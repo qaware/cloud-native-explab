@@ -1,17 +1,25 @@
-var builder = WebApplication.CreateBuilder(args);
-var app = builder.Build();
+namespace DotnetHello.App;
 
-app.UseStaticFiles();
-app.UseRouter(routeBuilder =>
+public class Program
 {
-    routeBuilder.MapGet("", context =>
+    public static void Main(string[] args)
     {
-        context.Response.Redirect("index.html", permanent: false);
-        return Task.FromResult(0);
-    });
-});
+        var builder = WebApplication.CreateBuilder(args);
+        var app = builder.Build();
 
-app.MapGet("/", () => "Hello World!");
-app.MapGet("/sum", (int? n1, int? n2) => n1 + n2);
+        app.UseStaticFiles();
+        app.UseRouter(routeBuilder =>
+        {
+            routeBuilder.MapGet("", context =>
+            {
+                context.Response.Redirect("index.html", permanent: false);
+                return Task.FromResult(0);
+            });
+        });
 
-app.Run();
+        app.MapGet("/", () => "Hello World!");
+        app.MapGet("/sum", (int? n1, int? n2) => n1 + n2);
+
+        app.Run();
+    }
+}
