@@ -1,5 +1,8 @@
-# Dotnet Hello World
+# Dotnet Weather
 
-This is a simple application that can be run from a container.
+This is a simple weather application that can be run from a container.
 
-```docker build . -t dotnet-weather && docker run -p 8080:8080 dotnet-weather```
+```
+docker build . -t dotnet-weather
+docker run -d -p 8080:8080 dotnet-weather
+```
