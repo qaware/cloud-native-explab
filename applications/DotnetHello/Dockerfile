@@ -1,10 +1,12 @@
-FROM mcr.microsoft.com/dotnet/aspnet:6.0
+FROM mcr.microsoft.com/dotnet/sdk:6.0
 
 EXPOSE 80
 
-COPY ["DotnetHello.App/DotnetHello.App.csproj", "."]
-RUN dotnet restore "./DotnetHello.App/DotnetHello.csproj"
-COPY . . 
-RUN dotnet build "DotnetHello.App/DotnetHello.csproj"
+COPY DotnetHello.App/DotnetHello.App.csproj DotnetHello.App/
+RUN dotnet restore DotnetHello.App/DotnetHello.App.csproj
 
-ENTRYPOINT ["dotnet", "DotnetHello.App.dll"]
+COPY . . 
+RUN dotnet build "DotnetHello.App/DotnetHello.App.csproj"
+
+WORKDIR DotnetHello.App
+ENTRYPOINT ["dotnet", "run"]
