@@ -1,0 +1,11 @@
+GCP_REGION: europe-west1
+GCP_PROJECT: cloud-native-experience-lab
+GCP_ZONE: europe-west1-b
+KUBERNETES_VERSION: v1.22.9
+GCP_CONTROL_PLANE_MACHINE_TYPE: n1-standard-2
+GCP_NODE_MACHINE_TYPE: n1-standard-2
+GCP_NETWORK_NAME: default
+IMAGE_ID: cluster-api-ubuntu-2004-v1-22-9-1653382327
+GCP_PROJECT_ID: cloud-native-experience-lab
+CONTROL_PLANE_MACHINE_COUNT: 1
+WORKER_MACHINE_COUNT: 1
