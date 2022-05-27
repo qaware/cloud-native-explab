@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DotnetHello.App\DotnetHello.App.csproj" />
+    <ProjectReference Include="..\DotnetWeather\DotnetWeather.csproj" />
   </ItemGroup>
 
 </Project>

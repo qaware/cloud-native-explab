@@ -1,12 +1,12 @@
 FROM mcr.microsoft.com/dotnet/sdk:6.0
 
-EXPOSE 80
+EXPOSE 8080
 
-COPY DotnetHello.App/DotnetHello.App.csproj DotnetHello.App/
-RUN dotnet restore DotnetHello.App/DotnetHello.App.csproj
+COPY DotnetWeather/DotnetWeather.csproj DotnetWeather/
+RUN dotnet restore DotnetWeather/DotnetWeather.csproj
 
 COPY . . 
-RUN dotnet build "DotnetHello.App/DotnetHello.App.csproj"
+RUN dotnet build "DotnetWeather/DotnetWeather.csproj"
 
-WORKDIR DotnetHello.App
+WORKDIR DotnetWeather
 ENTRYPOINT ["dotnet", "run"]

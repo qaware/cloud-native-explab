@@ -1,7 +1,6 @@
 using System.Net;
 using System.Text.RegularExpressions;
-using DotnetHello.App;
-using Microsoft.AspNetCore.Http;
+using DotnetWeather;
 
 namespace DotnetHello.Test;
 
