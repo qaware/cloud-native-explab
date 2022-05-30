@@ -1,0 +1,19 @@
+version: '3.4'
+
+services:
+  sqldata:
+    image: mcr.microsoft.com/mssql/server
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=dont-store-Pa55w0rd-in-GIT
+    ports:
+      - "1433:1433"
+
+  dotnet-weather:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - sqldata

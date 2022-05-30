@@ -1,3 +1,7 @@
+using DotnetWeather.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+
 namespace DotnetWeather;
 
 public class Program
@@ -6,10 +10,20 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        builder.Services.AddDbContext<DotnetWeatherContext>(options =>
+            options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
         // Add services to the container.
         builder.Services.AddControllersWithViews();
 
         var app = builder.Build();
+
+        using (var scope = app.Services.CreateScope())
+        {
+            var services = scope.ServiceProvider;
+
+            CreateDbIfNotExists(services);
+        }
 
         // Configure the HTTP request pipeline.
         if (!app.Environment.IsDevelopment())
@@ -30,5 +44,19 @@ public class Program
             pattern: "{controller=Home}/{action=Index}/{id?}");
 
         app.Run();
+    }
+    
+    private static void CreateDbIfNotExists(IServiceProvider services)
+    {
+        try
+        {
+            var context = services.GetRequiredService<DotnetWeatherContext>();
+            DbInitializer.Initialize(context);
+        }
+        catch (Exception ex)
+        {
+            var logger = services.GetRequiredService<ILogger<Program>>();
+            logger.LogError(ex, "An error occurred creating the DB.");
+        }
     }
 }

@@ -1,29 +1,59 @@
+using System.Text.Json;
+using DotnetWeather.Data;
 using DotnetWeather.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace DotnetWeather.Controllers;
 
 public class WeatherController : Controller
 {
-    public RedirectToActionResult Find(string city = "London", string date = "")
+    private readonly DotnetWeatherContext _context;
+
+    public WeatherController(DotnetWeatherContext context)
     {
-        DateTime dateT = DateTime.Today;
-        DateTime.TryParse(date, out dateT);
+        _context = context;
+    }
+    
+    public async Task<RedirectToActionResult> Find(string city, string date)
+    {
+        if (!DateTime.TryParseExact(date, "yyyy-MM-dd", null, 
+                System.Globalization.DateTimeStyles.AssumeUniversal, out DateTime dateT))
+        {
+            dateT = DateTime.Today;
+        }
+        int day = (dateT - DateTime.Today).Days;
 
-        int cityID = 123456;                                       //TODO: find id in database
-        int day = 0;                                               //TODO: count day from dateT
+        var foundCities = await _context.City.Where(c => c.Name.ToLower() == city).ToListAsync();
+        if (foundCities.Count == 0)
+        {
+            List<City> alternatives = new List<City>();            //TODO: find similar names in database
+            return new RedirectToActionResult("CityNotFound", "Weather", alternatives);
+        }
 
-        return new RedirectToActionResult("Index", "Weather", new {cityID, day});
+        else if (foundCities.Count == 1)
+        {
+            return new RedirectToActionResult("Index", "Weather", new {cityId = foundCities[0].Id, day});
+        }
+
+        else
+        {
+            return new RedirectToActionResult("CityNotFound", "Weather", foundCities);
+        }
     }
 
-    public IActionResult Index(int cityID = 123456, int day = 0)
+    public async Task<IActionResult> Index(int cityId = 3, int day = 0)
     {
-        string city = "London";                                     //TODO: get city from database
+        City? city = await _context.City.FindAsync(cityId);
         DateTime date = DateTime.Today + TimeSpan.FromDays(day);
         string dateString = date.ToString("dd. MM.");
-        WeatherType weather = WeatherType.RAINING;                  //TODO: get weather from database for given date
-        int temperature = 19;                                       //TODO: get temperature from database for given date
+        Weather? weather = await _context.Weather.FindAsync(city.Id, date);
 
-        return View(new WeatherModel(city, weather, temperature, dateString));
+        return View(new WeatherModel(city.Name, weather.WeatherType, weather.Temperature??0, dateString));
+    }
+
+    public string CityNotFound(List<City> alternatives)
+    {
+        return "city not found";
     }
 }
