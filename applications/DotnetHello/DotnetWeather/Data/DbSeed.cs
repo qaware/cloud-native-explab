@@ -2,9 +2,9 @@ using DotnetWeather.Models;
 
 namespace DotnetWeather.Data;
 
-public static class DbInitializer
+public static class DbSeed
 {
-    public static void Initialize(DotnetWeatherContext context)
+    public static void Seed(DotnetWeatherContext context)
     {
         context.Database.EnsureCreated();
 
@@ -28,18 +28,23 @@ public static class DbInitializer
         }
         context.SaveChanges();
 
-        var weathers = new Weather[]
+        Random random = new Random();
+        List<WeatherType> weatherTypes = WeatherType.GetAllWeatherTypes();
+        for (int i = 1; i <= cities.Length; i++)
         {
-            new Weather{CityId = 1, Date = DateTime.Parse("2022-05-30"), Temperature = 16, WeatherType = WeatherType.CLOUDY},
-            new Weather{CityId = 1, Date = DateTime.Parse("2022-05-31"), Temperature = 22, WeatherType = WeatherType.RAINING},
-            new Weather{CityId = 1, Date = DateTime.Parse("2022-06-01"), Temperature = 20, WeatherType = WeatherType.RAINING},
-            new Weather{CityId = 5, Date = DateTime.Parse("2022-05-30"), Temperature = 19, WeatherType = WeatherType.SUNNY},
-        };
-
-        foreach (Weather w in weathers)
-        {
-            context.Weather.Add(w);
+            List<DateTime> dates = Enumerable.Range(1, DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month))
+                .Select(day => new DateTime(DateTime.Now.Year, DateTime.Now.Month, day)).ToList();
+            foreach (var date in dates)
+            {
+                Weather w = new Weather
+                {
+                    CityId = i, Date = date, Temperature = random.Next(10, 30),
+                    WeatherType = weatherTypes[random.Next(weatherTypes.Count)]
+                };
+                context.Weather.Add(w);
+            }
         }
+
         context.SaveChanges();
     }
 }

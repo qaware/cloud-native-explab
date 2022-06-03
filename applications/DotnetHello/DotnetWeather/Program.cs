@@ -51,7 +51,7 @@ public class Program
         try
         {
             var context = services.GetRequiredService<DotnetWeatherContext>();
-            DbInitializer.Initialize(context);
+            DbSeed.Seed(context);
         }
         catch (Exception ex)
         {

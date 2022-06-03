@@ -1,4 +1,4 @@
-@model WeatherModel
+@model WeatherViewModel
 @{
     ViewData["Title"] = "Weather";
 }
@@ -6,4 +6,4 @@
 
 <p>The current weather will be shown here.</p>
 
-<p>The weather in @Model.city on the @Model.date will be @Model.weather.Name.</p>
+<p>The weather in @Model.City.Name on @Model.Weather.Date.ToString("D") will be @Model.Weather.WeatherType.Name, @Model.Weather.Temperature °C.</p>

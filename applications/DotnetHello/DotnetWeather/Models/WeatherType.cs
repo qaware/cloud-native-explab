@@ -1,6 +1,6 @@
 namespace DotnetWeather.Models;
 
-public struct WeatherType
+public class WeatherType
 {
     private static Dictionary<string, WeatherType> serializeDict = new ();
 
@@ -8,7 +8,7 @@ public struct WeatherType
     public static readonly WeatherType CLOUDY = new WeatherType("Cloudy", "Resources/icons/cloudy.png");
     public static readonly WeatherType RAINING = new WeatherType("Raining", "Resources/icons/raining.png");
     public static readonly WeatherType SNOW = new WeatherType("Snow", "Resources/icons/snow.png");
-    public static readonly WeatherType NOT_AVAILABLE = new WeatherType("x", "Resources/icons/error.png");
+    public static readonly WeatherType NOT_AVAILABLE = new WeatherType("(not available)", "Resources/icons/error.png");
 
     private WeatherType(string name, string iconPath)
     {
@@ -17,7 +17,7 @@ public struct WeatherType
 
         if (serializeDict.ContainsKey(name))
         {
-            throw new Exception("Different weather can't have the same name!");
+            throw new Exception($"Weather with this name already exists: {name}");
         }
         serializeDict[name] = this;
     }
@@ -37,5 +37,12 @@ public struct WeatherType
             throw new Exception($"Unknown weather name: {s}");
         }
         return serializeDict[s];
+    }
+
+    public static List<WeatherType> GetAllWeatherTypes()
+    {
+        List<WeatherType> allTypes = serializeDict.Values.ToList();
+        allTypes.Remove(WeatherType.NOT_AVAILABLE);
+        return allTypes;
     }
 }

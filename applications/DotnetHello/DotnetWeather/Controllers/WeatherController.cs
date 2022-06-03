@@ -1,4 +1,3 @@
-using System.Text.Json;
 using DotnetWeather.Data;
 using DotnetWeather.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -24,21 +23,14 @@ public class WeatherController : Controller
         }
         int day = (dateT - DateTime.Today).Days;
 
-        var foundCities = await _context.City.Where(c => c.Name.ToLower() == city).ToListAsync();
-        if (foundCities.Count == 0)
-        {
-            List<City> alternatives = new List<City>();            //TODO: find similar names in database
-            return new RedirectToActionResult("CityNotFound", "Weather", alternatives);
-        }
-
-        else if (foundCities.Count == 1)
+        var foundCities = await _context.City.Where(c => c.Name.ToLower().Equals(city.ToLower())).ToListAsync();
+        if (foundCities.Count == 1)
         {
             return new RedirectToActionResult("Index", "Weather", new {cityId = foundCities[0].Id, day});
         }
-
         else
         {
-            return new RedirectToActionResult("CityNotFound", "Weather", foundCities);
+            return new RedirectToActionResult("CityNotFound", "Weather", new {city});
         }
     }
 
@@ -46,14 +38,15 @@ public class WeatherController : Controller
     {
         City? city = await _context.City.FindAsync(cityId);
         DateTime date = DateTime.Today + TimeSpan.FromDays(day);
-        string dateString = date.ToString("dd. MM.");
-        Weather? weather = await _context.Weather.FindAsync(city.Id, date);
+        Weather weather = await _context.Weather.FindAsync(cityId, date) ?? Weather.GetNotAvailable(cityId, date);
 
-        return View(new WeatherModel(city.Name, weather.WeatherType, weather.Temperature??0, dateString));
+        return View(new WeatherViewModel {City = city, Weather = weather});
     }
 
-    public string CityNotFound(List<City> alternatives)
+    public async Task<IActionResult> CityNotFound(string city)
     {
-        return "city not found";
+        List<City> alternatives = await _context.City.Take(5).ToListAsync();
+        City fake = new City {Name = city, SimilarCities = alternatives};
+        return View(fake);
     }
 }
