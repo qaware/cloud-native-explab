@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: sqldata
+  name: sqldata
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sqldata
+  template:
+    metadata:
+      labels:
+        app: sqldata
+    spec:
+      containers:
+        - env:
+            - name: ACCEPT_EULA
+              value: "Y"
+            - name: SA_PASSWORD
+              value: dont-store-Pa55w0rd-in-GIT
+          image: mcr.microsoft.com/mssql/server
+          name: sqldata
+          ports:
+            - containerPort: 1433
+          resources: {}
+      restartPolicy: Always
+status: {}

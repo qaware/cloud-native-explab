@@ -1,0 +1,14 @@
+version_settings(constraint='>=0.22.2')
+
+docker_build(
+    'dotnet-weather',
+    'DotnetWeather',
+    dockerfile='Dockerfile'
+)
+
+k8s_yaml(['k8s/sqldata-deployment.yaml', 'k8s/sqldata-service.yaml'])
+
+k8s_yaml(['k8s/dotnet-weather-deployment.yaml', 'k8s/dotnet-weather-service.yaml'])
+
+
+k8s_resource('dotnet-weather', port_forwards='8080:8080')
