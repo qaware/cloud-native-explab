@@ -3,7 +3,7 @@ kind: Service
 metadata:
   labels:
     app: dotnet-weather
-  name: dotnet-weather-service
+  name: dotnet-weather
 spec:
   type: LoadBalancer
   ports:

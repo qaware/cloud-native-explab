@@ -3,7 +3,7 @@ kind: Service
 metadata:
   labels:
     app: sqldata
-  name: sqldata-service
+  name: sqldata
 spec:
   ports:
     - name: "1433"
