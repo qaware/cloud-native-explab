@@ -2,7 +2,7 @@ version_settings(constraint='>=0.22.2')
 
 docker_build(
     'dotnet-weather',
-    'DotnetWeather',
+    '.',
     dockerfile='Dockerfile'
 )
 

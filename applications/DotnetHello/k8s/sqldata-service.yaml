@@ -2,13 +2,14 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: sqldata-service
+    app: sqldata
   name: sqldata-service
 spec:
   ports:
-    - port: 1433
+    - name: "1433"
+      port: 1433
       targetPort: 1433
   selector:
-    app: sqldata-service
+    app: sqldata
 status:
   loadBalancer: {}

@@ -12,6 +12,7 @@ spec:
   template:
     metadata:
       labels:
+        weather-network: "true"
         app: dotnet-weather
     spec:
       containers:
