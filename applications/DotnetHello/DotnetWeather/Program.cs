@@ -16,7 +16,7 @@ public class Program
                 sqlOptions => sqlOptions.EnableRetryOnFailure(
                     maxRetryCount: 15,
                     maxRetryDelay: TimeSpan.FromSeconds(30), 
-                    errorNumbersToAdd: new List<int>{0} // retry also if the server is not accesible (pod not created in k8s yet)
+                    errorNumbersToAdd: new List<int>{0} // retry also if the server is not accessible (pod not created in k8s yet)
                 )
             )
         );
