@@ -8,12 +8,20 @@ services:
       - SA_PASSWORD=dont-store-Pa55w0rd-in-GIT
     ports:
       - "1433:1433"
+    networks:
+      - weather-network
 
   dotnet-weather:
     build:
       context: .
       dockerfile: ./Dockerfile
+    image: dotnet-weather
     ports:
       - "8080:8080"
     depends_on:
       - sqldata
+    networks:
+      - weather-network
+
+networks:
+    weather-network:

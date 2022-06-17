@@ -11,7 +11,15 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
 
         builder.Services.AddDbContext<DotnetWeatherContext>(options =>
-            options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            options.UseSqlServer(
+                builder.Configuration.GetConnectionString("DefaultConnection"), 
+                sqlOptions => sqlOptions.EnableRetryOnFailure(
+                    maxRetryCount: 15,
+                    maxRetryDelay: TimeSpan.FromSeconds(30), 
+                    errorNumbersToAdd: new List<int>{0} // retry also if the server is not accesible (pod not created in k8s yet)
+                )
+            )
+        );
 
         // Add services to the container.
         builder.Services.AddControllersWithViews();
