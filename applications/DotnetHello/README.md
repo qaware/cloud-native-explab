@@ -10,11 +10,7 @@ docker-compose build
 docker-compose up
 ```
 
-You can then access the application on
-
-```
-http://localhost:8080/
-```
+You can then access the application on http://localhost:8080/.
 
 ## Run with Kubernetes
 
@@ -24,19 +20,11 @@ First, make sure you have build the docker image (`docker-compose build`). Then,
 kubectl apply -f k8s
 ```
 
-You can then access the application on
-
-```
-http://localhost:8080/
-```
+You can then access the application on http://localhost:8080/.
 
 
 ## Run with Tilt
 
-Run
+Run `tilt up`.
 
-```
-tilt up
-```
-
-The tilt server with info and status of all jobs should open.
+The tilt server with info and status of all jobs should open. You can access the application on http://localhost:8080/.
