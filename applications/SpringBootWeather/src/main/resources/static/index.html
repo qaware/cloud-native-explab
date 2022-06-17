@@ -2,39 +2,40 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Weather application by rk</title>
+    <title>Spring boot weather application by rk</title>
 </head>
 <body>
-    <p><a>Greetings</a></p>
+<div style="text-align: center;">
+    <h1>How is the weather?</h1>
 
     <p>
-    <form action="/weather" method="GET" id="cityForm">
-        <div>
-            <label for="cityField">Where do you live?</label>
-            <input name="city" id="cityField">
-            <button>How is the weather!?</button>
-        </div>
-    </form>
-    </p>
+        <form action="/weather" method="GET" id="cityForm">
+            <div>
+                <label for="cityField">Where do you live?</label>
+                <input name="city" id="cityField">
+                <button>Let's find out!?</button>
+            </div>
+        </form>
 
+    <h2>Do you want to add your knowledge?</h2>
     <p>
     <form action="/add" method="POST" id="cityAddForm">
         <div>
-            <label for="cityAddField">Which city do you want to add?</label>
+            <label for="cityAddField">City:</label>
             <input name="city" id="cityAddField">
-            <label for="weatherAddField">How is the weather?</label>
+            <label for="weatherAddField">Current weather:</label>
             <input name="weather" id="weatherAddField">
-            <button>Add city!</button>
+            <button>Add my knowledge!</button>
         </div>
     </form>
-    </p>
 
+    <h3>Are you interested in ... more!?</h3>
     <p>
     <form action="/list" method="GET" id="listForm">
         <div>
             <button>Get cities!</button>
         </div>
     </form>
-    </p>
+</div>
 </body>
 </html>
