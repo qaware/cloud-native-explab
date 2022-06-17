@@ -79,6 +79,7 @@ public class WeatherService implements ApplicationContextAware {
     }
 
     public Weather getWeather(Integer id) {
+        logger.info(String.format("Retrieved weather with id %s", id));
         return weatherRepository.findWeatherById(id);
     }
 
