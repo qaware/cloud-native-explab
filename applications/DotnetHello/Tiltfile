@@ -6,9 +6,9 @@ docker_build(
     dockerfile='Dockerfile'
 )
 
-k8s_yaml(['k8s/sqldata-deployment.yaml', 'k8s/sqldata-service.yaml'])
+k8s_yaml(['k8s/db-config.yaml', 'k8s/db-deployment.yaml', 'k8s/db-service.yaml'])
 
 k8s_yaml(['k8s/dotnet-weather-deployment.yaml', 'k8s/dotnet-weather-service.yaml'])
 
-
-k8s_resource('dotnet-weather', port_forwards='8080:8080')
+# k8s_resource('dotnet-weather', port_forwards='8080:8080')
+# port is already exposed by the app

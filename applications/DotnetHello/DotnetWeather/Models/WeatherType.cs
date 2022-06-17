@@ -4,11 +4,13 @@ public class WeatherType
 {
     private static Dictionary<string, WeatherType> serializeDict = new ();
 
-    public static readonly WeatherType SUNNY = new WeatherType("Sunny", "Resources/icons/sunny.png");
-    public static readonly WeatherType CLOUDY = new WeatherType("Cloudy", "Resources/icons/cloudy.png");
-    public static readonly WeatherType RAINING = new WeatherType("Raining", "Resources/icons/raining.png");
-    public static readonly WeatherType SNOW = new WeatherType("Snow", "Resources/icons/snow.png");
-    public static readonly WeatherType NOT_AVAILABLE = new WeatherType("(not available)", "Resources/icons/error.png");
+    public static readonly WeatherType SUNNY = new WeatherType("Sunny", "icons/sunny.png");
+    public static readonly WeatherType CLOUDY = new WeatherType("Cloudy", "icons/cloudy.png");
+    public static readonly WeatherType RAINING = new WeatherType("Raining", "icons/raining.png");
+    public static readonly WeatherType SNOW = new WeatherType("Snow", "icons/snow.png");
+    public static readonly WeatherType STORM = new WeatherType("Thunderstorm", "icons/storm.png");
+    public static readonly WeatherType NOT_AVAILABLE = new WeatherType("(not available)", "icons/error.png");
+    // icons by https://www.iconfinder.com/iconsets/the-weather-is-nice-today  (CC BY-NC 3.0)
 
     private WeatherType(string name, string iconPath)
     {

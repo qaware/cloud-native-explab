@@ -23,6 +23,11 @@ public class WeatherController : Controller
         }
         int day = (dateT - DateTime.Today).Days;
 
+        if (city == null)
+        {
+            city = "Munich";
+        }
+
         var foundCities = await _context.City.Where(c => c.Name.ToLower().Equals(city.ToLower())).ToListAsync();
         if (foundCities.Count == 1)
         {
@@ -34,7 +39,7 @@ public class WeatherController : Controller
         }
     }
 
-    public async Task<IActionResult> Index(int cityId = 3, int day = 0)
+    public async Task<IActionResult> Index(int cityId = 1, int day = 0)
     {
         City? city = await _context.City.FindAsync(cityId);
         DateTime date = DateTime.Today + TimeSpan.FromDays(day);

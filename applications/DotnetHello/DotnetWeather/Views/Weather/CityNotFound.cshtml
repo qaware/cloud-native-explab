@@ -9,6 +9,6 @@
 <p><ul>
     @foreach (var alt in Model.SimilarCities)
     {
-        <li>@alt.Name</li>
+        <li><a href="/Weather?cityId=@alt.Id&day=0">@alt.Name</a></li>
     }
 </ul></p>
