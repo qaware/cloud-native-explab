@@ -16,7 +16,10 @@ make -C ./kind create-kind-cluster
 # bootstrap flux2
 make -C ./kind bootstrap-flux2     
 ```
-This will install all resources defined in [clusters/flux-managed-cluster](./clusters/flux-managed-cluster)
+This will install all demo resources defined in [clusters/flux-managed-cluster](./clusters/flux-managed-cluster)
+
+The setup installs `falco` which will not work work with kind on MacOS
+
 
 ## Resource definitions
 Targets in [Makefile](./Makefile) can be used to create or recreate resource definitions.
@@ -34,3 +37,8 @@ git add --all && git commit -m "Add new resources"
 git push
 ```
 
+## Delete kind cluster
+```bash
+# Create a new kind cluster
+make -C ./kind delete-kind-cluster 
+```

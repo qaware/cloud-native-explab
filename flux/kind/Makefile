@@ -1,6 +1,6 @@
-GITHUB_USER ?= qaware
-BOOTSTRAP_PATH = ./clusters/flux-managed-cluster
-GITOPS_REPO = cloud-native-explab
+GITHUB_USER ?= sHolzner
+BOOTSTRAP_PATH ?= ./flux/clusters/flux-managed-cluster
+GITOPS_REPO ?= cloud-native-explab
 
 
 create-kind-cluster:
