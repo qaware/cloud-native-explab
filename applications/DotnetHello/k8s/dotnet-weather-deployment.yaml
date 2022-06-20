@@ -19,6 +19,9 @@ spec:
         - image: dotnet-weather
           imagePullPolicy: Never
           name: dotnet-weather
+          envFrom:
+            - configMapRef:
+                name: dotnet-weather-config
           ports:
             - containerPort: 8080
           resources: {}
