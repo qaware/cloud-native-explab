@@ -3,11 +3,6 @@ version: '3.4'
 services:
   sqldata:
     image: mcr.microsoft.com/mssql/server
-    environment:
-      - ACCEPT_EULA=${ACCEPT_EULA}
-      - SA_PASSWORD=${DB_SA_PASSWORD}
-    ports:
-      - "${DB_LOCAL_PORT}:1433"
     networks:
       - weather-network
 
@@ -16,8 +11,6 @@ services:
       context: .
       dockerfile: ./Dockerfile
     image: dotnet-weather
-    ports:
-      - "${APP_LOCAL_PORT}:8080"
     depends_on:
       - sqldata
     networks:
