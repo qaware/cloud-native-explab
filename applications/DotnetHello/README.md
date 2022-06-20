@@ -6,7 +6,7 @@ There are multiple ways how to run the application.
 
 ## Local deployment
 
-Deployment on a local machine is basically never used – we show it here only for completeness.
+Deployment on a local machine is not recommended – we show it here only for completeness.
 
 First, you need to have an instance of [Microsoft SQL server](https://docs.microsoft.com/en-us/sql/database-engine/install-windows/install-sql-server)
 installed and running.
@@ -19,7 +19,7 @@ dotnet build
 dotnet run
 ```
 
-This is the standard way to build a .NET app. You can find more about `dotnet` commands
+This is the standard way to build a .NET app from the command line. You can find more about `dotnet` commands
 in the [docs](https://docs.microsoft.com/en-us/dotnet/core/tools/).
 
 The app will be available on http://localhost:8080/. To change the app configuration, change entries
@@ -47,7 +47,9 @@ when building on a local machine.
 The final command `ENTRYPOINT` specifies the command that should be run when the container is started (`docker run`).
 
 You can build the image with the command `docker build . -t dotnet-weather:latest` and run the container
-with `docker run -d -p 8080:8080 dotnet-weather:latest`. Further reference is in the [docs](https://docs.docker.com/engine/reference/commandline/docker/).
+with `docker run -d -p 8080:8080 dotnet-weather:latest`. We need the flag `-p 8080:8080` to forward the port from the container
+to a local port, to be able to access the app from outside of the container.
+Further reference is in the [docker documentation](https://docs.docker.com/engine/reference/commandline/docker/).
 
 ### Docker-compose
 
