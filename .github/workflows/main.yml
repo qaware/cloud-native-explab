@@ -4,18 +4,16 @@ name: CI-SPRING-BOOT
 
 # Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "rk/general/springbootapp" branch
+  # Triggers the workflow on push events but only for changes in the SpringBootWeather folder
   push:
-    branches: [ "rk/general/springbootapp" ]
-  pull_request:
-    branches: [ "rk/general/springbootapp" ]
+    paths:
+      - 'applications/SpringBootWeather/**'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
@@ -41,9 +39,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: START Verification
-        run: echo Starting containerization process
-
       - name: Start containers
         run: docker-compose -f "applications/SpringBootWeather/docker-compose.yml" up -d --build
 
@@ -52,6 +47,3 @@ jobs:
 
       - name: Stop containers
         run: docker-compose -f "applications/SpringBootWeather/docker-compose.yml" down
-
-      - name: END Verification
-        run: echo Containerization process ended succesfully

@@ -11,7 +11,7 @@ print('Hello Tiltfile')
 # kubectl apply -f weather_app_service.yaml
 #k8s_yaml(['kubernetes/base/app_config.yaml','kubernetes/base/weather_app_deployment.yaml', 'kubernetes/base/weather_app_service.yaml'])
 
-k8s_yaml(kustomize('kubernetes/overlays/production/'))
+k8s_yaml(kustomize('kubernetes/base/'))
 
 # builds the docker image of the local application. Replaces following commands of docker:
 # docker build -t springbootweather_app .
