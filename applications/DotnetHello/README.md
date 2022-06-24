@@ -24,6 +24,7 @@ in the [docs](https://docs.microsoft.com/en-us/dotnet/core/tools/).
 
 The app will be available on http://localhost:8080/. To change the app configuration, change entries
 in [appsettings.json](DotnetWeather/appsettings.json) and [launchSettings.json](DotnetWeather/Properties/launchSettings.json).
+You can also create different profiles for Production and Developement by creating the files appsettings.*Environment*.json.
 
 ## Run with Docker-compose
 
@@ -67,26 +68,57 @@ create different docker-compose configuration in developement and production env
 
 ### Configure the environment
 
-TODO:
-- docker-compose.override.yml overrides docker-compose.yml
-- there are also environment variables in the .env file
-- how can it override appsettings.json and launchSettings.json?
-- what can we change and where
-- dev vs. prod?
+When we were deploying the app locally, we were configuring the app in [appsettings.json](DotnetWeather/appsettings.json)
+(or appsettings.*Environment*.json).
+With Docker, we can override the settings without touching these files. For example, to set the connection string, we can set the
+environment variable *ConnectionStrings:DefaultConnection* (as you can see in [docker-compose.override.yml](docker-compose.override.yml)).
+
+We can also set further environment variables through docker-compose. First, docker-compose looks in the [.env](.env) file
+where environment variables can be defined. These default values can be overwritten in [docker-compose.yml](docker-compose.yml) and
+[docker-compose.override.yml](docker-compose.override.yml). We can use the value of an environment variable in docker-compose.yml as
+${VARIABLE}.
+
+Try it: change the database password and port on which the app is exposed either in [docker-compose.override.yml](docker-compose.override.yml),
+or in [.env](.env).
+
+To distinguish configurations for Developement and Production, we can create separate docker-compose.*environment*.yml for each environment.
+To build and run it, we can then execute a command such as `docker-compose -f docker-compose.yml -f docker-compose.dev.yml`, which first applies
+the first file, and the second file (this happens automatically with docker-compose.override.yml).
 
 ## Run with Kubernetes
 
 First, make sure you have build the docker image (`docker-compose build`). Then, run:
 
 ```
-kubectl apply -f k8s
+kubectl apply -k k8s/overlays/dev
 ```
 
-You can then access the application on http://localhost:8080/.
+This deploys the app with *dev* configuration and you can access the application on http://localhost:8080/.
 
+So, what are actually all the files in k8s directory? There are several kinds of resources in Kubernetes (specified in field
+*kind* in the file). We list a few of them here:
+
+- Deployment. This specifies the Docker image that should be deployed, and can also specify environment variables and other configuration.
+- Service. This defines policies to access the pods, for example we can bind a target port to the pod.
+- ConfigMap. This specifies the configuration, we can then refer to the configuration in deployment instead of hard-writing it in multiple places.
+
+Please refer to the [documentation](https://kubernetes.io/docs/concepts/overview/) for further info.
+
+The single files / folders can be applied to a kubernetes cluster as `kubectl apply -f kubernetes-resource.yaml`, or with Kustomize.
+
+### Kustomize
+
+Kustomize is used to customize the deployment for Developement and Production environments. For this, we use the base and an overlay.
+In the file kustomization.yaml, the resources are specified. The resources in an overlay can overwrite the original settings or add new services,
+similar to an override with Docker.
 
 ## Run with Tilt
 
+Tilt allows us to automate the Kubernetes and Kustomize commands, as well as building the Docker images.
+
 Run `tilt up`.
 
-The tilt server with info and status of all jobs should open. You can access the application on http://localhost:8080/.
+The tilt server with info and status of all jobs should open. You can see the status of all services, logs, and access the application
+from there.
+
+The Tilt procedure is defined in [Tiltfile](Tiltfile). Documentation of all the functions can be found [here](https://docs.tilt.dev/api.html).
