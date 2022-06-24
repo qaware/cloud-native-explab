@@ -1,0 +1,15 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: experience-lab-gitops
+  namespace: org-experience-lab
+spec:
+  force: false
+  interval: 1m0s
+  path: ./management-clusters/gorilla/workload-clusters
+  prune: false
+  serviceAccountName: automation
+  sourceRef:
+    kind: GitRepository
+    name: shared-gitops-demo
+  timeout: 2m0s

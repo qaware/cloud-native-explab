@@ -1,0 +1,22 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: gorilla-clusters-qaw01
+  namespace: org-experience-lab
+spec:
+  interval: 1m
+  path: "./management-clusters/gorilla/workload-clusters/qaw01"
+  postBuild:
+    substitute:
+      cluster_id: "qaw01"
+      control_plane_id: "ae7g6"
+      machine_deployment_id: "vv0b2"
+      organization: "experience-lab"
+      release: "17.3.3"
+  prune: false
+  serviceAccountName: automation
+  sourceRef:
+    kind: GitRepository
+    name: shared-gitops-demo
+  suspend: false
+  timeout: 2m
