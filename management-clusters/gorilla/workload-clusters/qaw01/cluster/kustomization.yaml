@@ -2,10 +2,10 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 patchesStrategicMerge:
 - patch_awscluster.yaml
-- patch_awsmachinedeployment.yaml
+# - patch_awsmachinedeployment.yaml
 - patch_cluster.yaml
 - patch_g8scontrolplane.yaml
-- patch_machinedeployment.yaml
+# - patch_machinedeployment.yaml
 resources:
 - ../../../../../bases/clusters/aws/v1alpha3
-- ../../../../../bases/nodepools/aws/v1alpha3
+# - ../../../../../bases/nodepools/aws/v1alpha3
