@@ -164,6 +164,18 @@ file as well as the docker-compose.yml of this application.
 
 Congrats!!!
 
+At this point we can also add additional docker-compose files, like
+`docker-compose.override.yml`, which will be read automatically by the docker-compose command, while additional
+files like docker-compose.prod.yml would be possible too, to generate different environments depending on your needs. These
+files then can be started by the
+
+```
+docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+```
+
+command.
+
+
 ### Kubernetes
 
 Up to this point you now achieved to create a multi container application capable of running your app inside docker without a local 
@@ -276,7 +288,9 @@ status:
 ```
 
 your app will be able to be accessed. Analog files for the database are of course necessary. To check them out, feel free
-to look in the yaml files of this application and scroll through the code and comments to understand it better.
+to look in the yaml files of this application in the `kubernetes` folder and scroll through the code and comments to understand it better.
+An additional configmap is given there as well, meaning a .yaml file containing necessary
+environment variables, which can be used in the other .yaml files.
 
 After you fully understood the .yaml-files, you are now capable of deploying to your local cluster. For this open your 
 command line at the folder your yaml files are in. After that use these to create your application with the commands:
@@ -285,11 +299,13 @@ command line at the folder your yaml files are in. After that use these to creat
 kubectl apply -f <yaml-file>
 ```
 
-To create the app of this example open the SpringBootWeather folder and type the commands:
+To create the app of this example open the `SpringBootWeather/kubernetes` folder and type the commands:
 
 ```
+kubectl apply -f db_config.yaml
 kubectl apply -f weather_db_deployment.yaml
 kubectl apply -f weather_db_service.yaml
+kubectl apply -f app_config.yaml
 kubectl apply -f weather_app_deployment.yaml
 kubectl apply -f weather_app_service.yaml
 ```
@@ -348,12 +364,12 @@ Tiltfile of this project all will become a little clearer, hopefully.
 ```
 print('Hello Tiltfile')
 
-k8s_yaml(['weather_db_deployment.yaml', 'weather_db_service.yaml'])
-k8s_yaml(['weather_app_deployment.yaml', 'weather_app_service.yaml'])
+k8s_yaml(['kubernetes/db_config.yaml','kubernetes/weather_db_deployment.yaml', 'kubernetes/weather_db_service.yaml'])
+k8s_yaml(['kubernetes/app_config.yaml','kubernetes/weather_app_deployment.yaml', 'kubernetes/weather_app_service.yaml'])
 
 docker_build('springbootweather_app', '.')
 
-k8s_resource('app', port_forwards='8000:8080')
+k8s_resource('app', port_forwards='8081:8080')
 ```
 
 The first line creates an output in your tilt webview, which should you have noticed already using the tilt up command.
