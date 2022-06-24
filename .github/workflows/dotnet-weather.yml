@@ -1,0 +1,73 @@
+name: Test Dotnet Weather
+
+on:
+  push:
+    paths:
+      - 'applications/DotnetHello/**'
+  workflow_dispatch:
+
+jobs:
+  Test:
+    name: Perform the tests
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./applications/DotnetWeather
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: '6.x'
+      - name: Install dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+      - name: Test
+        run: dotnet test --no-restore --verbosity normal
+
+  TestDocker:
+    name: Try deploy the app locally with Kubernetes
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./applications/DotnetWeather
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build docker image
+      run: docker-compose build
+    - name: Apply kubernetes
+      run: kubectl apply -k k8s/overlays/dev
+    - name: Check deployment status
+      run: kubectl describe deployments
+    - name: Delete cluster
+      run: kubectl delete -k k8s/overlays/dev
+
+  Deploy:
+    name: Deploy to google cloud
+    runs-on: ubuntu-latest
+    needs: [ Test, TestDocker ]
+
+    if: github.ref == 'refs/heads/main'
+
+    defaults:
+      run:
+        working-directory: ./applications/DotnetWeather
+
+    steps:
+    # deploy with ssh: https://www.youtube.com/watch?v=gW1TDirJ5E4
+    - name: SSH connect
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{google-cloud-host}}
+        username: ${{google-cloud-username}}
+        key: ${{secrets.google-cloud-secret}}
+        port: 22
+        script: |
+          cd /DotnetWeather
+          git pull origin master
+          git status
+          # onlyl a test
