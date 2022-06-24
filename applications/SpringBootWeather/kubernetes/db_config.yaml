@@ -1,0 +1,9 @@
+# Configmap to contain environment variables
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: db-config
+data:
+  POSTGRES_DB: weather_db
+  POSTGRES_USER: springuser
+  POSTGRES_PASSWORD: password

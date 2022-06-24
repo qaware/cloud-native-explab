@@ -20,9 +20,9 @@ spec:
     spec:
       containers:
         # environment variables analog to docker-compose:
-        - env:
-            - name: SPRING_DATASOURCE_URL
-              value: jdbc:postgresql://db:5432/weather_db
+        - envFrom:
+            - configMapRef:
+                name: app-config
           # docker image used:
           image: springbootweather_app
           # The following line forces tilt to use the local image and not try to pull one from docker hub.

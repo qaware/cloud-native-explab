@@ -19,13 +19,9 @@ spec:
     spec:
       containers:
         # environment variables analog to docker-compose:
-        - env:
-            - name: POSTGRES_DB
-              value: weather_db
-            - name: POSTGRES_PASSWORD
-              value: password
-            - name: POSTGRES_USER
-              value: springuser
+        - envFrom:
+            - configMapRef:
+                name: db-config
           # docker image used:
           image: postgres:12
           # No ImagePullPolicy given, cause this image is accessible online

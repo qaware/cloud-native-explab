@@ -4,12 +4,12 @@ print('Hello Tiltfile')
 # Deployment of the database. Replaces following commands in kubectl:
 # kubectl apply -f weather_db_deployment.yaml
 # kubectl apply -f weather_db_service.yaml
-k8s_yaml(['weather_db_deployment.yaml', 'weather_db_service.yaml'])
+k8s_yaml(['kubernetes/db_config.yaml','kubernetes/weather_db_deployment.yaml', 'kubernetes/weather_db_service.yaml'])
 
 # Deployment of the application. Replaces following commands in kubectl:
 # kubectl apply -f weather_app_deployment.yaml
 # kubectl apply -f weather_app_service.yaml
-k8s_yaml(['weather_app_deployment.yaml', 'weather_app_service.yaml'])
+k8s_yaml(['kubernetes/app_config.yaml','kubernetes/weather_app_deployment.yaml', 'kubernetes/weather_app_service.yaml'])
 
 # builds the docker image of the local application. Replaces following commands of docker:
 # docker build -t springbootweather_app .
