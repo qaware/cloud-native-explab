@@ -7,9 +7,9 @@ spec:
   force: false
   interval: 1m0s
   path: ./management-clusters/gorilla/workload-clusters
-  prune: false
+  prune: true
   serviceAccountName: automation
   sourceRef:
     kind: GitRepository
-    name: shared-gitops-demo
+    name: qaware-gitops-explab
   timeout: 2m0s
