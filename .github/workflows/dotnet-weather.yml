@@ -1,10 +1,6 @@
 name: Test Dotnet Weather
 
-on:
-  push:
-    paths:
-      - 'applications/DotnetHello/**'
-  workflow_dispatch:
+on: [push, workflow_dispatch]
 
 jobs:
   Test:
@@ -45,29 +41,3 @@ jobs:
       run: kubectl describe deployments
     - name: Delete cluster
       run: kubectl delete -k k8s/overlays/dev
-
-  Deploy:
-    name: Deploy to google cloud
-    runs-on: ubuntu-latest
-    needs: [ Test, TestDocker ]
-
-    if: github.ref == 'refs/heads/main'
-
-    defaults:
-      run:
-        working-directory: ./applications/DotnetWeather
-
-    steps:
-    # deploy with ssh: https://www.youtube.com/watch?v=gW1TDirJ5E4
-    - name: SSH connect
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{google-cloud-host}}
-        username: ${{google-cloud-username}}
-        key: ${{secrets.google-cloud-secret}}
-        port: 22
-        script: |
-          cd /DotnetWeather
-          git pull origin master
-          git status
-          # onlyl a test
