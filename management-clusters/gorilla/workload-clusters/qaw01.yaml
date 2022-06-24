@@ -17,6 +17,6 @@ spec:
   serviceAccountName: automation
   sourceRef:
     kind: GitRepository
-    name: shared-gitops-demo
+    name: qaware-gitops-explab
   suspend: false
   timeout: 2m
