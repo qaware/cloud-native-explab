@@ -1,0 +1,11 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- db-config.yaml
+- db-service.yaml
+- db-deployment.yaml
+- dotnet-weather-config.yaml
+- dotnet-weather-service.yaml
+- dotnet-weather-deployment.yaml
+- weather-networkpolicy.yaml
