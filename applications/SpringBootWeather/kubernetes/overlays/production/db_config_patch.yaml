@@ -1,0 +1,9 @@
+# Configmap patch
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: db-config
+data:
+  POSTGRES_DB: weather_db
+  POSTGRES_USER: newUser
+  POSTGRES_PASSWORD: newPassword

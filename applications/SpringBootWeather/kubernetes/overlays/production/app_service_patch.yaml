@@ -1,0 +1,15 @@
+# App Service patch
+apiVersion: v1
+kind: Service
+metadata:
+  name: app
+spec:
+  ports:
+    # Delete previous port
+    - $protocol: TCP
+      $port: 8081
+      $targetPort: 8080
+    # update existing port to new value
+    - protocol: TCP
+      port: 8082
+      targetPort: 8080

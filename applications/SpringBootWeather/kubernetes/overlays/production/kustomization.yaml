@@ -4,5 +4,7 @@ kind: Kustomization
 resources:
   - ../../base
 patchesStrategicMerge:
-  - app_replica_count.yaml
-  - db_replica_count.yaml
+  - app_deployment_patch.yaml
+  - app_service_patch.yaml
+  - db_config_patch.yaml
+  - db_deployment_patch.yaml
