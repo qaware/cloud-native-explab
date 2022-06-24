@@ -1,0 +1,9 @@
+# Configmap to contain environament variables
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+data:
+  spring_datasource_url: jdbc:postgresql://db:5432/weather_db
+  spring_datasource_username: newUser
+  spring_datasource_password: newPassword

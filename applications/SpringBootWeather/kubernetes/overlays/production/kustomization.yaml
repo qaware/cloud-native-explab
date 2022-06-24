@@ -4,6 +4,7 @@ kind: Kustomization
 resources:
   - ../../base
 patchesStrategicMerge:
+  - app_config_patch.yaml
   - app_deployment_patch.yaml
   - app_service_patch.yaml
   - db_config_patch.yaml
