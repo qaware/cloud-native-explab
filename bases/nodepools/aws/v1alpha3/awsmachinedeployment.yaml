@@ -1,4 +1,4 @@
-apiVersion: infrastructure.giantswarm.io/v1alpha3
+apiVersion: infrastructure.giantswarm.io/v1beta1
 kind: AWSMachineDeployment
 metadata:
   annotations:
