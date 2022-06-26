@@ -1,0 +1,28 @@
+apiVersion: skaffold/v2beta24
+kind: Config
+metadata:
+  name: weather-service-javaee
+
+build:
+  tagPolicy:
+    gitCommit: {}
+  artifacts:
+    - image: weather-service
+      docker:
+        dockerfile: Dockerfile
+  local:
+    push: false
+    useBuildkit: true
+    useDockerCLI: false
+
+deploy:
+  kustomize:
+    defaultNamespace: default
+    paths: ["k8s/overlays/dev"]
+
+portForward:
+  - resourceName: weather-service
+    resourceType: service
+    namespace: default
+    port: 8080
+    localPort: 18080

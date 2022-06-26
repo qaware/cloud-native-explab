@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: weather-service
+  labels:
+    type: microservice
+spec:
+  selector:
+    app: weather-service
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: http
