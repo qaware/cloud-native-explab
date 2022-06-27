@@ -3,7 +3,7 @@ name: Test Dotnet Weather
 on:
   push:
     paths:
-      - 'applications/DotnetWeather/**'
+      - 'applications/weather-service-dotnet/**'
       - '.github/workflows/dotnet-weather.yml'
   workflow_dispatch:
 
@@ -14,7 +14,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: ./applications/DotnetWeather
+        working-directory: ./applications/weather-service-dotnet
 
     steps:
       - uses: actions/checkout@v3
@@ -35,7 +35,7 @@ jobs:
     needs: test
     defaults:
       run:
-        working-directory: ./applications/DotnetWeather
+        working-directory: ./applications/weather-service-dotnet
 
     steps:
     - uses: actions/checkout@v3
@@ -49,6 +49,6 @@ jobs:
     - name: Build and push Docker image
       uses: docker/build-push-action@v3
       with:
-        context: ./applications/DotnetWeather
+        context: ./applications/weather-service-dotnet
         push: true
         tags: ghcr.io/qaware/dotnet-weather:latest
