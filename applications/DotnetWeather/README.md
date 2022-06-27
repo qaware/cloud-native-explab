@@ -93,7 +93,7 @@ First, make sure you have build the docker image (`docker-compose build`). Then,
 kubectl apply -k k8s/overlays/dev
 ```
 
-This deploys the app with *dev* configuration and you can access the application on http://localhost:8080/.
+This deploys the app with *dev* configuration and you can access the application on http://localhost:8082/.
 
 So, what are actually all the files in k8s directory? There are several kinds of resources in Kubernetes (specified in field
 *kind* in the file). We list a few of them here:
@@ -112,11 +112,15 @@ Kustomize is used to customize the deployment for Developement and Production en
 In the file kustomization.yaml, the resources are specified. The resources in an overlay can overwrite the original settings or add new services,
 similar to an override with Docker.
 
+Here, a different port is exposed for both base (8081), dev (8082) and prod (8080). Also, a different database password is set.
+In the dev environment, the database port is also published outside of the cluster to make debugging easier. (In a real environment,
+there would be different databases for developement and production environment as well.)
+
 ## Run with Tilt
 
 Tilt allows us to automate the Kubernetes and Kustomize commands, as well as building the Docker images.
 
-Run `tilt up`.
+Once you have Tilt [installed](https://docs.tilt.dev/install.html), run `tilt up`.
 
 The tilt server with info and status of all jobs should open. You can see the status of all services, logs, and access the application
 from there.
