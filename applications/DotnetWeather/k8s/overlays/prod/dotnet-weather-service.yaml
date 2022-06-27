@@ -9,5 +9,8 @@ spec:
   ports:
     - port: 8081
       targetPort: 8080
+      $patch: delete
+    - port: 8080
+      targetPort: 8080
   selector:
     app: dotnet-weather

@@ -5,3 +5,4 @@ bases:
 patchesStrategicMerge:
 - db-config.yaml
 - dotnet-weather-config.yaml
+- dotnet-weather-service.yaml
