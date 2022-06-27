@@ -1,0 +1,24 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+commonLabels:
+  app: weather-service
+  framework: javaee
+
+buildMetadata: [managedByLabel]
+
+resources:
+  - microservice-deployment.yaml
+  - microservice-service.yaml
+
+configMapGenerator:
+  - name: database-configmap
+    literals:
+      - POSTGRES_HOST=weather-database
+      - POSTGRES_DB=weather
+
+secretGenerator:
+  - name: database-secrets
+    literals:
+      - POSTGRES_PASSWORD=1qay2wsx
+      - POSTGRES_USER=payara

@@ -1,0 +1,7 @@
+.idea/
+.settings/
+.vscode/
+.mvn/
+
+src/
+k8s/
