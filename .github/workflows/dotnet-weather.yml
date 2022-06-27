@@ -51,4 +51,4 @@ jobs:
       with:
         context: ./applications/DotnetWeather
         push: true
-        tags: ${{ github.actor }}/dotnet-weather:latest
+        tags: dotnet-weather:latest
