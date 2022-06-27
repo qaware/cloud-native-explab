@@ -14,6 +14,7 @@ public class WeatherController : Controller
         _context = context;
     }
     
+    [ServiceFilter(typeof(NeedsDatabase))]
     public async Task<RedirectToActionResult> Find(string city, string date)
     {
         if (!DateTime.TryParseExact(date, "yyyy-MM-dd", null, 
@@ -39,15 +40,18 @@ public class WeatherController : Controller
         }
     }
 
+    [ServiceFilter(typeof(NeedsDatabase))]
     public async Task<IActionResult> Index(int cityId = 1, int day = 0)
     {
         City? city = await _context.City.FindAsync(cityId);
+
         DateTime date = DateTime.Today + TimeSpan.FromDays(day);
         Weather weather = await _context.Weather.FindAsync(cityId, date) ?? Weather.GetNotAvailable(cityId, date);
 
         return View(new WeatherViewModel {City = city, Weather = weather});
     }
 
+    [ServiceFilter(typeof(NeedsDatabase))]
     public async Task<IActionResult> CityNotFound(string city)
     {
         List<City> alternatives = await _context.City.Take(5).ToListAsync();

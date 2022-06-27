@@ -1,5 +1,3 @@
-using System.Text.Json;
-using System.Text.Json.Serialization.Metadata;
 using DotnetWeather.Models;
 using Microsoft.EntityFrameworkCore;
 
