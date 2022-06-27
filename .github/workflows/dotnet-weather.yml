@@ -46,9 +46,16 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
+    - name: Docker meta
+      id: meta
+      uses: docker/metadata-action@v4
+      with:
+        images: ghcr.io/dotnet-weather
+        tags: latest
+
     - name: Build and push Docker image
       uses: docker/build-push-action@v3
       with:
         context: ./applications/DotnetWeather
         push: true
-        tags: dotnet-weather:latest
+        tags: ${{ steps.meta.outputs.tags }}
