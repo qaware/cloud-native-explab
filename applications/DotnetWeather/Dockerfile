@@ -1,10 +1,11 @@
 FROM mcr.microsoft.com/dotnet/sdk:6.0
 
-COPY DotnetWeather/DotnetWeather.csproj DotnetWeather/
-RUN dotnet restore DotnetWeather/DotnetWeather.csproj
+WORKDIR /DotnetWeather
 
-COPY . . 
-RUN dotnet build "DotnetWeather/DotnetWeather.csproj"
+COPY DotnetWeather/DotnetWeather.csproj ./
+RUN dotnet restore DotnetWeather.csproj
 
-WORKDIR DotnetWeather
+COPY DotnetWeather/ .
+RUN dotnet build DotnetWeather.csproj
+
 ENTRYPOINT ["dotnet", "run"]
