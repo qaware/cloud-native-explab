@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: sqldata
+  name: sqldata
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sqldata
+  template:
+    metadata:
+      labels:
+        weather-network: "true"
+        app: sqldata
+    spec:
+      containers:
+        - envFrom:
+            - configMapRef:
+                name: db-config
+          image: mcr.microsoft.com/mssql/server
+          name: sqldata
+          ports:
+            - containerPort: 1433
+          resources: {}
+      restartPolicy: Always
+status: {}

@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: sqldata
+  name: sqldata
+spec:
+  type: LoadBalancer # exposes the database externally (dev overlay)
+  ports:
+    - port: 1433
+      targetPort: 1433
+  selector:
+    app: sqldata
+status:
+  loadBalancer: {}

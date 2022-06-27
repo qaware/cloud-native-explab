@@ -1,0 +1,26 @@
+@model WeatherViewModel
+@{
+    ViewData["Title"] = "Weather";
+}
+<h1>@ViewData["Title"] in @Model.City.Name</h1>
+
+<p>@if (Model.Weather.Date.Date.Equals(DateTime.Today))
+    {
+        <span>Today, <b>@Model.Weather.Date.ToString("D")</b>, it is </span>
+    }
+    else if (Model.Weather.Date.Date.CompareTo(DateTime.Today) < 0)
+    {
+        <span>On <b>@Model.Weather.Date.ToString("D")</b> it was </span>
+    }
+    else
+    {
+        <span>On <b>@Model.Weather.Date.ToString("D")</b> it will be </span>
+    }
+    <span>@Model.Weather.WeatherType.Name, @Model.Weather.Temperature °C in @Model.City.Name.</span></p>
+
+<div style="width: 100px;margin-bottom: 20px">
+    <span style="font-size:30px;display:block" align="center">@Model.Weather.Temperature °C</span>
+    <img style="display: block;margin: 0 auto" src=@Model.Weather.WeatherType.IconPath width="100" height="100" alt=@Model.Weather.WeatherType.Name>
+</div>
+
+<p><a href="/">Back to homepage</a></p>

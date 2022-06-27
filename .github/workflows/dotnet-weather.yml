@@ -1,0 +1,54 @@
+name: Test Dotnet Weather
+
+on:
+  push:
+    paths:
+      - 'applications/weather-service-dotnet/**'
+      - '.github/workflows/dotnet-weather.yml'
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Perform the tests
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./applications/weather-service-dotnet
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: '6.x'
+      - name: Install dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+      - name: Test
+        run: dotnet test --no-restore --verbosity normal
+
+  build-and-push-image:
+    name: Push Docker image to Github Container registry
+    runs-on: ubuntu-latest
+    needs: test
+    defaults:
+      run:
+        working-directory: ./applications/weather-service-dotnet
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Log in to the Container registry
+      uses: docker/login-action@v2
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v3
+      with:
+        context: ./applications/weather-service-dotnet
+        push: true
+        tags: ghcr.io/qaware/dotnet-weather:latest

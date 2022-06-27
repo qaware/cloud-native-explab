@@ -1,0 +1,15 @@
+version: '3.4'
+
+services:
+  sqldata:
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=${SA_PASSWORD}
+    ports:
+      - "${DB_LOCAL_PORT}:1433"
+
+  dotnet-weather:
+    environment:
+      - ConnectionStrings:DefaultConnection=Data source=sqldata,${DB_LOCAL_PORT};Database=master;User Id=sa;Password=${SA_PASSWORD};
+    ports:
+      - "${APP_LOCAL_PORT}:8080"

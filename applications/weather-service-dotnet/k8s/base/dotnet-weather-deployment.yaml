@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: dotnet-weather
+  name: dotnet-weather
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dotnet-weather
+  template:
+    metadata:
+      labels:
+        weather-network: "true"
+        app: dotnet-weather
+    spec:
+      containers:
+        - image: dotnet-weather
+          imagePullPolicy: Never
+          name: dotnet-weather
+          envFrom:
+            - configMapRef:
+                name: dotnet-weather-config
+          ports:
+            - containerPort: 8080
+          resources: {}
+      restartPolicy: Always
+status: {}

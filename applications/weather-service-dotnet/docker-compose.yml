@@ -1,0 +1,20 @@
+version: '3.4'
+
+services:
+  sqldata:
+    image: mcr.microsoft.com/mssql/server
+    networks:
+      - weather-network
+
+  dotnet-weather:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: dotnet-weather
+    depends_on:
+      - sqldata
+    networks:
+      - weather-network
+
+networks:
+    weather-network:

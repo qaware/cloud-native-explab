@@ -1,0 +1,20 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>This project was created as a part of <a href="https://github.com/qaware/cloud-native-explab">Cloud Native Experience Lab</a>.</p>
+    <form asp-controller="Weather" asp-action="Find" method="GET" id="form">
+        <div>
+            <h3>What's the weather like?</h3>
+            <label for="location">City:</label>
+            <input name="city" id="location">
+            <label for="date">Date:</label>
+            <input type="date" name="date" id="date">
+        </div>
+        <div>
+            <button>Check weather</button>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: db-config
+data:
+  ACCEPT_EULA: "Y"
+  SA_PASSWORD: "ChangedInK8s"
