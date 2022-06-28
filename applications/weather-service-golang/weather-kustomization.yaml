@@ -1,7 +1,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
 kind: Kustomization
 metadata:
-  name: cloud-native-weather-javaee
+  name: cloud-native-weather-golang
   namespace: flux-system
 spec:
   interval: 5m0s
@@ -9,13 +9,13 @@ spec:
   prune: true
   sourceRef:
     kind: GitRepository
-    name: cloud-native-weather-javaee
+    name: cloud-native-weather-golang
   validation: client
-  targetNamespace: weather-javaee
+  targetNamespace: weather-golang
   images:
-    - name: ghcr.io/qaware/cloud-native-weather-javaee
-      newName: ghcr.io/qaware/cloud-native-weather-javaee # {"$imagepolicy": "flux-system:cloud-native-weather-javaee:name"}
-      newTag: 1.0.0 # {"$imagepolicy": "flux-system:cloud-native-weather-javaee:tag"}
+    - name: ghcr.io/qaware/cloud-native-weather-golang
+      newName: ghcr.io/qaware/cloud-native-weather-golang # {"$imagepolicy": "flux-system:cloud-native-weather-golang:name"}
+      newTag: 1.0.0 # {"$imagepolicy": "flux-system:cloud-native-weather-golang:tag"}
   patchesStrategicMerge:
     - apiVersion: apps/v1
       kind: Deployment
