@@ -1,7 +1,7 @@
 apiVersion: image.toolkit.fluxcd.io/v1beta1
 kind: ImageRepository
 metadata:
-  name: weather-javaee
+  name: cloud-native-weather-javaee
   namespace: flux-system
 spec:
   image: ghcr.io/qaware/cloud-native-weather-javaee

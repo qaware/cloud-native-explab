@@ -1,7 +1,7 @@
 apiVersion: source.toolkit.fluxcd.io/v1beta1
 kind: GitRepository
 metadata:
-  name: weather-javaee
+  name: cloud-native-weather-javaee
   namespace: flux-system
 spec:
   interval: 5m0s

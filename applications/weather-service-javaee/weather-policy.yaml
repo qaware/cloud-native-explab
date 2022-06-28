@@ -1,11 +1,11 @@
 apiVersion: image.toolkit.fluxcd.io/v1beta1
 kind: ImagePolicy
 metadata:
-  name: weather-javaee
+  name: cloud-native-weather-javaee
   namespace: flux-system
 spec:
   imageRepositoryRef:
-    name: weather-javaee
+    name: cloud-native-weather-javaee
   policy:
     semver:
       range: '>=1.0.0'

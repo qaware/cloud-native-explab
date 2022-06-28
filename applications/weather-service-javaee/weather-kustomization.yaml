@@ -1,7 +1,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
 kind: Kustomization
 metadata:
-  name: podinfo
+  name: cloud-native-weather-javaee
   namespace: default
 spec:
   interval: 5m0s
@@ -9,20 +9,20 @@ spec:
   prune: true
   sourceRef:
     kind: GitRepository
-    name: podinfo
+    name: cloud-native-weather-javaee
   validation: client
   targetNamespace: weather-javaee
   images:
     - name: ghcr.io/qaware/cloud-native-weather-javaee
-      newName: ghcr.io/qaware/cloud-native-weather-javaee # {"$imagepolicy": "flux-system:weather-javaee:name"}
-      newTag: 1.0.0 # {"$imagepolicy": "flux-system:weather-javaee:tag"}
+      newName: ghcr.io/qaware/cloud-native-weather-javaee # {"$imagepolicy": "flux-system:cloud-native-weather-javaee:name"}
+      newTag: 1.0.0 # {"$imagepolicy": "flux-system:cloud-native-weather-javaee:tag"}
   patchesStrategicMerge:
     - apiVersion: apps/v1
       kind: Deployment
       metadata:
         name: weather-service
       spec:
-        replicas: 2
+        replicas: 1
     - apiVersion: v1
       kind: Service
       metadata:
