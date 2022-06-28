@@ -16,13 +16,13 @@ Currently, several implementations of the lab and the Weather Service are availa
 
 There are several principles a good cloud-native application must and should adhere to.
 
-_TODO:_ Implement some of the 12-factor app principles within the given application. Think about external configuration via ENV variables. Circuit breakers. Metrics. Logs. et.al
+_TODO:_ Implement some of the 12-factor app principles within the given application. Think about external configuration via ENV variables. Use a circuit breaker for the REST call to the external weather API. Provide useful technical and business metrics. Use structured logging.
 
 ### Containerization
 
 In this stage, the microservice and all required resources need to be containerized, so that the runtime environment is the same overall stages of the software.
 
-_TODO:_ Implement a Dockerfile to build and containerized the given application.
+_TODO:_ Implement a Dockerfile to build and containerize the given application.
 
 ### Deployment (using Kustomize)
 
@@ -53,7 +53,7 @@ The software under development must be built on every (significat) change to ens
 
 _TODO:_ Implement GitHub Actions to build and publish the final Docker artifacts for deployment.
 
-## Continous Deployment
+## Continous Delivery
 
 ### Flux2 CD
 
