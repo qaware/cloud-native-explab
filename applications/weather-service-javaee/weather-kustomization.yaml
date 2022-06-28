@@ -13,7 +13,7 @@ spec:
   validation: client
   targetNamespace: weather-javaee
   images:
-    - name: ghcr.io/qaware/cloud-native-weather-javaee
+    - name: cloud-native-weather-javaee
       newName: ghcr.io/qaware/cloud-native-weather-javaee # {"$imagepolicy": "flux-system:cloud-native-weather-javaee:name"}
       newTag: 1.0.0 # {"$imagepolicy": "flux-system:cloud-native-weather-javaee:tag"}
   patchesStrategicMerge:

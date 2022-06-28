@@ -13,7 +13,7 @@ spec:
   validation: client
   targetNamespace: weather-golang
   images:
-    - name: ghcr.io/qaware/cloud-native-weather-golang
+    - name: cloud-native-weather-golang
       newName: ghcr.io/qaware/cloud-native-weather-golang # {"$imagepolicy": "flux-system:cloud-native-weather-golang:name"}
       newTag: 1.0.0 # {"$imagepolicy": "flux-system:cloud-native-weather-golang:tag"}
   patchesStrategicMerge:
