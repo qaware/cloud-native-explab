@@ -26,13 +26,16 @@ _TODO:_ Implement a Dockerfile to build and containerized the given application.
 
 ### Deployment (using Kustomize)
 
+In this stage, we will have a look at how to implement redundancy-free K8s deployment manifests using Kustomize. 
 
-
+_TODO:_ Implement a Kustomize base manifest as well as a Dev and Prod overlay manifest for the given microservice application.
 
 ### Deployment (using Helm)
-_TODO_
+_TODO:_
 
 ## Local Developer Experience
+
+For efficient development of modern microservices a local-first strategy should be adopted. This sections shows how to develop effiently and locally.
 
 ### Skaffold
 
@@ -50,11 +53,8 @@ The software under development must be built on every (significat) change to ens
 
 _TODO:_ Implement GitHub Actions to build and publish the final Docker artifacts for deployment.
 
-
 ## Continous Deployment
 
-### Flux
+### Flux2 CD
 
-## Continuous Testing
-
-### Testkube
+_TODO:_ Implement the required Flux configurations for your application repository to have your application deployed securely to a known environment.
