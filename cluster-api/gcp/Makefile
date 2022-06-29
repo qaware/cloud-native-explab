@@ -17,7 +17,7 @@ bootstrap-capi-flux2:
 		--owner=$(GITHUB_USER) \
         --repository=cloud-native-explab \
         --branch=main \
-        --path=./cluster-api/gcp/clusters/capi-mgmt-cluster \
+        --path=./clusters/gcp/capi-mgmt-cluster \
 		--components-extra=image-reflector-controller,image-automation-controller \
 		--read-write-key \
 		--personal
