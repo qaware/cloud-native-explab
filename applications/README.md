@@ -12,11 +12,23 @@ Currently, several implementations of the lab and the Weather Service are availa
 
 ## Cloud-native Development
 
+### Prerequisites
+
+- Java IDE, like VS.code, IntelliJ, ...
+- JDK 11, e.g. OpenJDK, Zulu, ...
+- Local Docker and Kubernetes installation
+    - Docker Desktop (https://docs.docker.com/get-docker/)
+    - Rancher Desktop (https://docs.rancherdesktop.io/getting-started/installation)
+    - Minikube (https://minikube.sigs.k8s.io/docs/start/)
+- Kustomize CLI (https://kubectl.docs.kubernetes.io/installation/kustomize/)
+- Skaffold (https://skaffold.dev/docs/install/#standalone-binary) and/or Tilt (https://docs.tilt.dev/install.html)
+- Flux2 CLI (https://fluxcd.io/docs/installation/)
+
 ### 12-factor App Principles
 
 There are several principles a good cloud-native application must and should adhere to.
 
-_TODO:_ Implement some of the 12-factor app principles within the given application. Think about external configuration via ENV variables. Use a circuit breaker for the REST call to the external weather API. Provide useful technical and business metrics. Use structured logging.
+_TODO:_ Implement some of the 12-factor app principles within the given application. Think about external configuration via ENV variables. Use a circuit breaker for the REST call to the external weather API. Provide useful technical and business metrics.
 
 ### Containerization
 
