@@ -1,0 +1,22 @@
+apiVersion: infrastructure.giantswarm.io/v1alpha3
+kind: AWSCluster
+metadata:
+  annotations:
+    alpha.aws.giantswarm.io/iam-roles-for-service-accounts: "true"
+    alpha.aws.giantswarm.io/update-max-batch-size: "2"
+    alpha.aws.giantswarm.io/update-pause-time: PT5M
+    node.giantswarm.io/terminate-unhealthy: "true"
+  name: ${cluster_id}
+  namespace: org-${organization}
+spec:
+  cluster:
+    description: Test cluster
+    dns:
+      domain: gorilla.eu-central-1.aws.gigantic.io
+  provider:
+    credentialSecret:
+      name: credential-default
+      namespace: giantswarm
+    pods:
+      cidrBlock: 10.7.0.0/16
+    region: eu-central-1

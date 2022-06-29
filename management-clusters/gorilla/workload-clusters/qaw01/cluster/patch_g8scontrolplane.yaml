@@ -1,0 +1,8 @@
+apiVersion: infrastructure.giantswarm.io/v1alpha3
+kind: G8sControlPlane
+metadata:
+  name: ${control_plane_id}
+  namespace: org-${organization}
+spec:
+  infrastructureRef:
+    apiVersion: infrastructure.giantswarm.io/v1alpha3
