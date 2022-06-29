@@ -5,8 +5,6 @@ metadata:
   name: capi-mgmt-cluster
   region: eu-central-1
   version: '1.22'
-  tags:
-    karpenter.sh/discovery: cluster-with-karpenter
 
 iam:
   withOIDC: true
@@ -36,10 +34,6 @@ iam:
       namespace: ci-cd
     wellKnownPolicies:
       imageBuilder: true
-
-karpenter:
-  version: '0.10.0'
-  createServiceAccount: true # default is false
 
 vpc:
   clusterEndpoints:
