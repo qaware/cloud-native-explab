@@ -70,3 +70,6 @@ _TODO:_ Implement GitHub Actions to build and publish the final Docker artifacts
 ### Flux2 CD
 
 _TODO:_ Implement the required Flux configurations for your application repository to have your application deployed securely to a known environment.
+
+### Argo CD
+_TODO:_
