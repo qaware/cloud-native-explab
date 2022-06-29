@@ -6,17 +6,17 @@ AWS_ACCOUNT_ID := $(shell aws sts get-caller-identity --query Account --output t
 AWS_REGION ?= eu-central-1
 
 prepare-gcp:
-    @gcloud config set project $(PROJECT)
+	@gcloud config set project $(PROJECT)
 	@gcloud config set compute/zone $(ZONE)
-    @gcloud config set container/use_client_certificate False
+	@gcloud config set container/use_client_certificate False
 
 create-gcp-cluster:
-    @gcloud container clusters create cloud-native-explab --num-nodes=3 --enable-autoscaling --min-nodes=3 --max-nodes=10 --machine-type=e2-standard-4 --cluster-version=1.22
-    @kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-admin --user=$$(gcloud config get-value core/account)
-    @kubectl cluster-info
+	@gcloud container clusters create cloud-native-explab --num-nodes=3 --enable-autoscaling --min-nodes=3 --max-nodes=10 --machine-type=e2-standard-4 --cluster-version=1.22
+	@kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-admin --user=$$(gcloud config get-value core/account)
+	@kubectl cluster-info
 
 bootstrap-gcp-flux2:
-    @flux bootstrap github \
+	@flux bootstrap github \
 		--owner=$(GITHUB_USER) \
         --repository=cloud-native-explab \
         --branch=main \
@@ -31,7 +31,7 @@ delete-gcp-cluster:
 create-aws-cluster:
 	@eksctl create cluster -f aws-cluster.yaml
 
-bootstrap-capi-flux2:
+bootstrap-aws-flux2:
 	@flux bootstrap github \
 		--owner=$(GITHUB_USER) \
         --repository=cloud-native-explab \
