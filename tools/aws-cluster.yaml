@@ -4,9 +4,7 @@ kind: ClusterConfig
 metadata:
   name: cloud-native-explab
   region: eu-central-1
-  version: '1.22'
-  tags:
-    karpenter.sh/discovery: cluster-with-karpenter
+  version: '1.21'
 
 iam:
   withOIDC: true
@@ -37,10 +35,6 @@ iam:
     wellKnownPolicies:
       imageBuilder: true
 
-karpenter:
-  version: '0.10.0'
-  createServiceAccount: true # default is false
-
 vpc:
   clusterEndpoints:
     privateAccess: true
@@ -53,9 +47,9 @@ cloudWatch:
 managedNodeGroups:
   - name: managed-explab-cluster-ng-1
     instanceType: t3.xlarge
-    minSize: 3
+    minSize: 5
     maxSize: 10
-    desiredCapacity: 3
+    desiredCapacity: 5
     volumeSize: 20
     ssh:
       allow: false
