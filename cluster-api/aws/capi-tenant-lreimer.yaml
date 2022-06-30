@@ -23,7 +23,7 @@ metadata:
   name: capi-tenant-lreimer
   namespace: default
 spec:
-  region: us-east-1
+  region: eu-central-1
   sshKeyName: default
 ---
 apiVersion: controlplane.cluster.x-k8s.io/v1beta1
@@ -56,7 +56,7 @@ spec:
       kind: AWSMachineTemplate
       name: capi-tenant-lreimer-control-plane
   replicas: 3
-  version: v1.24.0
+  version: v1.22.0
 ---
 apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
 kind: AWSMachineTemplate
@@ -92,7 +92,7 @@ spec:
         apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
         kind: AWSMachineTemplate
         name: capi-tenant-lreimer-md-0
-      version: v1.24.0
+      version: v1.22.0
 ---
 apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
 kind: AWSMachineTemplate

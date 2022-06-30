@@ -13,17 +13,28 @@ This experience lab puts its focus on cloud-native platform engineers. No matter
 - Kustomize CLI (https://kubectl.docs.kubernetes.io/installation/kustomize/)
 - Flux2 CLI (https://fluxcd.io/docs/installation/)
 
+## Cluster API
+
+```
+$ kubectl get clusters
+$ kubectl get kubeadmcontrolplane
+$ clusterctl describe cluster capi-tenant-lreimer
+$ kubectl --kubeconfig=capi-tenant-lreimer.kubeconfig get nodes
+```
+
+
 ## GitOps with Flux
 
-_TODO:_ Implement the required Flux configurations for your application repository to have your application deployed securely to a known environment.
-
-## Cluster API
-_TODO:_
-
-## Crossplane
-_TODO:_
+In this section we want to play around with FluxCD. Go to https://github.com/lreimer/hands-on-flux2
 
 ## Security
+
+- Sealed Secrets
+- Trivy Operator
+- Gatekeeper
+
+
+## Crossplane
 _TODO:_
 
 ## Diagnosability
