@@ -1,7 +1,7 @@
 apiVersion: cluster.x-k8s.io/v1beta1
 kind: Cluster
 metadata:
-  name: capi-quickstart
+  name: capi-tenant-lreimer
   namespace: default
 spec:
   clusterNetwork:
@@ -11,16 +11,16 @@ spec:
   controlPlaneRef:
     apiVersion: controlplane.cluster.x-k8s.io/v1beta1
     kind: KubeadmControlPlane
-    name: capi-quickstart-control-plane
+    name: capi-tenant-lreimer-control-plane
   infrastructureRef:
     apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
     kind: AWSCluster
-    name: capi-quickstart
+    name: capi-tenant-lreimer
 ---
 apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
 kind: AWSCluster
 metadata:
-  name: capi-quickstart
+  name: capi-tenant-lreimer
   namespace: default
 spec:
   region: us-east-1
@@ -29,7 +29,7 @@ spec:
 apiVersion: controlplane.cluster.x-k8s.io/v1beta1
 kind: KubeadmControlPlane
 metadata:
-  name: capi-quickstart-control-plane
+  name: capi-tenant-lreimer-control-plane
   namespace: default
 spec:
   kubeadmConfigSpec:
@@ -54,29 +54,29 @@ spec:
     infrastructureRef:
       apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
       kind: AWSMachineTemplate
-      name: capi-quickstart-control-plane
+      name: capi-tenant-lreimer-control-plane
   replicas: 3
   version: v1.24.0
 ---
 apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
 kind: AWSMachineTemplate
 metadata:
-  name: capi-quickstart-control-plane
+  name: capi-tenant-lreimer-control-plane
   namespace: default
 spec:
   template:
     spec:
       iamInstanceProfile: control-plane.cluster-api-provider-aws.sigs.k8s.io
-      instanceType: t3.large
+      instanceType: t3.medium
       sshKeyName: default
 ---
 apiVersion: cluster.x-k8s.io/v1beta1
 kind: MachineDeployment
 metadata:
-  name: capi-quickstart-md-0
+  name: capi-tenant-lreimer-md-0
   namespace: default
 spec:
-  clusterName: capi-quickstart
+  clusterName: capi-tenant-lreimer
   replicas: 3
   selector:
     matchLabels: null
@@ -86,30 +86,30 @@ spec:
         configRef:
           apiVersion: bootstrap.cluster.x-k8s.io/v1beta1
           kind: KubeadmConfigTemplate
-          name: capi-quickstart-md-0
-      clusterName: capi-quickstart
+          name: capi-tenant-lreimer-md-0
+      clusterName: capi-tenant-lreimer
       infrastructureRef:
         apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
         kind: AWSMachineTemplate
-        name: capi-quickstart-md-0
+        name: capi-tenant-lreimer-md-0
       version: v1.24.0
 ---
 apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
 kind: AWSMachineTemplate
 metadata:
-  name: capi-quickstart-md-0
+  name: capi-tenant-lreimer-md-0
   namespace: default
 spec:
   template:
     spec:
       iamInstanceProfile: nodes.cluster-api-provider-aws.sigs.k8s.io
-      instanceType: t3.large
+      instanceType: t3.medium
       sshKeyName: default
 ---
 apiVersion: bootstrap.cluster.x-k8s.io/v1beta1
 kind: KubeadmConfigTemplate
 metadata:
-  name: capi-quickstart-md-0
+  name: capi-tenant-lreimer-md-0
   namespace: default
 spec:
   template:
