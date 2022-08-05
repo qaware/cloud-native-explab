@@ -6,8 +6,6 @@ bare metal or virtualized hardware.
 
 ![Conceptual Architecture](cloudkoffer.png)
 
-
-
 ## Ubuntu Server 22.04 Installation
 
 The case consists of 5 NUCs. All need to be pre-installed with the latest Ubuntu Server linux distribution. 
@@ -91,17 +89,33 @@ export GITHUB_TOKEN=<your-token>
 
 # bootstrap the flux-system namespace and components
 flux bootstrap github \
-	--owner=$(GITHUB_USER) \
+	--owner=$GITHUB_USER \
     --repository=cloud-native-explab \
     --branch=main \
     --path=./clusters/bare/microk8s-cloudkoffer \
 	--components-extra=image-reflector-controller,image-automation-controller \
-	--read-write-key \
-  	--personal
-
+	--read-write-key
+    # --token-auth       # instead of SSH key access, use the Github token instead
+  	# --personal         # only for user accounts, not for org accounts
 ```
 
-## Alternative Labs
+## Observability with Grafana, Loki and Tempo
+
+```bash
+
+````
+
+
+## Addon and Alternative Labs
+
+### PXE Boot Server for NUC Setup
+
+Instead of manually provision the hardware nodes with the operating system and software, we could use the PXE boot
+mechanism to provision the individual nodes automatically on boot.
+
+- https://linuxhint.com/pxe_boot_ubuntu_server/
+- https://www.tecmint.com/install-ubuntu-via-pxe-server-using-local-dvd-sources/
+
 
 ### Fedora CoreOS with K3s Cluster
 
