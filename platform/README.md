@@ -1,41 +1,10 @@
 # Cloud-native Experience Lab (for Platform Engineers)
 
-This experience lab puts its focus on cloud-native platform engineers. No matter which implementation language is used, the conceptual items are very similar.
+This experience lab puts its focus on cloud-native platform engineers. No matter which implementation language is used, the conceptual items are very similar. In this lab we explore several opinionated platforms, from a bare metal CloudKoffer, to custom tailor-made Kubernetes, to provider managed Kubernetes and Cloud vendor platform solutions.
 
-![Platform Architecture](architecture.png)
-
-## Prerequisites
-
-- Local Docker and Kubernetes installation
-    - Docker Desktop (https://docs.docker.com/get-docker/)
-    - Rancher Desktop (https://docs.rancherdesktop.io/getting-started/installation)
-    - Minikube (https://minikube.sigs.k8s.io/docs/start/)
-- Kustomize CLI (https://kubectl.docs.kubernetes.io/installation/kustomize/)
-- Flux2 CLI (https://fluxcd.io/docs/installation/)
-
-## Cluster API
-
-```
-$ kubectl get clusters
-$ kubectl get kubeadmcontrolplane
-$ clusterctl describe cluster capi-tenant-lreimer
-$ kubectl --kubeconfig=capi-tenant-lreimer.kubeconfig get nodes
-```
-
-
-## GitOps with Flux
-
-In this section we want to play around with FluxCD. Go to https://github.com/lreimer/hands-on-flux2
-
-## Security
-
-- Sealed Secrets
-- Trivy Operator
-- Gatekeeper
-
-
-## Crossplane
-_TODO:_
-
-## Diagnosability
-_TODO:_
+- [EKS based Kubernetes Platform](aws-kubernetes.md)
+- [AWS Managed Services Platform](aws-native.md)
+- [Bare Metal Kubernetes Cloudkoffer](cloudkoffer.md)
+- [GKE based Kubernetes Platform](gcp-kubernetes.md)
+- [GCP Managed Services Platform](gcp-native.md)
+- [GiantSwarm based Kubernetes Platform](giantswarm.md)
