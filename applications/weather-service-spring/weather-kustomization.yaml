@@ -1,0 +1,31 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
+kind: Kustomization
+metadata:
+  name: cloud-native-weather-spring
+  namespace: flux-system
+spec:
+  interval: 5m0s
+  path: ./k8s/overlays/dev
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: cloud-native-weather-spring
+  validation: client
+  targetNamespace: weather-spring
+  images:
+    - name: cloud-native-weather-spring
+      newName: ghcr.io/qaware/cloud-native-weather-spring # {"$imagepolicy": "flux-system:cloud-native-weather-spring:name"}
+      newTag: 1.0.0 # {"$imagepolicy": "flux-system:cloud-native-weather-spring:tag"}
+  patchesStrategicMerge:
+    - apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: weather-service
+      spec:
+        replicas: 2
+    - apiVersion: v1
+      kind: Service
+      metadata:
+        name: weather-service
+      spec:
+        type: LoadBalancer
