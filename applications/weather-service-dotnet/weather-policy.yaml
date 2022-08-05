@@ -1,0 +1,12 @@
+apiVersion: image.toolkit.fluxcd.io/v1beta1
+kind: ImagePolicy
+metadata:
+  name: cloud-native-weather-dotnet
+  namespace: flux-system
+spec:
+  imageRepositoryRef:
+    name: cloud-native-weather-dotnet
+  policy:
+    semver:
+      range: '>=1.x.x'
+      # range: 1.0.x
