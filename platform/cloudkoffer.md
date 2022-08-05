@@ -1,6 +1,8 @@
 # Bare Metal Kubernetes Cloudkoffer
 
 This lab is really hands on with real hardware to give you that good old computer science feeling.
+Potential use cases are e.g. a private cloud Kubernetes setup in an on-premise data center on either
+bare metal or virtualized hardware.
 
 ![Conceptual Architecture](cloudkoffer.png)
 
@@ -74,10 +76,59 @@ microk8s kubectl get nodes
 
 ## Platform Bootstrapping with Flux2
 
+In this lab we use Flux2 as GitOps tool to provision further infrastructure and platform components as
+well as a simple weather microservice.
 
+```bash
+# install the Flux2 CLI on the master node
+# see https://fluxcd.io/docs/installation/
+curl -s https://fluxcd.io/install.sh | sudo bash
+
+# see https://fluxcd.io/docs/get-started/
+# generate a personal Github token
+export GITHUB_USER=qaware
+export GITHUB_TOKEN=<your-token>
+
+# bootstrap the flux-system namespace and components
+flux bootstrap github \
+	--owner=$(GITHUB_USER) \
+    --repository=cloud-native-explab \
+    --branch=main \
+    --path=./clusters/bare/microk8s-cloudkoffer \
+	--components-extra=image-reflector-controller,image-automation-controller \
+	--read-write-key \
+  	--personal
+
+```
 
 ## Alternative Labs
 
 ### Fedora CoreOS with K3s Cluster
 
+An alternative base setup at the IaaS and CaaS layer is the combination of CoreOS and K3s.
+
+- https://devopstales.github.io/kubernetes/k3s-fcos/
+- https://stevex0r.medium.com/setting-up-a-lightweight-kubernetes-cluster-with-k3s-and-fedora-coreos-12d504160366
+- https://www.murillodigital.com/tech_talk/k3s_in_coreos/
+
 ### ArgoCD instead of Flux2
+
+Instead of Flux2 you could use ArgoCD as GitOps tool. Luckily, in case of microk8s there is a suitable addon.
+
+```bash
+# enable community addons
+microk8s enable community
+microk8s enable argocd
+
+# see https://argo-cd.readthedocs.io/en/stable/getting_started/
+# install argo CLI
+kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
+
+# get the initial password
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
+argocd login <ARGOCD_SERVER>
+```
+
+### k3OS with K3s Cluster
+
+see https://github.com/rancher/k3os#installation
