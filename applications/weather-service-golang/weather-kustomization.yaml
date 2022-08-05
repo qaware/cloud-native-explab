@@ -15,7 +15,7 @@ spec:
   images:
     - name: cloud-native-weather-golang
       newName: ghcr.io/qaware/cloud-native-weather-golang # {"$imagepolicy": "flux-system:cloud-native-weather-golang:name"}
-      newTag: 1.0.0 # {"$imagepolicy": "flux-system:cloud-native-weather-golang:tag"}
+      newTag: 1.2.0 # {"$imagepolicy": "flux-system:cloud-native-weather-golang:tag"}
   patchesStrategicMerge:
     - apiVersion: apps/v1
       kind: Deployment

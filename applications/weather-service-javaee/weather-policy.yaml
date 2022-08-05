@@ -8,5 +8,5 @@ spec:
     name: cloud-native-weather-javaee
   policy:
     semver:
-      range: '>=1.0.0'
+      range: '>=1.x.x'
       # range: 1.0.x
