@@ -147,6 +147,7 @@ flux get all
 </details>
 
 ### Kubernetes Dashboard
+___
 
 The Kubernetes dashboard has already been installed as microk8s addon as part of the cluster setup.
 However, since RBAC has been enabled for the cluster a few additional steps are required.
@@ -199,6 +200,7 @@ microk8s kubectl -n kube-system create token admin-user
 </details>
 
 ### Observability with Grafana, Loki and Tempo
+___
 
 For good observability we will use a Grafana-based stack, which is completely free software:
 - [Prometheus](https://prometheus.io/) to collect metrics
