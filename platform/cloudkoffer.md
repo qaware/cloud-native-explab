@@ -103,8 +103,7 @@ Next, we will bootstrap Flux2 as GitOps tool to provision further infrastructure
     - use this repository as GitOps repository
     - enable extra components: _image-reflector-controller_ and _image-automation-controller_
     - create a read-write SSH key
-4. Add Flux2 Kustomization for platform `infrastructure/` and `applications/` folder
-5. Add support for image update automation for `applications/` folder
+4. Add Flux2 Kustomization for platform `infrastructure/` folder
 
 <details>
   <summary markdown="span">Click to expand solution ...</summary>
@@ -150,14 +149,20 @@ flux get all
 ### Kubernetes Dashboard
 
 The Kubernetes dashboard has already been installed as microk8s addon as part of the cluster setup.
-However, since RBAC has been enabled for the cluster a few additional steps are required, such as creating
-a service account and cluster role binding.
+However, since RBAC has been enabled for the cluster a few additional steps are required.
 
-Use the configure Flux2 GitOps repository to create and/or update the RBAC service account and cluster role
-binding the dashboard.
-```yaml
+**Lab Instructions**
+1. Create service account and cluster role binding using Flux2
+2. Expose the dashboard UI as _LoadBalancer_ service or using an _Ingress_ resource
+3. Generate user token and access dashboard UI
+
+<details>
+  <summary markdown="span">Click to expand solution ...</summary>
+
+  ```yaml
 # see https://github.com/kubernetes/dashboard/blob/master/docs/user/access-control/creating-sample-user.md
 # the microk8s dashboard is installed in the kube-system namespace
+# create dashboard-rbac.yaml in the GitOps infrastructure directory
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -176,11 +181,12 @@ subjects:
 - kind: ServiceAccount
   name: admin-user
   namespace: kube-system
-```
+  ```
 
 Now you can open and access the dashboard in your preferred browser. If you prefer to expose the dashboard UI as
 LoadBalancer or Ingress, add the K8s resource definitions to the configured GitOps repository.
-```bash
+
+  ```bash
 # either use port forwarding
 microk8s kubectl port-forward -n kube-system service/kubernetes-dashboard 10443:443
 # or (manually) use a LoadBalancer to access the dashboard
@@ -189,7 +195,8 @@ microk8s kubectl get services -n kube-system
 
 # create an access token to login to the dashboard
 microk8s kubectl -n kube-system create token admin-user
-```
+  ```
+</details>
 
 ### Observability with Grafana, Loki and Tempo
 
