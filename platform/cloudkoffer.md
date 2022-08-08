@@ -43,7 +43,7 @@ On the master node, create a keypair and copy the SSH ID to all the nodes. Basic
 After the initial server installation all nodes run as individual microk8s nodes. Now we need to join all nodes
 with the master to automatically for a HA cluster. Also, we need to enable useful and required microk8s addons.
 
-**Instructions**
+**Lab Instructions**
 1. Enable at least the following standard microk8s addons: 
     - DNS
     - RBAC
@@ -57,7 +57,7 @@ with the master to automatically for a HA cluster. Also, we need to enable usefu
     - traefik
 
 <details>
-  <summary markdown="span">This is the solution, click me to expand</summary>
+  <summary markdown="span">Click to expand solution ...</summary>
 
   ```bash
 # prepare the master node
@@ -94,20 +94,20 @@ microk8s enable traefik
 
 ## Platform Bootstrapping with Flux2
 
-Next, we will bootstrap Flux2 as GitOps tool to provision further infrastructure and platform components as well as the applications.
+Next, we will bootstrap Flux2 as GitOps tool to provision further infrastructure and platform components. as well as the applications.
 
-**Instructions**
+**Lab Instructions**
 1. Install the Flux2 CLI on either the microk8s master or your developer machine
 2. Create personal Github token and export as ENV variable
 3. Bootstrap the flux-system namespace and components
     - use this repository as GitOps repository
     - enable extra components: _image-reflector-controller_ and _image-automation-controller_
     - create a read-write SSH key
-4. Add Flux2 Kustomization for `infrastructure/` and `applications/` folder
+4. Add Flux2 Kustomization for platform `infrastructure/` and `applications/` folder
 5. Add support for image update automation for `applications/` folder
 
 <details>
-  <summary markdown="span">This is the solution, click me to expand</summary>
+  <summary markdown="span">Click to expand solution ...</summary>
   
   ```bash
 # install the Flux2 CLI on the master node
@@ -132,8 +132,6 @@ flux bootstrap github \
 
 # you may need to update and modify Flux kustomization
 # - infrastructure-sync.yaml
-# - applications-sync.yaml
-# - image-update-automation.yaml
 
 flux create kustomization infrastructure \
   --source=GitRepository/flux-system \
@@ -142,22 +140,10 @@ flux create kustomization infrastructure \
   --interval=5m0s \
   --export > ./clusters/bare/microk8s-cloudkoffer/infrastructure-sync.yaml
 
-flux create kustomization applications \
-  --depends-on=infrastructure
-  --source=GitRepository/flux-system \
-  --path="./applications/bare/microk8s-cloudkoffer"
-  --prune=true \
-  --interval=5m0s \
-  --export > ./clusters/bare/microk8s-cloudkoffer/applications-sync.yaml
-
-# see https://fluxcd.io/docs/guides/image-update/
-
 # to manually trigger the GitOps process use the following commands
-flux get all
 flux reconcile source git flux-system
-
 flux reconcile kustomization infrastructure
-flux reconcile kustomization applications
+flux get all
   ```
 </details>
 
@@ -261,7 +247,42 @@ flux create hr loki \
   --target-namespace=observability \
   --create-target-namespace=false \
   --export > observability/loki-release.yaml
-````
+```
+
+## Applications Deployment with Flux2
+
+Now, we will finally setup Flux2 as GitOps tool to provision cloud-native applications.
+
+**Lab Instructions**
+1. Add another Flux2 Kustomization for the `applications/` folder, that depends on the _infrastructure_ Kustomization
+2. Add support for image update automation for the `applications/` folder
+
+<details>
+  <summary markdown="span">Click to expand solution ...</summary>
+  
+  ```bash
+# you may need to update and modify Flux kustomization
+# - applications-sync.yaml
+# - image-update-automation.yaml
+
+flux create kustomization applications \
+  --depends-on=infrastructure
+  --source=GitRepository/flux-system \
+  --path="./applications/bare/microk8s-cloudkoffer"
+  --prune=true \
+  --interval=5m0s \
+  --export > ./clusters/bare/microk8s-cloudkoffer/applications-sync.yaml
+
+# see https://fluxcd.io/docs/guides/image-update/
+
+# to manually trigger the GitOps process use the following commands
+flux reconcile source git flux-system
+flux reconcile kustomization applications
+flux get all
+  ```
+</details>
+
+### 
 
 ## Addon and Alternative Labs
 
