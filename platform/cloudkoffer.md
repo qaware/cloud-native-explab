@@ -43,6 +43,19 @@ On the master node, create a keypair and copy the SSH ID to all the nodes. Basic
 After the initial server installation all nodes run as individual microk8s nodes. Now we need to join all nodes
 with the master to automatically for a HA cluster. Also, we need to enable useful and required microk8s addons.
 
+**Instructions**
+1. Enable at least the following standard microk8s addons: 
+    - DNS
+    - RBAC
+    - hostpath-storage
+    - dashboard
+    - metallb
+2. Add and join all 4 nodes to the master node
+3. _(Optional)_ Enable additional community addons, e.g.
+    - linkerd
+    - dashboard-ingress
+    - traefik
+
 <details>
   <summary markdown="span">This is the solution, click me to expand</summary>
 
