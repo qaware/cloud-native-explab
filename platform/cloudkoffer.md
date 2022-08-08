@@ -207,54 +207,72 @@ For good observability we will use a Grafana-based stack, which is completely fr
 
 Read the blog post [Cloud Observability With Grafana And Spring Boot](https://blog.qaware.de/posts/cloud-observability-grafana-spring-boot/) for more details.
 
+**Lab Instructions**
+1. Add Helm repository for Prometheus community charts using Flux CLI and GitOps repository
+2. Add `observability` namespace via GitOps repository
+3. Install `kube-prometheus-stack` Helm chart (39.5.0 or later) using Flux CLI and GitOps repository
+4. Add Helm repository for Grfana chars using Flux CLI and GitOps repository
+5. Install `tempo` Helm chart (0.15.0 or later) or later using Flux CLI and GitOps repository
+5. Install `promtail` Helm chart (2.6.0 or later) using Flux CLI and GitOps repository
+5. Install `loki` Helm chart (2.13.0 or later) using Flux CLI and GitOps repository
+
+<details>
+  <summary markdown="span">Click to expand solution ...</summary>
+
 ```bash
 # we can use the Flux CLI to create the GitOps manifests for the observability stack
 cd infrastructure/bare/microk8s-cloudkoffer
 
 # create a Helm source and release for a the kube-prometheus-stack
 flux create source helm prometheus-community \
-  --url=https://prometheus-community.github.io/helm-charts \
-  --interval=10m0s \
-  --export > observability/prometheus-community-source.yaml
+    --url=https://prometheus-community.github.io/helm-charts \
+    --interval=10m0s \
+    --export > observability/prometheus-community-source.yaml
 
 flux create hr kube-prometheus-stack \
-  --source=HelmRepository/prometheus-community \
-  --chart=kube-prometheus-stack \
-  --chart-version="39.5.0" \
-  --target-namespace=observability \
-  --create-target-namespace=false \
-  --export > observability/kube-prometheus-stack.yaml
+    --source=HelmRepository/prometheus-community \
+    --chart=kube-prometheus-stack \
+    --chart-version="39.5.0" \
+    --target-namespace=observability \
+    --create-target-namespace=false \
+    --export > observability/kube-prometheus-stack.yaml
 
 # create a Helm source for Grafana charts and for the individual releases
 flux create source helm grafana-charts \
-  --url=https://grafana.github.io/helm-charts \
-  --interval=10m0s \
-  --export > observability/grafana-charts-source.yaml
+    --url=https://grafana.github.io/helm-charts \
+    --interval=10m0s \
+    --export > observability/grafana-charts-source.yaml
 
 flux create hr tempo \
-  --source=HelmRepository/grafana-charts \
-  --chart=tempo \
-  --chart-version=">=0.15.0 <0.16.0" \
-  --target-namespace=observability \
-  --create-target-namespace=false \
-  --export > observability/tempo-release.yaml
+    --source=HelmRepository/grafana-charts \
+    --chart=tempo \
+    --chart-version=">=0.15.0 <0.16.0" \
+    --target-namespace=observability \
+    --create-target-namespace=false \
+    --export > observability/tempo-release.yaml
 
 flux create hr promtail \
-  --source=HelmRepository/grafana-charts \
-  --chart=promtail \
-  --chart-version=">=2.6.0 <2.7.0" \
-  --target-namespace=observability \
-  --create-target-namespace=false \
-  --export > observability/promtail-release.yaml
+    --source=HelmRepository/grafana-charts \
+    --chart=promtail \
+    --chart-version=">=2.6.0 <2.7.0" \
+    --target-namespace=observability \
+    --create-target-namespace=false \
+    --export > observability/promtail-release.yaml
 
 flux create hr loki \
-  --source=HelmRepository/grafana-charts \
-  --chart=loki \
-  --chart-version=">=2.13.0 <2.13.0" \
-  --target-namespace=observability \
-  --create-target-namespace=false \
-  --export > observability/loki-release.yaml
+    --source=HelmRepository/grafana-charts \
+    --chart=loki \
+    --chart-version=">=2.13.0 <2.13.0" \
+    --target-namespace=observability \
+    --create-target-namespace=false \
+    --export > observability/loki-release.yaml
+
+# to manually trigger the GitOps process use the following commands
+flux reconcile source git flux-system
+flux reconcile kustomization infrastructure
+flux get all
 ```
+</details>
 
 ## Applications Deployment with Flux2
 
