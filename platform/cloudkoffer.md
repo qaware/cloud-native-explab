@@ -43,7 +43,10 @@ On the master node, create a keypair and copy the SSH ID to all the nodes. Basic
 After the initial server installation all nodes run as individual microk8s nodes. Now we need to join all nodes
 with the master to automatically for a HA cluster. Also, we need to enable useful and required microk8s addons.
 
-```bash
+<details>
+  <summary markdown="span">This is the solution, click me to expand</summary>
+
+  ```bash
 # prepare the master node
 microk8s status
 
@@ -70,7 +73,8 @@ microk8s join 192.168.178.10:25000/92b2db237428470dc4fcfc4ebbd9dc81/2c0cb3284b05
 # once all four nodes have joined check their status
 microk8s status
 microk8s kubectl get nodes
-```
+  ```
+</details>
 
 ## Platform Bootstrapping with Flux2
 
