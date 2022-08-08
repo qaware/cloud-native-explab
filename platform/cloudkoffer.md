@@ -53,7 +53,7 @@ with the master to automatically for a HA cluster. Also, we need to enable usefu
 2. Add and join all 4 nodes to the master node
 3. _(Optional)_ Enable additional community addons, e.g.
     - linkerd
-    - dashboard-ingress
+    - starboard
     - traefik
 
 <details>
@@ -67,8 +67,6 @@ microk8s enable dns
 microk8s enable rbac
 microk8s enable hostpath-storage
 microk8s enable dashboard
-microk8s enable community
-
 microk8s enable metallb
 # when asked, use the following IP range: 192.168.178.60-192.168.178.100
 
@@ -78,7 +76,6 @@ microk8s enable metallb
 # repeat the following steps for each of the nodes
 # and use the output from the following command
 microk8s add-node
-
 ssh k8s-node-1
 microk8s join 192.168.178.10:25000/92b2db237428470dc4fcfc4ebbd9dc81/2c0cb3284b05
 ...
@@ -86,15 +83,33 @@ microk8s join 192.168.178.10:25000/92b2db237428470dc4fcfc4ebbd9dc81/2c0cb3284b05
 # once all four nodes have joined check their status
 microk8s status
 microk8s kubectl get nodes
+
+# enable additional community addons
+microk8s enable community
+microk8s enable linkerd
+microk8s enable starboard
+microk8s enable traefik
   ```
 </details>
 
 ## Platform Bootstrapping with Flux2
 
-In this lab we use Flux2 as GitOps tool to provision further infrastructure and platform components as
-well as a simple weather microservice.
+Next, we will bootstrap Flux2 as GitOps tool to provision further infrastructure and platform components as well as the applications.
 
-```bash
+**Instructions**
+1. Install the Flux2 CLI on either the microk8s master or your developer machine
+2. Create personal Github token and export as ENV variable
+3. Bootstrap the flux-system namespace and components
+    - use this repository as GitOps repository
+    - enable extra components: _image-reflector-controller_ and _image-automation-controller_
+    - create a read-write SSH key
+4. Add Flux2 Kustomization for `infrastructure/` and `applications/` folder
+5. Add support for image update automation for `applications/` folder
+
+<details>
+  <summary markdown="span">This is the solution, click me to expand</summary>
+  
+  ```bash
 # install the Flux2 CLI on the master node
 # see https://fluxcd.io/docs/installation/
 curl -s https://fluxcd.io/install.sh | sudo bash
@@ -107,26 +122,46 @@ export GITHUB_TOKEN=<your-token>
 # bootstrap the flux-system namespace and components
 flux bootstrap github \
 	--owner=$GITHUB_USER \
-    --repository=cloud-native-explab \
-    --branch=main \
-    --path=./clusters/bare/microk8s-cloudkoffer \
+  --repository=cloud-native-explab \
+  --branch=main \
+  --path=./clusters/bare/microk8s-cloudkoffer \
 	--components-extra=image-reflector-controller,image-automation-controller \
 	--read-write-key
-    # --token-auth       # instead of SSH key access, use the Github token instead
-  	# --personal         # only for user accounts, not for org accounts
+  # --token-auth       # instead of SSH key access, use the Github token instead
+  # --personal         # only for user accounts, not for org accounts
 
 # you may need to update and modify Flux kustomization
 # - infrastructure-sync.yaml
 # - applications-sync.yaml
 # - image-update-automation.yaml
 
+flux create kustomization infrastructure \
+  --source=GitRepository/flux-system \
+  --path="./infrastructure/bare/microk8s-cloudkoffer"
+  --prune=true \
+  --interval=5m0s \
+  --export > ./clusters/bare/microk8s-cloudkoffer/infrastructure-sync.yaml
+
+flux create kustomization applications \
+  --depends-on=infrastructure
+  --source=GitRepository/flux-system \
+  --path="./applications/bare/microk8s-cloudkoffer"
+  --prune=true \
+  --interval=5m0s \
+  --export > ./clusters/bare/microk8s-cloudkoffer/applications-sync.yaml
+
+# see https://fluxcd.io/docs/guides/image-update/
+
 # to manually trigger the GitOps process use the following commands
+flux get all
 flux reconcile source git flux-system
+
 flux reconcile kustomization infrastructure
 flux reconcile kustomization applications
-```
+  ```
+</details>
 
-## Kubernetes Dashboard
+### Kubernetes Dashboard
 
 The Kubernetes dashboard has already been installed as microk8s addon as part of the cluster setup.
 However, since RBAC has been enabled for the cluster a few additional steps are required, such as creating
@@ -170,7 +205,7 @@ microk8s kubectl get services -n kube-system
 microk8s kubectl -n kube-system create token admin-user
 ```
 
-## Observability with Grafana, Loki and Tempo
+### Observability with Grafana, Loki and Tempo
 
 For good observability we will use a Grafana-based stack, which is completely free software:
 - [Prometheus](https://prometheus.io/) to collect metrics
