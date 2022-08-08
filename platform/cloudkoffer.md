@@ -120,24 +120,24 @@ export GITHUB_TOKEN=<your-token>
 
 # bootstrap the flux-system namespace and components
 flux bootstrap github \
-	--owner=$GITHUB_USER \
-  --repository=cloud-native-explab \
-  --branch=main \
-  --path=./clusters/bare/microk8s-cloudkoffer \
-	--components-extra=image-reflector-controller,image-automation-controller \
-	--read-write-key
-  # --token-auth       # instead of SSH key access, use the Github token instead
-  # --personal         # only for user accounts, not for org accounts
+    --owner=$GITHUB_USER \
+    --repository=cloud-native-explab \
+    --branch=main \
+    --path=./clusters/bare/microk8s-cloudkoffer \
+    --components-extra=image-reflector-controller,image-automation-controller \
+    --read-write-key
+    # --token-auth       # instead of SSH key access, use the Github token instead
+    # --personal         # only for user accounts, not for org accounts
 
 # you may need to update and modify Flux kustomization
 # - infrastructure-sync.yaml
 
 flux create kustomization infrastructure \
-  --source=GitRepository/flux-system \
-  --path="./infrastructure/bare/microk8s-cloudkoffer"
-  --prune=true \
-  --interval=5m0s \
-  --export > ./clusters/bare/microk8s-cloudkoffer/infrastructure-sync.yaml
+    --source=GitRepository/flux-system \
+    --path="./infrastructure/bare/microk8s-cloudkoffer"
+    --prune=true \
+    --interval=5m0s \
+    --export > ./clusters/bare/microk8s-cloudkoffer/infrastructure-sync.yaml
 
 # to manually trigger the GitOps process use the following commands
 flux reconcile source git flux-system
@@ -159,29 +159,29 @@ However, since RBAC has been enabled for the cluster a few additional steps are 
 <details>
   <summary markdown="span">Click to expand solution ...</summary>
 
-  ```yaml
+```yaml
 # see https://github.com/kubernetes/dashboard/blob/master/docs/user/access-control/creating-sample-user.md
 # the microk8s dashboard is installed in the kube-system namespace
 # create dashboard-rbac.yaml in the GitOps infrastructure directory
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: admin-user
-  namespace: kube-system
+    name: admin-user
+    namespace: kube-system
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: admin-user
+    name: admin-user
 roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: cluster-admin
+    apiGroup: rbac.authorization.k8s.io
+    kind: ClusterRole
+    name: cluster-admin
 subjects:
-- kind: ServiceAccount
-  name: admin-user
-  namespace: kube-system
-  ```
+    - kind: ServiceAccount
+      name: admin-user
+      namespace: kube-system
+```
 
 Now you can open and access the dashboard in your preferred browser. If you prefer to expose the dashboard UI as
 LoadBalancer or Ingress, add the K8s resource definitions to the configured GitOps repository.
@@ -273,12 +273,12 @@ Now, we will finally setup Flux2 as GitOps tool to provision cloud-native applic
 # - image-update-automation.yaml
 
 flux create kustomization applications \
-  --depends-on=infrastructure
-  --source=GitRepository/flux-system \
-  --path="./applications/bare/microk8s-cloudkoffer"
-  --prune=true \
-  --interval=5m0s \
-  --export > ./clusters/bare/microk8s-cloudkoffer/applications-sync.yaml
+    --depends-on=infrastructure
+    --source=GitRepository/flux-system \
+    --path="./applications/bare/microk8s-cloudkoffer"
+    --prune=true \
+    --interval=5m0s \
+    --export > ./clusters/bare/microk8s-cloudkoffer/applications-sync.yaml
 
 # see https://fluxcd.io/docs/guides/image-update/
 
