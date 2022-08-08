@@ -155,8 +155,60 @@ microk8s kubectl -n kube-system create token admin-user
 
 ## Observability with Grafana, Loki and Tempo
 
-```bash
+For good observability we will use a Grafana-based stack, which is completely free software:
+- [Prometheus](https://prometheus.io/) to collect metrics
+- [Promtail](https://grafana.com/docs/loki/latest/clients/promtail/) to forward logs to [Loki](https://grafana.com/docs/loki/latest/)
+- [Tempo](https://grafana.com/docs/tempo/latest/) to receive traces
 
+Read the blog post [Cloud Observability With Grafana And Spring Boot](https://blog.qaware.de/posts/cloud-observability-grafana-spring-boot/) for more details.
+
+```bash
+# we can use the Flux CLI to create the GitOps manifests for the observability stack
+cd infrastructure/bare/microk8s-cloudkoffer
+
+# create a Helm source and release for a the kube-prometheus-stack
+flux create source helm prometheus-community \
+  --url=https://prometheus-community.github.io/helm-charts \
+  --interval=10m0s \
+  --export > observability/prometheus-community-source.yaml
+
+flux create hr kube-prometheus-stack \
+  --source=HelmRepository/prometheus-community \
+  --chart=kube-prometheus-stack \
+  --chart-version="39.5.0" \
+  --target-namespace=observability \
+  --create-target-namespace=false \
+  --export > observability/kube-prometheus-stack.yaml
+
+# create a Helm source for Grafana charts and for the individual releases
+flux create source helm grafana-charts \
+  --url=https://grafana.github.io/helm-charts \
+  --interval=10m0s \
+  --export > observability/grafana-charts-source.yaml
+
+flux create hr tempo \
+  --source=HelmRepository/grafana-charts \
+  --chart=tempo \
+  --chart-version=">=0.15.0 <0.16.0" \
+  --target-namespace=observability \
+  --create-target-namespace=false \
+  --export > observability/tempo-release.yaml
+
+flux create hr promtail \
+  --source=HelmRepository/grafana-charts \
+  --chart=promtail \
+  --chart-version=">=2.6.0 <2.7.0" \
+  --target-namespace=observability \
+  --create-target-namespace=false \
+  --export > observability/promtail-release.yaml
+
+flux create hr loki \
+  --source=HelmRepository/grafana-charts \
+  --chart=loki \
+  --chart-version=">=2.13.0 <2.13.0" \
+  --target-namespace=observability \
+  --create-target-namespace=false \
+  --export > observability/loki-release.yaml
 ````
 
 ## Addon and Alternative Labs
