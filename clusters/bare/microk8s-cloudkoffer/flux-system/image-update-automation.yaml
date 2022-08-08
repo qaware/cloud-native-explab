@@ -20,5 +20,5 @@ spec:
     push:
       branch: main
   update:
-    path: ./applications
+    path: ./applications/bare/microk8s-cloudkoffer
     strategy: Setters
