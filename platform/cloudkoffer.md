@@ -97,6 +97,60 @@ flux bootstrap github \
 	--read-write-key
     # --token-auth       # instead of SSH key access, use the Github token instead
   	# --personal         # only for user accounts, not for org accounts
+
+# you may need to update and modify Flux kustomization
+# - infrastructure-sync.yaml
+# - applications-sync.yaml
+# - image-update-automation.yaml
+
+# to manually trigger the GitOps process use the following commands
+flux reconcile source git flux-system
+flux reconcile kustomization infrastructure
+flux reconcile kustomization applications
+```
+
+## Kubernetes Dashboard
+
+The Kubernetes dashboard has already been installed as microk8s addon as part of the cluster setup.
+However, since RBAC has been enabled for the cluster a few additional steps are required, such as creating
+a service account and cluster role binding.
+
+Use the configure Flux2 GitOps repository to create and/or update the RBAC service account and cluster role
+binding the dashboard.
+```yaml
+# see https://github.com/kubernetes/dashboard/blob/master/docs/user/access-control/creating-sample-user.md
+# the microk8s dashboard is installed in the kube-system namespace
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: admin-user
+  namespace: kube-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: admin-user
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: admin-user
+  namespace: kube-system
+```
+
+Now you can open and access the dashboard in your preferred browser. If you prefer to expose the dashboard UI as
+LoadBalancer or Ingress, add the K8s resource definitions to the configured GitOps repository.
+```bash
+# either use port forwarding
+microk8s kubectl port-forward -n kube-system service/kubernetes-dashboard 10443:443
+# or (manually) use a LoadBalancer to access the dashboard
+microk8s kubectl patch service kubernetes-dashboard -n kube-system -p '{"spec": {"type": "LoadBalancer"}}'
+microk8s kubectl get services -n kube-system
+
+# create an access token to login to the dashboard
+microk8s kubectl -n kube-system create token admin-user
 ```
 
 ## Observability with Grafana, Loki and Tempo
@@ -104,7 +158,6 @@ flux bootstrap github \
 ```bash
 
 ````
-
 
 ## Addon and Alternative Labs
 

@@ -22,8 +22,7 @@ bootstrap-gcp-flux2:
         --branch=main \
         --path=./clusters/gcp/cloud-native-explab \
 		--components-extra=image-reflector-controller,image-automation-controller \
-		--read-write-key \
-		--personal
+		--read-write-key
 
 delete-gcp-cluster:
 	@gcloud container clusters delete cloud-native-explab --async --quiet
@@ -38,8 +37,7 @@ bootstrap-aws-flux2:
         --branch=main \
         --path=./clusters/aws/cloud-native-explab \
 		--components-extra=image-reflector-controller,image-automation-controller \
-		--read-write-key \
-  		--personal
+		--read-write-key
 
 delete-aws-cluster:
 	@eksctl delete cluster -f aws-cluster.yaml
