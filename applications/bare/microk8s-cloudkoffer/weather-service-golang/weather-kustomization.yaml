@@ -23,9 +23,3 @@ spec:
         name: weather-service
       spec:
         replicas: 2
-    - apiVersion: v1
-      kind: Service
-      metadata:
-        name: weather-service
-      spec:
-        type: LoadBalancer

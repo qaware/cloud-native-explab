@@ -309,9 +309,112 @@ flux get all
 
 ### Pod Info Application Deployment
 
+Podinfo is a tiny web application made with Go that showcases best practices of running microservices in Kubernetes. Podinfo is used by CNCF projects like Flux and Flagger for end-to-end testing and workshops. 
+In this lab we will deploy [Podinfo](https://github.com/stefanprodan/podinfo) using the Cloudkoffer Gitops workflow.
 
-### Cloud-native Weather Application Deployment
+**Lab Instructions**
+1. Read the installation instructions at https://github.com/stefanprodan/podinfo
+2. Install the Podinfo application into the default namespace either as Helm chart or Kustomize
+    - Patch the Podinfo deployment and set `replicas: 3`
+    - Patch the Podinfo deployment with Prometheus labels and annotations (_TODO_)
+    - Patch the PodInfo HPA and set `minReplicas: 3`
+    - Patch the PodInfo Service and set `type: LoadBalancer`
+3. (_optional_) Setup the image update automation workflow with suitable image repository and policy
 
+<details>
+  <summary markdown="span">Click to expand solution ...</summary>
+
+```bash
+cd applications/bare/microk8s-cloudkoffer
+
+flux create source git podinfo \
+    --url=https://github.com/stefanprodan/podinfo \
+    --tag="6.1.8"
+    --interval=30s \
+    --export > podinfo/podinfo-source.yaml
+
+flux create kustomization podinfo \
+    --source=GitRepository/podinfo \
+    --path="./kustomize" \
+    --prune=true \
+    --interval=5m0s \
+    --target-namespace=default \
+    --export > podinfo/podinfo-kustomization.yaml
+```
+
+The Kustomize patches need to be added manually to the `podinfo-kustomization.yaml`.
+```yaml
+  images:
+    - name: ghcr.io/stefanprodan/podinfo
+      newName: ghcr.io/stefanprodan/podinfo # {"$imagepolicy": "flux-system:podinfo:name"}
+      newTag: 6.1.8 # {"$imagepolicy": "flux-system:podinfo:tag"}
+  patchesStrategicMerge:
+    - apiVersion: autoscaling/v2beta2
+      kind: HorizontalPodAutoscaler
+      metadata:
+        name: podinfo
+      spec:
+        minReplicas: 3
+    - apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: podinfo
+        labels:
+          lab: cloudkoffer
+      spec:
+        replicas: 3
+        template:
+          metadata:
+            labels:
+              lab: cloudkoffer
+    - apiVersion: v1
+      kind: Service
+      metadata:
+        name: podinfo
+      spec:
+        type: LoadBalancer
+```
+
+Finally, we will add and configure image repository and policy for the image update automation to work.
+```bash
+flux create image repository podinfo \
+    --image=ghcr.io/stefanprodan/podinfo \
+    --interval 1m0s \
+    --export > podinfo/podinfo-registry.yaml
+
+flux create image policy podinfo \
+    --image-ref=podinfo \
+    --select-semver="6.1.x" \
+    --export > podinfo/podinfo-policy.yaml
+```
+</details>
+
+
+### Cloud-native Weather Service and UI Deployment
+
+This application is part of the Cloud-native Experience Lab (for Software Engineers). It has been implemented 
+in several different languages and frameworks (Go, JavaEE, .NET, NodeJS). The main purpose of this app is to 
+showcase important cloud-native design and development principles.1
+
+**Lab Instructions**
+1. Read the installation instructions
+    - Weather Service: https://github.com/qaware/cloud-native-weather-golang
+    - Weather UI: https://github.com/qaware/cloud-native-weather-vue3
+2. Create a dedicated namespace via GitOps
+2. Install the weather service into dedicated namespace using Kustomize
+    - Patch the service deployment and set `replicas: 2`
+3. Install the weather UI into dedicated namespace using Kustomize
+    - Patch the UI deployment and set `replicas: 2`
+    - Patch the UI service and set `type: LoadBalancer`
+3. (_optional_) Setup the image update automation workflow with suitable image repository and policy for the service and the UI
+
+<details>
+  <summary markdown="span">Click to expand solution ...</summary>
+
+```bash
+
+```
+</details>
 
 ## Addon and Alternative Labs
 
