@@ -4,7 +4,8 @@ This experience lab puts its focus on cloud-native software engineers. No matter
 
 ![Weather Service Architecture](architecture.png)
 
-Currently, several implementations of the lab and the weather service are available:
+Currently, several implementations of the lab and the weather service are available, make sure to have a look at the
+lab instructions of the following repositories:
 
 - DotNET: https://github.com/qaware/cloud-native-weather-dotnet
 - JavaEE: https://github.com/qaware/cloud-native-weather-javaee
