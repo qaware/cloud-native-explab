@@ -11,3 +11,4 @@ Currently, several implementations of the lab and the weather service are availa
 - NodeJS: https://github.com/qaware/cloud-native-weather-nodejs
 - Spring: https://github.com/qaware/cloud-native-weather-spring
 - Golang: https://github.com/qaware/cloud-native-weather-golang
+- Vue.js: https://github.com/qaware/cloud-native-weather-vue3
