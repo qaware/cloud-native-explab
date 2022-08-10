@@ -415,12 +415,12 @@ spec:
 Currently, several implementations of the Cloud-native weather service implementation are available, including 
 a SPA that serves as a frontend. Installation instructions can be found in the individual repositories:
 
-- [Cloud-native Weather Service with Golang](https://github.com/qaware/cloud-native-weather-golang/blob/main/docs/cloud-native-explab.md)
-- [Cloud-native Weather UI with Vue.js](https://github.com/qaware/cloud-native-weather-vue3/blob/main/docs/cloud-native-explab.md)
-- [Cloud-native Weather Service with .NET Core](https://github.com/qaware/cloud-native-weather-dotnet/blob/main/docs/cloud-native-explab.md)
-- [Cloud-native Weather Service with JavaEE](https://github.com/qaware/cloud-native-weather-javaee/blob/main/docs/cloud-native-explab.md)
-- [Cloud-native Weather Service with Node.js](https://github.com/qaware/cloud-native-weather-nodejs/blob/main/docs/cloud-native-explab.md)
-- [Cloud-native Weather Service with Spring](https://github.com/qaware/cloud-native-weather-spring/blob/main/docs/cloud-native-explab.md)
+- [Cloud-native Weather Service with Golang](https://github.com/qaware/cloud-native-weather-golang/blob/main/docs/README.md)
+- [Cloud-native Weather UI with Vue.js](https://github.com/qaware/cloud-native-weather-vue3/blob/main/docs/README.md)
+- [Cloud-native Weather Service with .NET Core](https://github.com/qaware/cloud-native-weather-dotnet/blob/main/docs/README.md)
+- [Cloud-native Weather Service with JavaEE](https://github.com/qaware/cloud-native-weather-javaee/blob/main/docs/README.md)
+- [Cloud-native Weather Service with Node.js](https://github.com/qaware/cloud-native-weather-nodejs/blob/main/docs/README.md)
+- [Cloud-native Weather Service with Spring](https://github.com/qaware/cloud-native-weather-spring/blob/main/docs/README.md)
 
 ## Addon and Alternative Labs
 
