@@ -316,10 +316,10 @@ In this lab we will deploy [Podinfo](https://github.com/stefanprodan/podinfo) us
 1. Read the installation instructions at https://github.com/stefanprodan/podinfo
 2. Install the Podinfo application into the default namespace either as Helm chart or Kustomize
     - Patch the Podinfo deployment and set `replicas: 3`
-    - Patch the Podinfo deployment with Prometheus labels and annotations (_TODO_)
     - Patch the PodInfo HPA and set `minReplicas: 3`
     - Patch the PodInfo Service and set `type: LoadBalancer`
 3. (_optional_) Setup the image update automation workflow with suitable image repository and policy
+4. (_optional_) Set `ServiceMonitor` for observability support
 
 <details>
   <summary markdown="span">Click to expand solution ...</summary>
@@ -375,7 +375,7 @@ The Kustomize patches need to be added manually to the `podinfo-kustomization.ya
         type: LoadBalancer
 ```
 
-Finally, add and configure image repository and policy for the image update automation to work.
+Then add and configure image repository and policy for the image update automation to work.
 ```bash
 flux create image repository podinfo \
     --image=ghcr.io/stefanprodan/podinfo \
@@ -387,6 +387,27 @@ flux create image policy podinfo \
     --select-semver="6.1.x" \
     --export > podinfo/podinfo-policy.yaml
 ```
+
+Finally, we need to integrate the Podinfo application with the observability stack. Create a file `podinfo-monitor.yaml` with the following content.
+```yaml
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+    labels:
+        app: podinfo
+        release: observability-kube-prometheus-stack
+    name: podinfo
+spec:
+    selector:
+        matchLabels:
+          app: podinfo
+    endpoints:
+        - port: http
+          scrapeTimeout: 3s
+          scheme: http
+          path: "/metrics"
+          interval: "5s"
+```
 </details>
 
 ### Cloud-native Weather Showcase Deployment
@@ -394,12 +415,12 @@ flux create image policy podinfo \
 Currently, several implementations of the Cloud-native weather service implementation are available, including 
 a SPA that serves as a frontend. Installation instructions can be found in the individual repositories:
 
+- [Cloud-native Weather Service with Golang](https://github.com/qaware/cloud-native-weather-golang/blob/main/docs/cloud-native-explab.md)
+- [Cloud-native Weather UI with Vue.js](https://github.com/qaware/cloud-native-weather-vue3/blob/main/docs/cloud-native-explab.md)
 - [Cloud-native Weather Service with .NET Core](https://github.com/qaware/cloud-native-weather-dotnet/blob/main/docs/cloud-native-explab.md)
 - [Cloud-native Weather Service with JavaEE](https://github.com/qaware/cloud-native-weather-javaee/blob/main/docs/cloud-native-explab.md)
 - [Cloud-native Weather Service with Node.js](https://github.com/qaware/cloud-native-weather-nodejs/blob/main/docs/cloud-native-explab.md)
 - [Cloud-native Weather Service with Spring](https://github.com/qaware/cloud-native-weather-spring/blob/main/docs/cloud-native-explab.md)
-- [Cloud-native Weather Service with Golang](https://github.com/qaware/cloud-native-weather-golang/blob/main/docs/cloud-native-explab.md)
-- [Cloud-native Weather UI with Vue.js](https://github.com/qaware/cloud-native-weather-vue3/blob/main/docs/cloud-native-explab.md)
 
 ## Addon and Alternative Labs
 

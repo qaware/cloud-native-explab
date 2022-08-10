@@ -5,3 +5,4 @@ resources:
 - podinfo-source.yaml
 - podinfo-registry.yaml
 - podinfo-policy.yaml
+- podinfo-monitor.yaml
