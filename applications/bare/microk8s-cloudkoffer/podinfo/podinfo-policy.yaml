@@ -9,6 +9,6 @@ spec:
     namespace: flux-system
   policy:
     semver:      
-      # range: 5.2.x
+      # range: '5.2.x'
       # range: '>=6.0.0'
       range: '6.1.8'
