@@ -5,6 +5,7 @@ metadata:
     app: podinfo
     release: observability-kube-prometheus-stack
   name: podinfo
+  namespace: default
 spec:
   selector:
     matchLabels:
