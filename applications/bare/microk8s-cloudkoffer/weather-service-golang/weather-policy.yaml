@@ -8,5 +8,5 @@ spec:
     name: cloud-native-weather-golang
   policy:
     semver:
-      # range: '>=1.2.0'
-      range: '1.2.x'
+      range: '>=1.2.0 <2.0.0'
+      # range: '1.3.x'
