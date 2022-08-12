@@ -32,7 +32,8 @@ spec:
       metadata:
         name: podinfo
       spec:
-        minReplicas: 3
+        minReplicas: 2
+        maxReplicas: 5
     - apiVersion: apps/v1
       kind: Deployment
       metadata:
@@ -46,7 +47,7 @@ spec:
           LAUNCHPAD_ROW: "0"
           lab: cloudkoffer
       spec:
-        replicas: 3
+        replicas: 2
         template:
           metadata:
             labels:
