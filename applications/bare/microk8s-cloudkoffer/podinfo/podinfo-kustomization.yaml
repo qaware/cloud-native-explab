@@ -40,8 +40,6 @@ spec:
         name: podinfo
         labels:
           k8s-minipad/enabled: "true"
-          cloudcontrol.enabled: "true"
-          cloudcontrol.index: "0"
           LAUNCHPAD_ENABLE: "true"
           LAUNCHPAD_COLOR: RED
           LAUNCHPAD_ROW: "0"

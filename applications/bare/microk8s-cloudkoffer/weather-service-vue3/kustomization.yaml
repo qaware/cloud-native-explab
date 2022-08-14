@@ -1,0 +1,7 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - vue3ui-kustomization.yaml
+  - vue3ui-source.yaml
+  - vue3ui-registry.yaml
+  - vue3ui-policy.yaml

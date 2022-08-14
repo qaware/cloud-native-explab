@@ -1,0 +1,31 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
+kind: Kustomization
+metadata:
+  name: cloud-native-weather-vue3
+  namespace: flux-system
+spec:
+  interval: 5m0s
+  path: ./k8s/overlays/prod
+  prune: true
+  dependsOn:
+    - name: cloud-native-weather-golang
+  sourceRef:
+    kind: GitRepository
+    name: cloud-native-weather-vue3
+  validation: client
+  targetNamespace: weather-golang
+  images:
+    - name: cloud-native-weather-vue3
+      newName: ghcr.io/qaware/cloud-native-weather-vue3 # {"$imagepolicy": "flux-system:cloud-native-weather-vue3:name"}
+      newTag: 1.0.0 # {"$imagepolicy": "flux-system:cloud-native-weather-vue3:tag"}
+  patchesStrategicMerge:
+    - apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: vue-frontend
+        labels:
+          k8s-minipad/enabled: "true"
+          LAUNCHPAD_ENABLE: "true"
+          LAUNCHPAD_COLOR: GREEN
+          LAUNCHPAD_ROW: "1"
+          lab: cloudkoffer

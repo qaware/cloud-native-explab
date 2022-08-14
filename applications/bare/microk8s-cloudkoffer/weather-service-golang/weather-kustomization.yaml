@@ -21,5 +21,11 @@ spec:
       kind: Deployment
       metadata:
         name: weather-service
+        labels:
+          k8s-minipad/enabled: "true"
+          LAUNCHPAD_ENABLE: "true"
+          LAUNCHPAD_COLOR: RED
+          LAUNCHPAD_ROW: "0"
+          lab: cloudkoffer
       spec:
         replicas: 2

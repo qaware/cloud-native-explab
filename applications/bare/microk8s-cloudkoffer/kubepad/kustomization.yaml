@@ -1,0 +1,10 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- kubepad-1.yaml
+- kubepad-2.yaml
+- kubepad-3.yaml
+- kubepad-4.yaml
+- kubepad-5.yaml
+- kubepad-6.yaml
+- kubepad-7.yaml
