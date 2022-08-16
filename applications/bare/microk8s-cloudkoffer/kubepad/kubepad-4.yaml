@@ -12,10 +12,13 @@ metadata:
 spec:
   replicas: 1
   revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app: nginx-4
   template:
     metadata:
       labels:
-        app: nginx
+        app: nginx-4
     spec:
       containers:
       - name: nginx
