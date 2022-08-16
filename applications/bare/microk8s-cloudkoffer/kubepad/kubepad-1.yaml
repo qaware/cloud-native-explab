@@ -33,20 +33,3 @@ spec:
             path: /
             port: 80
           timeoutSeconds: 10
----
-apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  name: nginx
-  labels:
-    app: nginx
-  namespace: default
-spec:
-  rules:
-  - host: nginx.cloudkoffer
-    http:
-      paths:
-      - path: /
-        backend:
-          serviceName: nginx
-          servicePort: 80
