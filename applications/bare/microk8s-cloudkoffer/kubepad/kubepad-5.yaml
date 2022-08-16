@@ -10,7 +10,7 @@ metadata:
     LAUNCHPAD_ROW: "5"
     lab: cloudkoffer
 spec:
-  replicas: 1
+  replicas: 5
   revisionHistoryLimit: 3
   selector:
     matchLabels:
