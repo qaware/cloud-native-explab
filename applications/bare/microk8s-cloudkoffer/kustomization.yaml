@@ -4,4 +4,4 @@ resources:
   - podinfo/
   - weather-service-golang/
   - weather-service-vue3/
-  - kubepad/
+  # - kubepad/
