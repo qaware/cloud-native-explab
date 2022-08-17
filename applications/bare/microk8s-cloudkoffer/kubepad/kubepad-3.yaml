@@ -6,7 +6,7 @@ metadata:
     app: nginx-3
     k8s-minipad/enabled: "true"
     LAUNCHPAD_ENABLE: "true"
-    LAUNCHPAD_COLOR: GREEN
+    LAUNCHPAD_COLOR: LIGHT_GREEN
     LAUNCHPAD_ROW: "3"
     lab: cloudkoffer
 spec:
