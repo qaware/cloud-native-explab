@@ -17,7 +17,7 @@ spec:
   images:
     - name: cloud-native-weather-vue3
       newName: ghcr.io/qaware/cloud-native-weather-vue3 # {"$imagepolicy": "flux-system:cloud-native-weather-vue3:name"}
-      newTag: 1.0.0 # {"$imagepolicy": "flux-system:cloud-native-weather-vue3:tag"}
+      newTag: 1.0.1 # {"$imagepolicy": "flux-system:cloud-native-weather-vue3:tag"}
   patchesStrategicMerge:
     - apiVersion: apps/v1
       kind: Deployment
