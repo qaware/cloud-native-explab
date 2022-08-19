@@ -4,7 +4,7 @@ This lab is really hands on with real hardware to give you that good old compute
 Potential use cases are e.g. a private cloud Kubernetes setup in an on-premise data center on either
 bare metal or virtualized hardware.
 
-![Conceptual Architecture](cloudkoffer.png)
+![Conceptual Architecture](images/cloudkoffer.png)
 
 ## Ubuntu Server 22.04 Installation
 
