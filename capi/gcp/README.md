@@ -1,12 +1,16 @@
 # Cluster API with GCP Lab
 
-This guide is based on the following tutorials:
-
-- https://cluster-api.sigs.k8s.io/user/quick-start.html
+This lab describes how to spin up GKE clusters using Cluster API. All the steps are documented
+in the following resources:
 - https://github.com/kubernetes-sigs/cluster-api-provider-gcp/blob/main/docs/book/src/topics/prerequisites.md
-- https://kube.academy/courses/cluster-api/lessons/cluster-api-introduction
+- https://cluster-api.sigs.k8s.io/user/quick-start.html
 
-The guide is still work in progress.
+## Prerequisites
+
+There are some steps that need to be performed before we can use Cluster API with GCP.
+
+
+
 
 ## Prerequisites
 - gcloud CLI

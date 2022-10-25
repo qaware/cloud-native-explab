@@ -6,6 +6,7 @@ create-capi-cluster:
 	@eksctl create cluster -f capi-cluster.yaml
 
 bootstrap-capi-flux2:
+	# my need to add --personal if the GITHUB_USER is not an org
 	@echo "You must set a personal GITHUB_TOKEN"
 	@flux bootstrap github \
 		--owner=$(GITHUB_USER) \
@@ -13,8 +14,7 @@ bootstrap-capi-flux2:
         --branch=main \
         --path=./clusters/aws/capi-mgmt-cluster \
 		--components-extra=image-reflector-controller,image-automation-controller \
-		--read-write-key \
-  		--personal
+		--read-write-key
 
 prepare-capi-aws:
 	# create an SSH key
