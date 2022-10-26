@@ -138,7 +138,7 @@ kubectl --kubeconfig=./capi-tenant-demo.kubeconfig get nodes
 
 ## Delete a CAPI Tenant Cluster
 
-> :warning: In order to ensure a proper cleanup of your infrastructure you must always delete the cluster object. Deleting the entire cluster template with kubectl delete -f capi-tenant-demo.yaml might lead to pending resources to be cleaned up manually.
+> :warning: In order to ensure a proper cleanup of your infrastructure you must always delete the cluster object. Deleting the entire cluster template with `kubectl delete -f capi-tenant-demo.yaml` might lead to pending resources to be cleaned up manually.
 
 ```bash
 # delete the root CAPI cluster resource
