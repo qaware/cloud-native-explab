@@ -11,14 +11,14 @@ spec:
   git:
     checkout:
       ref:
-        branch: env/prod
+        branch: main
     commit:
       author:
         email: fluxcdbot@users.noreply.github.com
         name: fluxcdbot
       messageTemplate: '{{range .Updated.Images}}{{println .}}{{end}}'
     push:
-      branch: env/prod
+      branch: main
   update:
-    path: ./applications
+    path:  ./applications/gcp/cloud-native-explab
     strategy: Setters

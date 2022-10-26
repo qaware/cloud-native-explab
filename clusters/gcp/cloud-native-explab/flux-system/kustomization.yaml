@@ -8,4 +8,4 @@ resources:
 - receiver-service.yaml
 - webhook-token.yaml
 # - image-update-automation.yaml
-# - applications-sync.yaml
+- applications-sync.yaml

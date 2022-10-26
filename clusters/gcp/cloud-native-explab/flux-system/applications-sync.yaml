@@ -10,6 +10,6 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./applications/weather-service-golang
+  path: ./applications/gcp/cloud-native-explab
   prune: true
   validation: client
