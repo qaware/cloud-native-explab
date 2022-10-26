@@ -8,9 +8,50 @@ This lab is builds an opinionated K8s-native platform based on Google Kubernetes
 
 ## GKE Cluster Setup
 
+In this initial step we will create the GKE cluster using the official Google `gcloud` CLI. We will also
+install and enabler the ConfigConnector add-on to be able to provision GCP infrastructure via K8s resources.
+
+```bash
+# for the unpatient, use the provided Make targets
+make create-gcp-cluster
+make create-gcp-sa
+
+# or do it manually to better unstand the steps and commands
+# see https://cloud.google.com/sdk/gcloud/reference/container/clusters/create
+export GCP_PROJECT=cloud-native-experience-lab
+export GCP_ZONE=europe-west1-b
+export CLUSTER_NAME=cloud-native-explab
+
+gcloud config set project $GCP_PROJECT
+gcloud config set compute/zone $GCP_ZONE
+gcloud config set container/use_client_certificate False
+
+gcloud container clusters create $CLUSTER_NAME  \
+        --addons HttpLoadBalancing,HorizontalPodAutoscaling,ConfigConnector \
+        --workload-pool=$GCP_PROJECT.svc.id.goog \
+        --num-nodes=3 \
+        --enable-autoscaling \
+        --min-nodes=3 --max-nodes=10 \
+        --machine-type=e2-standard-4 \
+        --logging=SYSTEM \
+        --monitoring=SYSTEM \
+        --cluster-version=1.22
+kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-admin --user=`gcloud config get-value core/account`
+
+# for the ConfigConnector plugin we need to create a SA with correct permissions
+gcloud iam service-accounts create $CLUSTER_NAME --description="$CLUSTER_NAME Service Account" --display-name="$CLUSTER_NAME Service Account"
+gcloud projects add-iam-policy-binding $GCP_PROJECT  \
+        --role=roles/editor  \
+        --member=serviceAccount:$CLUSTER_NAME@$GCP_PROJECT.iam.gserviceaccount.com
+gcloud iam service-accounts add-iam-policy-binding $CLUSTER_NAME@$GCP_PROJECT.iam.gserviceaccount.com \
+        --member="serviceAccount:$GCP_PROJECT.svc.id.goog[cnrm-system/cnrm-controller-manager]" \
+        --role="roles/iam.workloadIdentityUser"
+gcloud iam service-accounts keys create gke-sa-key.json --iam-account=$CLUSTER_NAME@$GCP_PROJECT.iam.gserviceaccount.com
+```
+
 ## Platform Bootstrapping with Flux2
 
-In this lab we use Flux2 as GitOps tool to provision further infrastructure and platform components as
+In this step we bootstrap Flux2 as GitOps tool to provision further infrastructure and platform components as
 well as a simple weather microservice.
 
 ```bash
@@ -25,14 +66,14 @@ export GITHUB_TOKEN=<your-token>
 
 # bootstrap the flux-system namespace and components
 flux bootstrap github \
-	--owner=$GITHUB_USER \
+    --owner=$GITHUB_USER \
     --repository=cloud-native-explab \
     --branch=main \
-    --path=./clusters/gcp/cloud-native-explab \
-	--components-extra=image-reflector-controller,image-automation-controller \
-	--read-write-key
+    --path=./clusters/gcp/$CLUSTER_NAME \
+    --components-extra=image-reflector-controller,image-automation-controller \
+    --read-write-key
     # --token-auth       # instead of SSH key access, use the Github token instead
-  	# --personal         # only for user accounts, not for org accounts
+    # --personal         # only for user accounts, not for org accounts
 
 # you may need to update and modify Flux kustomization
 # - infrastructure-sync.yaml
@@ -54,3 +95,18 @@ flux reconcile kustomization applications
 $ kubectl -n flux-system get svc/receiver
 $ kubectl -n flux-system get receiver/webapp
 ```
+
+### Kubernetes Dashboard
+
+_TODO_ 
+
+## External Secrets Management
+
+_TODO_ 
+
+## References
+
+- https://cloud.google.com/sdk/gcloud/reference/container/clusters/create
+- https://github.com/GoogleCloudPlatform/k8s-config-connector
+- https://cloud.google.com/config-connector/docs/how-to/install-upgrade-uninstall
+- https://cloud.google.com/config-connector/docs/reference/overview
