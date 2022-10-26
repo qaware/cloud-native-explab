@@ -23,7 +23,7 @@ prepare-capi-aws:
 	@export AWS_SECRET_ACCESS_KEY=<INSERT>
 	@clusterawsadm bootstrap iam create-cloudformation-stack --config bootstrap-config.yaml
 
-install-capi-aws:
+bootstrap-capi-cluster:
 	# required to avoid API rate limiting
 	@echo "You may need to set a personal GITHUB_TOKEN to avoid API rate limiting"
 	@export AWS_REGION=$(AWS_REGION)
@@ -35,3 +35,15 @@ install-capi-aws:
 
 delete-capi-cluster:
 	@eksctl delete cluster -f capi-cluster.yaml
+
+create-tenant:
+	@clusterctl generate cluster capi-tenant-demo --kubernetes-version $(KUBERNETES_VERSION) --control-plane-machine-count=1 --worker-machine-count=1 > capi-tenant-demo.yaml
+	@kubectl apply -f capi-tenant-demo.yaml
+	
+	# kubectl get cluster 
+	# clusterctl describe cluster capi-tenant-demo 
+	# kubectl get kubeadmcontrolplane
+
+	# clusterctl get kubeconfig capi-tenant-demo > capi-tenant-demo.kubeconfig
+	# kubectl --kubeconfig=./capi-tenant-demo.kubeconfig apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.24.1/manifests/calico.yaml
+	# kubectl --kubeconfig=./capi-tenant-demo.kubeconfig get nodes

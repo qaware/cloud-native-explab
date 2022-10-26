@@ -2,6 +2,10 @@
 
 This lab describes how to spin up GKE clusters using Cluster API.
 
+## Installation
+
+You need to have `clusterctl`, `gcloud`, `Packer` and `Ansible` installed locally for this lab. Alternativly, use the `cn-explab-shell` Docker image for a consistent local CLI tool setup.
+
 ## Setup a Network and Cloud NAT
 
 If the Google project is freshly setup than you need to configure the `default` network appropriately.
@@ -113,6 +117,9 @@ Using on the CAPI management cluster, further tenant cluster can be spawned easi
 
 ```bash
 export KUBERNETES_VERSION=1.22.15
+
+# to get a list of variables
+clusterctl generate cluster capi-tenant-demo --infrastructure=gcp --list-variables
 
 # create and apply the CAPI tenant manifests
 clusterctl generate cluster capi-tenant-demo --kubernetes-version $KUBERNETES_VERSION --control-plane-machine-count=1 --worker-machine-count=1 > capi-tenant-demo.yaml

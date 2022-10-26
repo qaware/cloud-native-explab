@@ -1,7 +1,7 @@
 apiVersion: cluster.x-k8s.io/v1beta1
 kind: Cluster
 metadata:
-  name: capi-tenant-lreimer
+  name: capi-tenant-demo
   namespace: default
 spec:
   clusterNetwork:
@@ -11,16 +11,16 @@ spec:
   controlPlaneRef:
     apiVersion: controlplane.cluster.x-k8s.io/v1beta1
     kind: KubeadmControlPlane
-    name: capi-tenant-lreimer-control-plane
+    name: capi-tenant-demo-control-plane
   infrastructureRef:
     apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
     kind: AWSCluster
-    name: capi-tenant-lreimer
+    name: capi-tenant-demo
 ---
 apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
 kind: AWSCluster
 metadata:
-  name: capi-tenant-lreimer
+  name: capi-tenant-demo
   namespace: default
 spec:
   region: eu-central-1
@@ -29,7 +29,7 @@ spec:
 apiVersion: controlplane.cluster.x-k8s.io/v1beta1
 kind: KubeadmControlPlane
 metadata:
-  name: capi-tenant-lreimer-control-plane
+  name: capi-tenant-demo-control-plane
   namespace: default
 spec:
   kubeadmConfigSpec:
@@ -54,14 +54,14 @@ spec:
     infrastructureRef:
       apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
       kind: AWSMachineTemplate
-      name: capi-tenant-lreimer-control-plane
-  replicas: 3
+      name: capi-tenant-demo-control-plane
+  replicas: 1
   version: v1.22.0
 ---
 apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
 kind: AWSMachineTemplate
 metadata:
-  name: capi-tenant-lreimer-control-plane
+  name: capi-tenant-demo-control-plane
   namespace: default
 spec:
   template:
@@ -73,11 +73,11 @@ spec:
 apiVersion: cluster.x-k8s.io/v1beta1
 kind: MachineDeployment
 metadata:
-  name: capi-tenant-lreimer-md-0
+  name: capi-tenant-demo-md-0
   namespace: default
 spec:
-  clusterName: capi-tenant-lreimer
-  replicas: 3
+  clusterName: capi-tenant-demo
+  replicas: 1
   selector:
     matchLabels: null
   template:
@@ -86,18 +86,18 @@ spec:
         configRef:
           apiVersion: bootstrap.cluster.x-k8s.io/v1beta1
           kind: KubeadmConfigTemplate
-          name: capi-tenant-lreimer-md-0
-      clusterName: capi-tenant-lreimer
+          name: capi-tenant-demo-md-0
+      clusterName: capi-tenant-demo
       infrastructureRef:
         apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
         kind: AWSMachineTemplate
-        name: capi-tenant-lreimer-md-0
+        name: capi-tenant-demo-md-0
       version: v1.22.0
 ---
 apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
 kind: AWSMachineTemplate
 metadata:
-  name: capi-tenant-lreimer-md-0
+  name: capi-tenant-demo-md-0
   namespace: default
 spec:
   template:
@@ -109,7 +109,7 @@ spec:
 apiVersion: bootstrap.cluster.x-k8s.io/v1beta1
 kind: KubeadmConfigTemplate
 metadata:
-  name: capi-tenant-lreimer-md-0
+  name: capi-tenant-demo-md-0
   namespace: default
 spec:
   template:
