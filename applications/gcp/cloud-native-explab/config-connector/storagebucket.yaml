@@ -1,0 +1,18 @@
+apiVersion: storage.cnrm.cloud.google.com/v1beta1
+kind: StorageBucket
+metadata:
+  # StorageBucket names must be globally unique
+  name: cloud-native-experience-lab-demo
+  annotations:
+    cnrm.cloud.google.com/force-destroy: "false"
+  labels:
+    stage: demo
+spec:
+  lifecycleRule:
+    - action:
+        type: Delete
+      condition:
+        age: 7
+  versioning:
+    enabled: true
+  uniformBucketLevelAccess: true
