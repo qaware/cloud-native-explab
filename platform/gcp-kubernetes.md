@@ -98,6 +98,74 @@ $ kubectl -n flux-system get receiver/webapp
 
 ### Kubernetes Dashboard
 
+The Kubernetes dashboard has not been installed as a GKE addon. Instead, we install the dashboard manually in the
+current version. Since RBAC is enabled we also need to make a few additional steps are required.
+
+**Lab Instructions**
+
+1. Deploy the Kubernetes Dashboard as YAML from the upstream repository
+2. Create service account and cluster role binding using Flux2
+3. Expose the dashboard UI as _LoadBalancer_ service or using an _Ingress_ resource
+4. Generate user token and access dashboard UI
+
+<details>
+  <summary markdown="span">Click to expand solution ...</summary>
+
+```yaml
+# see https://github.com/kubernetes/dashboard/blob/master/docs/user/access-control/creating-sample-user.md
+# create admin-service-account.yaml in the GitOps infrastructure directory
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+    name: admin-user
+    namespace: kube-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+    name: admin-user
+roleRef:
+    apiGroup: rbac.authorization.k8s.io
+    kind: ClusterRole
+    name: cluster-admin
+subjects:
+    - kind: ServiceAccount
+      name: admin-user
+      namespace: kube-system
+```
+
+Now you can open and access the dashboard in your preferred browser. You could either use port-forwarding or the proxy
+functionality of kubectl.
+
+```bash
+# using the proxy
+kubectl proxy
+open http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/
+
+# or use port forward
+kubectl port-forward -n kube-system service/kubernetes-dashboard 10443:443
+```
+
+Even better is to patch the `kubernetes-dashboard` service using type `LoadBalancer` and apply it as strategic
+merge patch using Kustomize.
+
+```yaml
+# create loadbalancer.yaml in the GitOps repository
+apiVersion: v1
+kind: Service
+metadata:
+  name: kubernetes-dashboard
+  namespace: kubernetes-dashboard
+spec:
+  type: LoadBalancer
+
+# add this to the kustomize.yaml
+patchesStrategicMerge:
+  - loadbalancer.yaml
+```
+
+## Config Connector
+
 _TODO_ 
 
 ## External Secrets Management
