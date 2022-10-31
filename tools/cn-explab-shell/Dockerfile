@@ -14,7 +14,7 @@ RUN curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/s
         mv ./kubectl /usr/local/bin/kubectl 
 
 # clusterctl
-RUN curl -L https://github.com/kubernetes-sigs/cluster-api/releases/download/v1.1.3/clusterctl-linux-amd64 -o clusterctl && \
+RUN curl -L https://github.com/kubernetes-sigs/cluster-api/releases/download/v1.2.4/clusterctl-linux-amd64 -o clusterctl && \
         chmod +x ./clusterctl && \ 
         mv ./clusterctl /usr/local/bin/clusterctl 
 

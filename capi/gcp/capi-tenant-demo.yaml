@@ -1,0 +1,123 @@
+apiVersion: cluster.x-k8s.io/v1beta1
+kind: Cluster
+metadata:
+  name: capi-tenant-demo
+  namespace: default
+spec:
+  clusterNetwork:
+    pods:
+      cidrBlocks:
+      - 192.168.0.0/16
+  controlPlaneRef:
+    apiVersion: controlplane.cluster.x-k8s.io/v1beta1
+    kind: KubeadmControlPlane
+    name: capi-tenant-demo-control-plane
+  infrastructureRef:
+    apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
+    kind: GCPCluster
+    name: capi-tenant-demo
+---
+apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
+kind: GCPCluster
+metadata:
+  name: capi-tenant-demo
+  namespace: default
+spec:
+  network:
+    name: default
+  project: cloud-native-experience-lab
+  region: europe-west1
+---
+apiVersion: controlplane.cluster.x-k8s.io/v1beta1
+kind: KubeadmControlPlane
+metadata:
+  name: capi-tenant-demo-control-plane
+  namespace: default
+spec:
+  kubeadmConfigSpec:
+    clusterConfiguration:
+      apiServer:
+        extraArgs:
+          cloud-provider: gce
+        timeoutForControlPlane: 20m
+      controllerManager:
+        extraArgs:
+          allocate-node-cidrs: "false"
+          cloud-provider: gce
+    initConfiguration:
+      nodeRegistration:
+        kubeletExtraArgs:
+          cloud-provider: gce
+        name: '{{ ds.meta_data.local_hostname.split(".")[0] }}'
+    joinConfiguration:
+      nodeRegistration:
+        kubeletExtraArgs:
+          cloud-provider: gce
+        name: '{{ ds.meta_data.local_hostname.split(".")[0] }}'
+  machineTemplate:
+    infrastructureRef:
+      apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
+      kind: GCPMachineTemplate
+      name: capi-tenant-demo-control-plane
+  replicas: 1
+  version: "1.22.15"
+---
+apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
+kind: GCPMachineTemplate
+metadata:
+  name: capi-tenant-demo-control-plane
+  namespace: default
+spec:
+  template:
+    spec:
+      image: projects/cloud-native-experience-lab/global/images/cluster-api-ubuntu-2004-v1-22-9-1653382327
+      instanceType: e2-medium
+---
+apiVersion: cluster.x-k8s.io/v1beta1
+kind: MachineDeployment
+metadata:
+  name: capi-tenant-demo-md-0
+  namespace: default
+spec:
+  clusterName: capi-tenant-demo
+  replicas: 1
+  selector:
+    matchLabels: null
+  template:
+    spec:
+      bootstrap:
+        configRef:
+          apiVersion: bootstrap.cluster.x-k8s.io/v1beta1
+          kind: KubeadmConfigTemplate
+          name: capi-tenant-demo-md-0
+      clusterName: capi-tenant-demo
+      infrastructureRef:
+        apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
+        kind: GCPMachineTemplate
+        name: capi-tenant-demo-md-0
+      version: "1.22.15"
+---
+apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
+kind: GCPMachineTemplate
+metadata:
+  name: capi-tenant-demo-md-0
+  namespace: default
+spec:
+  template:
+    spec:
+      image: projects/cloud-native-experience-lab/global/images/cluster-api-ubuntu-2004-v1-22-9-1653382327
+      instanceType: e2-medium
+---
+apiVersion: bootstrap.cluster.x-k8s.io/v1beta1
+kind: KubeadmConfigTemplate
+metadata:
+  name: capi-tenant-demo-md-0
+  namespace: default
+spec:
+  template:
+    spec:
+      joinConfiguration:
+        nodeRegistration:
+          kubeletExtraArgs:
+            cloud-provider: gce
+          name: '{{ ds.meta_data.local_hostname.split(".")[0] }}'

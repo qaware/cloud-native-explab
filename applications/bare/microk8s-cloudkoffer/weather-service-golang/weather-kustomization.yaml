@@ -1,0 +1,31 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
+kind: Kustomization
+metadata:
+  name: cloud-native-weather-golang
+  namespace: flux-system
+spec:
+  interval: 5m0s
+  path: ./k8s/overlays/dev
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: cloud-native-weather-golang
+  validation: client
+  targetNamespace: weather-golang
+  images:
+    - name: cloud-native-weather-golang
+      newName: ghcr.io/qaware/cloud-native-weather-golang # {"$imagepolicy": "flux-system:cloud-native-weather-golang:name"}
+      newTag: 1.3.1 # {"$imagepolicy": "flux-system:cloud-native-weather-golang:tag"}
+  patchesStrategicMerge:
+    - apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: weather-service
+        labels:
+          k8s-minipad/enabled: "true"
+          LAUNCHPAD_ENABLE: "true"
+          LAUNCHPAD_COLOR: RED
+          LAUNCHPAD_ROW: "0"
+          lab: cloudkoffer
+      spec:
+        replicas: 2

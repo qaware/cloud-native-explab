@@ -1,0 +1,10 @@
+apiVersion: source.toolkit.fluxcd.io/v1beta1
+kind: GitRepository
+metadata:
+  name: metrics-server
+  namespace: flux-system
+spec:
+  interval: 5m0s
+  url: https://github.com/kubernetes-sigs/metrics-server
+  ref:
+    tag: v0.6.1

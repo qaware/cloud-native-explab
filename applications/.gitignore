@@ -1,0 +1,9 @@
+.dccache
+
+target/
+build/
+
+.idea/
+.vscode/
+.project
+.classpath

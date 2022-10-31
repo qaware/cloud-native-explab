@@ -1,0 +1,11 @@
+GCP_REGION: europe-west1
+GCP_PROJECT: cloud-native-experience-lab
+GCP_ZONE: europe-west1-b
+KUBERNETES_VERSION: v1.22.15
+GCP_NETWORK_NAME: default
+IMAGE_ID: projects/cloud-native-experience-lab/global/images/cluster-api-ubuntu-2004-v1-22-9-1653382327
+CLUSTER_NAME: capi-mgmt-cluster
+GCP_CONTROL_PLANE_MACHINE_TYPE: e2-medium
+GCP_NODE_MACHINE_TYPE: e2-medium
+CONTROL_PLANE_MACHINE_COUNT: 3
+WORKER_MACHINE_COUNT: 3

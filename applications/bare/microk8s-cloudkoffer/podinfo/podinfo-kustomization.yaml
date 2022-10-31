@@ -1,0 +1,58 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
+kind: Kustomization
+metadata:
+  name: podinfo
+  namespace: flux-system
+spec:
+  interval: 5m0s
+  path: ./kustomize
+  targetNamespace: default
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: podinfo
+  validation: client
+  # we supply an inline patch for the deployment
+  # patchesJson6902:
+  #  - target:
+  #      Version: autoscaling/v2beta2
+  #      kind: HorizontalPodAutoscaler
+  #      name: podinfo
+  #    patch:
+  #    - op: replace
+  #      path: /spec/minReplicas
+  #      value: 3
+  images:
+    - name: ghcr.io/stefanprodan/podinfo
+      newName: ghcr.io/stefanprodan/podinfo # {"$imagepolicy": "flux-system:podinfo:name"}
+      newTag: 6.1.8 # {"$imagepolicy": "flux-system:podinfo:tag"}
+  patchesStrategicMerge:
+    - apiVersion: autoscaling/v2beta2
+      kind: HorizontalPodAutoscaler
+      metadata:
+        name: podinfo
+      spec:
+        minReplicas: 2
+        maxReplicas: 5
+    - apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: podinfo
+        labels:
+          k8s-minipad/enabled: "true"
+          LAUNCHPAD_ENABLE: "true"
+          LAUNCHPAD_COLOR: RED
+          LAUNCHPAD_ROW: "0"
+          lab: cloudkoffer
+      spec:
+        replicas: 2
+        template:
+          metadata:
+            labels:
+              lab: cloudkoffer
+    - apiVersion: v1
+      kind: Service
+      metadata:
+        name: podinfo
+      spec:
+        type: LoadBalancer

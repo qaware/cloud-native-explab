@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: vue-frontend
+  namespace: weather-golang
+  annotations:
+    kubernetes.io/ingress.class: "traefik"
+    # traefik.frontend.passHostHeader: "true"
+    # traefik.backend.loadbalancer.sticky: "true"
+spec:
+  rules:
+    - host: weather.cloudkoffer
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: vue-frontend
+                port:
+                  name: http
