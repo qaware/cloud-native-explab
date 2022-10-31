@@ -1,18 +1,18 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
 metadata:
-  name: gorilla-clusters-qaw01
+  name: gorilla-clusters-cne08
   namespace: org-experience-lab
 spec:
   interval: 1m
-  path: "./management-clusters/gorilla/workload-clusters/qaw01"
+  path: "./management-clusters/gorilla/workload-clusters/cne08"
   postBuild:
     substitute:
-      cluster_id: "qaw01"
-      control_plane_id: "ae7g6"
-      machine_deployment_id: "vv0b2"
+      cluster_id: "cne08"
+      control_plane_id: "cnec8"
+      machine_deployment_id: "cnem8"
       organization: "experience-lab"
-      release: "17.3.3"
+      release: "18.0.2"
   prune: true
   serviceAccountName: automation
   sourceRef:
