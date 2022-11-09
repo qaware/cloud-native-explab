@@ -3,3 +3,8 @@ kind: Kustomization
 resources:
 - gotk-components.yaml
 - gotk-sync.yaml
+- infrastructure-sync.yaml
+- notification-receiver.yaml
+- receiver-service.yaml
+- webhook-token.yaml
+- applications-sync.yaml
