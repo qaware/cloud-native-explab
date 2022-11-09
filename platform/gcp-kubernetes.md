@@ -164,7 +164,25 @@ patchesStrategicMerge:
   - loadbalancer.yaml
 ```
 
+</details>
+
 ## Config Connector
+
+The ConfigConnector add-on from GKE allows the declarative management of other GCP cloud resources such as SQL instances or storage bucket. However, after the installation it needs to be configured for it to work correctly.
+
+**Lab Instructions**
+
+1. Create a dedicated namespace `config-connector` and add `cnrm.cloud.google.com/project-id` label
+2. Create ConfigConnector resource and configure Google Service Account
+
+<details>
+  <summary markdown="span">Click to expand solution ...</summary>
+
+_TODO_
+
+</details>
+
+## Network Policies with Calico
 
 _TODO_ 
 

@@ -16,10 +16,11 @@ create-gcp-cluster:
 	@gcloud container clusters create $(CLUSTER_NAME)  \
 		--addons HttpLoadBalancing,HorizontalPodAutoscaling,ConfigConnector \
 		--workload-pool=$(GCP_PROJECT).svc.id.goog \
-		--num-nodes=3 \
+		--enable-network-policy \
 		--enable-autoscaling \
+		--num-nodes=3 \
 		--min-nodes=3 --max-nodes=10 \
-		--machine-type=e2-standard-4 \
+		--machine-type=e2-medium \
 		--logging=SYSTEM \
     	--monitoring=SYSTEM \
 		--cluster-version=1.22
