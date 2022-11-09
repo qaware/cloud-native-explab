@@ -7,3 +7,4 @@ resources:
 - notification-receiver.yaml
 - receiver-service.yaml
 - webhook-token.yaml
+- applications-sync.yaml

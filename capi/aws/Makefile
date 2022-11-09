@@ -5,17 +5,6 @@ GITHUB_USER ?= qaware
 create-capi-cluster:
 	@eksctl create cluster -f capi-cluster.yaml
 
-bootstrap-capi-flux2:
-	# my need to add --personal if the GITHUB_USER is not an org
-	@echo "You must set a personal GITHUB_TOKEN"
-	@flux bootstrap github \
-		--owner=$(GITHUB_USER) \
-        --repository=cloud-native-explab \
-        --branch=main \
-        --path=./clusters/aws/capi-mgmt-cluster \
-		--components-extra=image-reflector-controller,image-automation-controller \
-		--read-write-key
-
 prepare-capi-aws:
 	# create an SSH key
 	@export AWS_REGION=$(AWS_REGION)
@@ -33,9 +22,6 @@ bootstrap-capi-cluster:
 	@export AWS_B64ENCODED_CREDENTIALS=$(shell clusterawsadm bootstrap credentials encode-as-profile)
 	@clusterctl init --infrastructure aws
 
-delete-capi-cluster:
-	@eksctl delete cluster -f capi-cluster.yaml
-
 create-tenant:
 	@clusterctl generate cluster capi-tenant-demo --kubernetes-version $(KUBERNETES_VERSION) --control-plane-machine-count=1 --worker-machine-count=1 > capi-tenant-demo.yaml
 	@kubectl apply -f capi-tenant-demo.yaml
@@ -47,3 +33,17 @@ create-tenant:
 	# clusterctl get kubeconfig capi-tenant-demo > capi-tenant-demo.kubeconfig
 	# kubectl --kubeconfig=./capi-tenant-demo.kubeconfig apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.24.1/manifests/calico.yaml
 	# kubectl --kubeconfig=./capi-tenant-demo.kubeconfig get nodes
+
+bootstrap-capi-flux2:
+	# my need to add --personal if the GITHUB_USER is not an org
+	@echo "You must set a personal GITHUB_TOKEN"
+	@flux bootstrap github \
+		--owner=$(GITHUB_USER) \
+        --repository=cloud-native-explab \
+        --branch=main \
+        --path=./clusters/aws/capi-mgmt-cluster \
+		--components-extra=image-reflector-controller,image-automation-controller \
+		--read-write-key
+
+delete-capi-cluster:
+	@eksctl delete cluster -f capi-cluster.yaml
