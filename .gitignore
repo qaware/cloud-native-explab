@@ -3,3 +3,5 @@
 
 .terraform/
 .terraform.lock.hcl
+
+*.kubeconfig

@@ -1,3 +1,2 @@
 gke-sa-key.json
 image-builder/
-*.kubeconfig
