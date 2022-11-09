@@ -17,8 +17,8 @@ $ terraform validate
 ## Usage
 
 ```
-module "ekscli_cluster" {
-    source = git::https://github.com/qaware/cloud-native-explab.git//terraform/ekscli_cluster
+module "ekscli-cluster" {
+    source = git::https://github.com/qaware/cloud-native-explab.git//terraform/ekscli-cluster
 
     # specify input variables for this module
     cluster_name = "demo-eks-dev"
