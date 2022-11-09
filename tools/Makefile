@@ -18,7 +18,7 @@ create-gcp-cluster:
 		--workload-pool=$(GCP_PROJECT).svc.id.goog \
 		--enable-network-policy \
 		--enable-autoscaling \
-		--num-nodes=3 \
+		--num-nodes=5 \
 		--min-nodes=3 --max-nodes=10 \
 		--machine-type=e2-medium \
 		--logging=SYSTEM \
