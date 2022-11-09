@@ -1,49 +1,20 @@
-# Plain GKE Cluster using TypeScript Pulumi
-
-## Setup
-
-```bash
-export GCP_PROJECT=cloud-native-experience-lab
-export GCP_ZONE=europe-west1-b
-
-# create an empty directory
-mkdir gke-cluster-plain && cd gke-cluster-plain
-
-# prepare GCP setup
-gcloud auth login
-gcloud config set project $GCP_PROJECT
-gcloud config set compute/zone $GCP_ZONE
-gcloud auth application-default login
-
-# create new Pulumi program
-pulumi new
-pulumi config set gcp:zone $GCP_ZONE
-npm install --save @pulumi/kubernetes
-
-code .
-```
-
-## Infrastructure as Code
-
-```typescript
-import * as k8s from "@pulumi/kubernetes";
 import * as pulumi from "@pulumi/pulumi";
 import * as gcp from "@pulumi/gcp";
+import * as k8s from "@pulumi/kubernetes";
 
-const name = "pulumi-autopilot-cluster";
+export const name = "pulumi-flux2-cluster";
 
 const latestVersion = gcp.container.getEngineVersions().then(v => v.releaseChannelDefaultVersion['STABLE']);
 const cluster = new gcp.container.Cluster(name, {
-    // minMasterVersion: "1.22.12-gke.2300",
     minMasterVersion: latestVersion,    
-    location: "europe-west1",
-    // avoid a bug with GKE autopilot cluster defaults
-    // https://github.com/pulumi/pulumi-gcp/issues/714
-    ipAllocationPolicy: {},
-    enableAutopilot: true,
-    initialNodeCount: 1,
+    nodeVersion: latestVersion,
     releaseChannel: { 
         channel: 'STABLE', 
+    },
+    name: name,
+    initialNodeCount: 3,
+    nodeConfig: {
+        machineType: 'e2-medium'
     },
 });
 
@@ -84,24 +55,6 @@ users:
 `;
     });
 
-const clusterProvider = new k8s.Provider(name, {
+export const clusterProvider = new k8s.Provider(name, {
     kubeconfig: kubeconfig,
 });
-```
-
-## Usage
-
-```bash
-# to spin everything up
-pulumi up
-pulumi up --diff
-
-# get kubeconfig for cluster
-pulumi stack output kubeconfig --show-secrets > kubeconfig
-KUBECONFIG=$(PWD)/kubeconfig kubectl cluster-info
-KUBECONFIG=$(PWD)/kubeconfig kubectl version
-KUBECONFIG=$(PWD)/kubeconfig kubectl get nodes
-
-# to tear everything down
-pulumi destroy --yes
-```
