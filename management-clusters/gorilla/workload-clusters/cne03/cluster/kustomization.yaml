@@ -7,5 +7,5 @@ patchesStrategicMerge:
 - patch_g8scontrolplane.yaml
 # - patch_machinedeployment.yaml
 resources:
-- ../../../../../bases/clusters/aws/v1alpha3
-# - ../../../../../bases/nodepools/aws/v1alpha3
+- ../../../../bases/clusters/aws/v1alpha3
+# - ../../../../bases/nodepools/aws/v1alpha3
