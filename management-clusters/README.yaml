@@ -3,7 +3,7 @@ apiVersion: source.toolkit.fluxcd.io/v1beta1
 kind: GitRepository
 metadata:
   name: qaware-gitops-explab
-  namespace: org-experience-lab
+  namespace: default
 spec:
   gitImplementation: go-git
   ignore: |
@@ -16,4 +16,3 @@ spec:
   timeout: 20s
   url: https://github.com/qaware/cloud-native-explab
   ```
-  

@@ -3,7 +3,7 @@ kind: Kustomization
 resources:
 #- cne01.yaml
 #- cne02.yaml
-- cne03.yaml
+#- cne03.yaml
 #- cne04.yaml
 #- cne05.yaml
 #- cne06.yaml
