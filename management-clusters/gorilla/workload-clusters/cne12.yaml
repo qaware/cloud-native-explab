@@ -1,0 +1,22 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: gorilla-clusters-cne12
+  namespace: default
+spec:
+  interval: 1m
+  path: "./management-clusters/gorilla/workload-clusters/cne12"
+  postBuild:
+    substitute:
+      cluster_id: "cne12"
+      control_plane_id: "cnec12"
+      machine_deployment_id: "cnem12"
+      organization: "experience-lab"
+      release: "18.0.2"
+  prune: true
+  serviceAccountName: automation
+  sourceRef:
+    kind: GitRepository
+    name: qaware-gitops-explab
+  suspend: false
+  timeout: 2m
