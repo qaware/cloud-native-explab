@@ -3,27 +3,25 @@ terraform {
 
   required_providers {
     # add providers here
+    random = {
+      version = "~> 2.1"
+    }
+    aws = {
+      source  = "hashicorp/aws"
+      version = ">= 3.72"
+    }
+    tls = {
+      source  = "hashicorp/tls"
+      version = ">= 3.0"
+    }
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = ">= 2.10"
+    }
   }
 }
 
-provider "random" {
-  version = "~> 2.1"
-}
-
-provider "local" {
-  version = "~> 1.2"
-}
-
-provider "null" {
-  version = "~> 2.1"
-}
-
-provider "template" {
-  version = "~> 2.1"
-}
-
 provider "aws" {
-  version = ">= 2.28.1"
   region  = var.region
 }
 
@@ -41,7 +39,6 @@ resource "random_string" "suffix" {
 
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "2.6.0"
 
   name                 = "tf-eks-plain-vpc"
   cidr                 = "10.0.0.0/16"
@@ -119,7 +116,12 @@ resource "aws_security_group" "all_worker_mgmt" {
 module "eks" {
   source       = "terraform-aws-modules/eks/aws"
   cluster_name = local.cluster_name
-  subnets      = module.vpc.private_subnets
+
+  vpc_id = module.vpc.vpc_id
+  subnet_ids      = module.vpc.private_subnets
+  
+  cluster_endpoint_private_access = true
+  cluster_endpoint_public_access  = true
 
   tags = {
     Environment = "development"
@@ -127,22 +129,20 @@ module "eks" {
     GithubOrg   = "qaware"
   }
 
-  vpc_id = module.vpc.vpc_id
+  eks_managed_node_groups = { 
+    default_node_group = {
+      # By default, the module creates a launch template to ensure tags are propagated to instances, etc.,
+      # so we need to disable it to use the default template provided by the AWS EKS managed node group service
+      create_launch_template = false
+      launch_template_name   = ""
 
-  worker_groups = [
-    {
-      name                          = "worker-group-1"
-      instance_type                 = "t2.medium"
-      asg_desired_capacity          = 2
+      disk_size = 50
+      instance_type = "t2.medium"
+
+      asg_desired_capacity          = 3
       additional_security_group_ids = [aws_security_group.worker_group_mgmt_one.id]
-    },
-    {
-      name                          = "worker-group-2"
-      instance_type                 = "t2.medium"
-      asg_desired_capacity          = 2
-      additional_security_group_ids = [aws_security_group.worker_group_mgmt_two.id]
-    },
-  ]
+    }
+  }
 }
 
 data "aws_eks_cluster" "cluster" {
@@ -151,12 +151,4 @@ data "aws_eks_cluster" "cluster" {
 
 data "aws_eks_cluster_auth" "cluster" {
   name = module.eks.cluster_id
-}
-
-# Kubernetes setup
-provider "kubernetes" {
-  load_config_file       = "false"
-  host                   = data.aws_eks_cluster.cluster.endpoint
-  token                  = data.aws_eks_cluster_auth.cluster.token
-  cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
 }
