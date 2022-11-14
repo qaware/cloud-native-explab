@@ -13,12 +13,12 @@ resources:
 - cne10.yaml
 - cne11.yaml
 - cne12.yaml
-#- cne13.yaml
-#- cne14.yaml
-#- cne15.yaml
-#- cne16.yaml
-#- cne17.yaml
-#- cne18.yaml
-#- cne19.yaml
-#- cne20.yaml
+- cne13.yaml
+- cne14.yaml
+- cne15.yaml
+- cne16.yaml
+- cne17.yaml
+- cne18.yaml
+- cne19.yaml
+- cne20.yaml
 
