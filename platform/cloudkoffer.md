@@ -94,7 +94,7 @@ microk8s enable traefik
 
 ## Platform Bootstrapping with Flux2
 
-Next, we will bootstrap Flux2 as GitOps tool to provision further infrastructure and platform components. as well as the applications.
+Next, we will bootstrap Flux2 as GitOps tool to provision further infrastructure and platform components.
 
 **Lab Instructions**
 1. Install the Flux2 CLI on either the microk8s master or your developer machine
