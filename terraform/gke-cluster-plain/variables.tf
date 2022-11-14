@@ -16,8 +16,26 @@ variable "gke_cluster_name" {
   type        = string
 }
 
-variable "gke_num_nodes" {
+variable "gke_min_nodes" {
   default     = 3
-  description = "Number of GKE nodes"
-  type        = "number"
+  description = "Minimum number of GKE nodes"
+  type        = number
+}
+
+variable "gke_max_nodes" {
+  default     = 3
+  description = "Maximum number of GKE nodes"
+  type        = number
+}
+
+variable "gke_machine_type" {
+  default     = "e2-medium"
+  description = "Machine type of GKE nodes"
+  type        = string
+}
+
+variable "preemptible" {
+  default     = false
+  description = "Preemptible GKE nodes"
+  type        = bool
 }
