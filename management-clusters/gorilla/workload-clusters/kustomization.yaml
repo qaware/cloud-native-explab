@@ -12,7 +12,7 @@ resources:
 - cne09.yaml
 - cne10.yaml
 - cne11.yaml
-- cne12.yaml
+#- cne12.yaml
 - cne13.yaml
 - cne14.yaml
 - cne15.yaml
