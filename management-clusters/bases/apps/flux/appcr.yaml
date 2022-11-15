@@ -18,4 +18,4 @@ spec:
     configMap:
       name: flux-app-user-values
       namespace: ${cluster_id}
-  version: 0.10.0-20e20882fe36dfda3de0c609b91cf3492ac172b6
+  version: 0.18.2-20e20882fe36dfda3de0c609b91cf3492ac172b6
