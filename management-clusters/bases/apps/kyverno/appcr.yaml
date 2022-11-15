@@ -1,0 +1,18 @@
+apiVersion: application.giantswarm.io/v1alpha1
+kind: App
+metadata:
+  name: kyverno
+  namespace: ${cluster_id}
+spec:
+  catalog: giantswarm
+  kubeConfig:
+    context:
+      name: ${cluster_id}
+    inCluster: false
+    secret:
+      name: ${cluster_id}-kubeconfig
+      namespace: ${cluster_id}
+  name: kyverno
+  namespace: kyverno
+  version: 0.11.8
+  
