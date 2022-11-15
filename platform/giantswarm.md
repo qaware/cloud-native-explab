@@ -257,6 +257,7 @@ flux create image policy podinfo \
     --select-semver="6.1.x" \
     --export > podinfo/podinfo-policy.yaml
 ```
+</details>
 
 ### Cloud-native Weather Showcase Deployment
 
