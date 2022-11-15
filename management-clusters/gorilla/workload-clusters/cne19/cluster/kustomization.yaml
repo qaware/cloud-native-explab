@@ -9,5 +9,5 @@ patchesStrategicMerge:
 resources:
 - ../../../../bases/clusters/aws/v1alpha3
 - ../../../../bases/nodepools/aws/v1alpha3
-- ../../../../bases/apps/flux
+#- ../../../../bases/apps/flux
 - ../../../../bases/apps/kyverno
