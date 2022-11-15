@@ -200,6 +200,123 @@ flux get all
 
 </details>
 
+### Kubernetes Dashboard
+
+The Kubernetes dashboard has not been installed as a GKE addon. Instead, we install the dashboard manually in the
+current version. Since RBAC is enabled we also need to make a few additional steps are required.
+
+**Lab Instructions**
+
+1. Deploy the Kubernetes Dashboard as YAML from the upstream repository
+2. Create service account and cluster role binding using Flux2
+3. Expose the dashboard UI as _LoadBalancer_ service or using an _Ingress_ resource
+4. Generate user token and access dashboard UI
+
+<details>
+  <summary markdown="span">Click to expand solution ...</summary>
+
+```bash
+# change into infrastructure/ directory
+take kubernetes-dashboard
+kustomize create
+```
+
+Now you can add the latest recommend dashboard manifest YAML to the resources section of the kustomization.yaml
+e.g. https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml
+
+```yaml
+# see https://github.com/kubernetes/dashboard/blob/master/docs/user/access-control/creating-sample-user.md
+# create admin-service-account.yaml in the GitOps infrastructure directory
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+    name: admin-user
+    namespace: kube-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+    name: admin-user
+roleRef:
+    apiGroup: rbac.authorization.k8s.io
+    kind: ClusterRole
+    name: cluster-admin
+subjects:
+    - kind: ServiceAccount
+      name: admin-user
+      namespace: kube-system
+```
+
+Now you can open and access the dashboard in your preferred browser. You could either use port-forwarding or the proxy
+functionality of kubectl.
+
+```bash
+# using the proxy
+kubectl proxy
+open http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/
+
+# or use port forward
+kubectl port-forward -n kube-system service/kubernetes-dashboard 10443:443
+```
+
+Even better is to patch the `kubernetes-dashboard` service using type `LoadBalancer` and apply it as strategic
+merge patch using Kustomize.
+
+```yaml
+# create loadbalancer.yaml in the GitOps repository
+apiVersion: v1
+kind: Service
+metadata:
+  name: kubernetes-dashboard
+  namespace: kubernetes-dashboard
+spec:
+  type: LoadBalancer
+
+# add this to the kustomize.yaml
+patchesStrategicMerge:
+  - loadbalancer.yaml
+```
+
+</details>
+
+### Bitnami Sealed Secrets
+
+In this step we want to provision the [Sealed Secrets](https://github.com/bitnami-labs/sealed-secrets) controller as 
+a Helm release using Flux.
+
+**Lab Instructions**
+
+1. Create a `HelmRepository` resource for the official Sealed Secrets chart repository 
+2. Create a `HelmRelease` resource for the actual chart to install
+3. Add resource to your GitOps repo and synchronize the cluster state
+
+<details>
+  <summary markdown="span">Click to expand solution ...</summary>
+
+```bash
+# create a dedicated directory with initial Kustomization
+take sealed-secrets
+kustomize create
+
+flux create source helm sealed-secrets \
+    --url=https://bitnami-labs.github.io/sealed-secrets \
+    --interval=10m0s \
+    --export > repository.yaml
+
+flux create hr sealed-secrets \
+    --source=HelmRepository/sealed-secrets \
+    --chart=sealed-secrets \
+    --release-name=sealed-secrets-controller \
+    --chart-version=">=1.18.1" \
+    --target-namespace=kube-system \
+    --create-target-namespace=false \
+    --crds=CreateReplace \
+    --export > release.yaml
+```
+
+</details>
+
+
 ## Applications Deployment with Flux2
 
 Now, we will finally setup Flux2 as GitOps tool to provision cloud-native applications.
