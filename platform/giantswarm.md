@@ -102,7 +102,7 @@ flux bootstrap github \
 flux create source git $GIT_REPO \
     --url=https://github.com/$GIT_USER/$GIT_REPO \
     --branch=main \
-    --interval=30s \
+    --interval=5m \
     --export > ./clusters/gorilla/cne01/$GIT_REPO-source.yaml
 
 # you may need to update and modify Flux kustomization
