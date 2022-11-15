@@ -65,9 +65,9 @@ Next, we will bootstrap Flux2 as GitOps tool to provision further infrastructure
 
 1. Install the Flux2 CLI on your developer machine, if not already done
 2. Create personal Github token and export as ENV variable
-3. Bootstrap the flux-system namespace and components
+3. (_optional_) Bootstrap the flux-system namespace and components
     - use a personal repository as GitOps repository
-    - enable extra components: _image-reflector-controller_ and _image-automation-controller_
+    - (_optional_) enable extra components: _image-reflector-controller_ and _image-automation-controller_
     - create a read-write SSH key
 4. Add Flux2 Kustomization for platform `infrastructure/` folder
 
@@ -81,18 +81,27 @@ curl -s https://fluxcd.io/install.sh | sudo bash
 
 # see https://fluxcd.io/docs/get-started/
 # generate a personal Github token
-export GITHUB_USER=qaware
+export GITHUB_USER=<your-github-user>
+export GITHUB_REPO=cloud-native-explab
 export GITHUB_TOKEN=<your-github-token>
 
 # bootstrap the flux-system namespace and components
+# only do this if Flux is not installed on the cluster yet
 flux bootstrap github \
     --owner=$GITHUB_USER \
-    --repository=cloud-native-explab \
+    --repository=$GITHUB_REPO \
     --branch=main \
     --path=./clusters/gorilla/cne01 \
     --components-extra=image-reflector-controller,image-automation-controller \
     --read-write-key
     --personal         # only for user accounts, not for org accounts
+
+# you may register a dedicated 
+flux create source git $GIT_REPO \
+    --url=https://github.com/$GIT_USER/$GIT_REPO \
+    --branch=main \
+    --interval=30s \
+    --export > ./clusters/gorilla/cne01/$GIT_REPO-source.yaml
 
 # you may need to update and modify Flux kustomization
 # - infrastructure-sync.yaml
@@ -104,11 +113,16 @@ flux create kustomization infrastructure \
     --interval=5m0s \
     --export > ./clusters/gorilla/cne01/infrastructure-sync.yaml
 
+# manually apply the source and infrastructure manifests
+kubectl apply ./clusters/gorilla/cne01/$GIT_REPO-source.yaml
+kubectl apply ./clusters/gorilla/cne01/infrastructure-sync.yaml
+
 # to manually trigger the GitOps process use the following commands
 flux reconcile source git flux-system
 flux reconcile kustomization infrastructure
 flux get all
   ```
+
 </details>
 
 ### Observability with Grafana, Loki and Tempo
@@ -183,6 +197,7 @@ flux reconcile source git flux-system
 flux reconcile kustomization infrastructure
 flux get all
 ```
+
 </details>
 
 ## Applications Deployment with Flux2
