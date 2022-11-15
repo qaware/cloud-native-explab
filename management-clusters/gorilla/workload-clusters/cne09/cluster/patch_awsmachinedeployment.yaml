@@ -16,4 +16,4 @@ spec:
     description: Default node pool
     scaling:
       max: 5
-      min: 1
+      min: 3
