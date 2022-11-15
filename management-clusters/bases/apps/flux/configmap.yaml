@@ -5,5 +5,5 @@ data:
       domain: ${cluster_domain}
 kind: ConfigMap
 metadata:
-  name: ${cluster_id}-user-values
+  name: flux-app-user-values
   namespace: ${cluster_id}
