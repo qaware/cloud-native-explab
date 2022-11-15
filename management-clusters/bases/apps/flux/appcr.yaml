@@ -14,8 +14,8 @@ spec:
       namespace: ${cluster_id}
   name: flux-app
   namespace: flux-app
-  # userConfig:
-  #   configMap:
-  #     name: flux-app-user-values
-  #     namespace: ${cluster_id}
+  userConfig:
+    configMap:
+      name: flux-app-user-values
+      namespace: ${cluster_id}
   version: 0.10.0-20e20882fe36dfda3de0c609b91cf3492ac172b6
