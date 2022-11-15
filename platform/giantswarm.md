@@ -13,7 +13,7 @@ Before you dive right into this experience lab, make sure your local development
   - VS Code
 - (_optional_) Local Docker / Kubernetes installation (Docker Desktop, Rancher Desktop, Minikube)
 - [kubectl](https://kubernetes.io/docs/tasks/tools/)
-- [Flux2](https://tilt.dev)
+- [Flux2](https://fluxcd.io/flux/cmd/)
 - [Kustomize](https://kustomize.io)
 
 
@@ -93,9 +93,10 @@ flux bootstrap github \
     --owner=$GITHUB_USER \
     --repository=$GITHUB_REPO \
     --branch=main \
-    --path=./clusters/gorilla/cne01 \
+    --path=./clusters/gorilla/cne19 \
     --components-extra=image-reflector-controller,image-automation-controller \
-    --read-write-key
+    --read-write-key \
+    --cluster-domain eu-central-1.local \
     --personal         # only for user accounts, not for org accounts
 
 # you may register a dedicated 
