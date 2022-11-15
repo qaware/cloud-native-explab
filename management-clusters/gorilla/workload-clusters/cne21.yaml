@@ -12,7 +12,7 @@ spec:
       control_plane_id: "cnec21"
       machine_deployment_id: "cnem21"
       organization: "experience-lab"
-      release: "18.0.2"
+      release: "18.0.3"
   prune: true
   serviceAccountName: automation
   sourceRef:
