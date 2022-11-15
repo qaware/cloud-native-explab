@@ -9,6 +9,7 @@ spec:
   postBuild:
     substitute:
       cluster_id: "cne01"
+      cluster_domain: "eu-central-1.local"
       control_plane_id: "cnec1"
       machine_deployment_id: "cnem1"
       organization: "experience-lab"

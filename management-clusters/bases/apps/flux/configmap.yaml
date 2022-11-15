@@ -1,0 +1,9 @@
+apiVersion: v1
+data:
+  values: |
+    cluster:
+      domain: ${cluster_domain}
+kind: ConfigMap
+metadata:
+  name: ${cluster_id}-user-values
+  namespace: ${cluster_id}

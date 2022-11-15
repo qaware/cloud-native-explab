@@ -3,4 +3,4 @@ buildMetadata: [originAnnotations]
 kind: Kustomization
 resources:
   - appcr.yaml
-  
+  - configmap.yaml

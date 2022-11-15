@@ -4,7 +4,7 @@ metadata:
   name: flux-app
   namespace: ${cluster_id}
 spec:
-  catalog: giantswarm
+  catalog: giantswarm-test
   kubeConfig:
     context:
       name: ${cluster_id}
@@ -14,5 +14,8 @@ spec:
       namespace: ${cluster_id}
   name: flux-app
   namespace: flux-app
-  version: 0.10.0
-  
+  userConfig:
+    configMap:
+      name: ${cluster_id}-user-values
+      namespace: ${cluster_id}
+  version: 0.10.0-20e20882fe36dfda3de0c609b91cf3492ac172b6
