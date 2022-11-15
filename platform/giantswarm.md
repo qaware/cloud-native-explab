@@ -3,6 +3,20 @@
 This lab will provision a GiantSwarm based platform with several useful infrastructure components as well
 as a demo application.
 
+## Prerequisites
+
+Before you dive right into this experience lab, make sure your local development environment is setup properly! 
+
+- Modern Operating System (Windows 10, MacOS, ...) with terminal and shell
+- IDE of your personal choice (with relevant plugins installed)
+  - IntelliJ Ultimate
+  - VS Code
+- (_optional_) Local Docker / Kubernetes installation (Docker Desktop, Rancher Desktop, Minikube)
+- [kubectl](https://kubernetes.io/docs/tasks/tools/)
+- [Flux2](https://tilt.dev)
+- [Kustomize](https://kustomize.io)
+
+
 ## GiantSwarm Cluster Setup
 
 _TODO_
