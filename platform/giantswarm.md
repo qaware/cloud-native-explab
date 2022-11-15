@@ -25,7 +25,7 @@ repository. Scale your cluster to a desired minimum size of 3.
 **Lab Instructions**
 
 1. Install the Flux2 CLI on your developer machine, if not already done
-2. For the GitHub repository `https://github.com/qaware/cloud-native-explab` if not already done
+2. Fork the GitHub repository `https://github.com/qaware/cloud-native-explab` if not already done
 3. Modify the `AWSMachineDeployment` to have a minimum node pool size of 3
 4. Issue a pull request with your changes (or manually apply the changes?)
 
@@ -65,11 +65,13 @@ Next, we will bootstrap Flux2 as GitOps tool to provision further infrastructure
 
 1. Install the Flux2 CLI on your developer machine, if not already done
 2. Create personal Github token and export as ENV variable
-3. (_optional_) Bootstrap the flux-system namespace and components
+3. Add Flux2 Kustomization for platform `infrastructure/` folder
+4. (_Bonus_) Bootstrap the flux-system namespace and components locally on your machine
     - use a personal repository as GitOps repository
     - (_optional_) enable extra components: _image-reflector-controller_ and _image-automation-controller_
     - create a read-write SSH key
-4. Add Flux2 Kustomization for platform `infrastructure/` folder
+
+
 
 <details>
   <summary markdown="span">Click to expand solution ...</summary>
