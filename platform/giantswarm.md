@@ -1,4 +1,4 @@
-# Giantswarm Managed Kubernetes Platform (on AWS)
+# Giant Swarm Managed Kubernetes Platform (on AWS)
 
 This lab will provision a GiantSwarm based platform with several useful infrastructure components as well
 as a demo application.
@@ -17,16 +17,53 @@ Before you dive right into this experience lab, make sure your local development
 - [Kustomize](https://kustomize.io)
 
 
-## GiantSwarm Cluster Setup
+## Giant Swarm Workload Cluster Setup
 
-_TODO_
+First, we need to obtain access to our personal Giant Swarm workload cluster. The cluster is GitOps managed by this
+repository. Scale your cluster to a desired minimum size of 3.
+
+**Lab Instructions**
+
+1. Install the Flux2 CLI on your developer machine, if not already done
+2. For the GitHub repository `https://github.com/qaware/cloud-native-explab` if not already done
+3. Modify the `AWSMachineDeployment` to have a minimum node pool size of 3
+4. Issue a pull request with your changes (or manually apply the changes?)
+
+<details>
+  <summary markdown="span">Click to expand solution ...</summary>
+
+```yaml
+apiVersion: infrastructure.giantswarm.io/v1alpha3
+kind: AWSMachineDeployment
+metadata:
+  annotations:
+    giantswarm.io/docs: https://docs.giantswarm.io/ui-api/management-api/crd/awsmachinedeployments.infrastructure.giantswarm.io/
+  labels:
+    cluster.x-k8s.io/cluster-name: ${cluster_id}
+    giantswarm.io/cluster: ${cluster_id}
+    giantswarm.io/machine-deployment: ${machine_deployment_id}
+    giantswarm.io/organization: ${organization}
+    release.giantswarm.io/version: ${release}
+  name: ${machine_deployment_id}
+  namespace: org-${organization}
+spec:
+  nodePool:
+    description: Default node pool
+    scaling:
+      max: 5
+      # set minimum size
+      min: 3
+```
+
+</details>
 
 ## Platform Bootstrapping with Flux2
 
 Next, we will bootstrap Flux2 as GitOps tool to provision further infrastructure and platform components.
 
 **Lab Instructions**
-1. Install the Flux2 CLI on your developer machine
+
+1. Install the Flux2 CLI on your developer machine, if not already done
 2. Create personal Github token and export as ENV variable
 3. Bootstrap the flux-system namespace and components
     - use a personal repository as GitOps repository
