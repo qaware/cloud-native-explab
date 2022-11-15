@@ -13,7 +13,7 @@ metadata:
   namespace: org-${organization}
 spec:
   nodePool:
-    description: Default node pool
+    description: workers
     scaling:
-      max: 5
-      min: 1
+      max: 10
+      min: 3
