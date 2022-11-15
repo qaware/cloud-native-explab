@@ -10,7 +10,7 @@ metadata:
   namespace: org-${organization}
 spec:
   cluster:
-    description: Test cluster
+    description: Felix cluster
     dns:
       domain: gorilla.eu-central-1.aws.gigantic.io
   provider:
