@@ -5,7 +5,8 @@ as a demo application.
 
 ## Prerequisites
 
-Before you dive right into this experience lab, make sure your local development environment is setup properly!
+Before you dive right into this experience lab, make sure your local environment is setup properly.
+Alternatively, use the preconfigured `cn-explab-shell` Docker image.
 
 - Modern Operating System (Windows 10, MacOS, ...) with terminal and shell
 - IDE of your personal choice (with relevant plugins installed)
@@ -18,8 +19,7 @@ Before you dive right into this experience lab, make sure your local development
 
 ## Giant Swarm Workload Cluster Setup
 
-First, we need to obtain access to our personal Giant Swarm workload cluster. The cluster is GitOps managed by this
-repository. Scale your cluster to a desired minimum size of 3.
+First, we need to obtain access to our personal Giant Swarm workload cluster. The cluster is GitOps managed by this repository. Scale your cluster to a desired minimum size of 3.
 
 **Lab Instructions**
 

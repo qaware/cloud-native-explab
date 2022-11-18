@@ -1,21 +1,45 @@
 # GKE based Kubernetes native Platform
 
-This lab is builds an opinionated K8s-native platform based on Google Kubernetes Engine.
+This lab will provision a GKE based platform with several useful infrastructure components as well
+as a demo application.
 
-- gcloud CLI
-- Google Kubernetes Engine (GKE)
-- Flux2 CLI
+## Prerequisites
+
+Before you dive right into this experience lab, make sure your local environment is setup properly.
+Alternatively, use the preconfigured `cn-explab-shell` Docker image.
+
+- Modern Operating System (Windows 10, MacOS, ...) with terminal and shell
+- IDE of your personal choice (with relevant plugins installed)
+  - IntelliJ Ultimate
+  - VS Code
+- [gcloud](https://cloud.google.com/sdk/docs/install)
+- [kubectl](https://kubernetes.io/docs/tasks/tools/)
+- [Flux2](https://fluxcd.io/flux/cmd/)
+- [Kustomize](https://kustomize.io)
 
 ## GKE Cluster Setup
 
 In this initial step we will create the GKE cluster using the official Google `gcloud` CLI. We will also
-install and enabler the ConfigConnector add-on to be able to provision GCP infrastructure via K8s resources.
+install and enable additional built-in addons.
+
+**Lab Instructions**
+
+1. Configure your local `gcloud` configuration to use the `cloud-native-experience-lab` project and `europe-west1-b` as compute zone.
+2. Create a GKE cluster with the following settings and properties:
+   - Kubernetes version 1.22
+   - 3 to 10 nodes using auto scaling and machine type e2-standard-4
+   - Logging and monitoring enabled for SYSTEM scope
+   - Network policies enabled
+   - Workload pool identity enabled
+   - Addons: HttpLoadBalancing, HorizontalPodAutoscaling, ConfigConnector
+3. Create a GCP service account for the cluster with the following permissions
+   - Add the service account to the `roles/editor` IAM role
+   - Add the workload identity service account as member using the `roles/iam.workloadIdentityUser` role
+
+<details>
+  <summary markdown="span">Click to expand solution ...</summary>
 
 ```bash
-# for the unpatient, use the provided Make targets
-make create-gcp-cluster
-make create-gcp-sa
-
 # or do it manually to better unstand the steps and commands
 # see https://cloud.google.com/sdk/gcloud/reference/container/clusters/create
 export GCP_PROJECT=cloud-native-experience-lab
@@ -40,25 +64,36 @@ kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-ad
 
 # for the ConfigConnector plugin we need to create a SA with correct permissions
 gcloud iam service-accounts create $CLUSTER_NAME --description="$CLUSTER_NAME Service Account" --display-name="$CLUSTER_NAME Service Account"
+
 gcloud projects add-iam-policy-binding $GCP_PROJECT  \
         --role=roles/editor  \
         --member=serviceAccount:$CLUSTER_NAME@$GCP_PROJECT.iam.gserviceaccount.com
+
 gcloud iam service-accounts add-iam-policy-binding $CLUSTER_NAME@$GCP_PROJECT.iam.gserviceaccount.com \
         --member="serviceAccount:$GCP_PROJECT.svc.id.goog[cnrm-system/cnrm-controller-manager]" \
         --role="roles/iam.workloadIdentityUser"
+
 gcloud iam service-accounts keys create gke-sa-key.json --iam-account=$CLUSTER_NAME@$GCP_PROJECT.iam.gserviceaccount.com
 ```
 
+</details>
+
 ## Platform Bootstrapping with Flux2
 
-In this step we bootstrap Flux2 as GitOps tool to provision further infrastructure and platform components as
-well as a simple weather microservice.
+In this step we bootstrap Flux2 as GitOps tool to provision further infrastructure and platform and application components.
+
+**Lab Instructions**
+
+1. Bootstrap Flux using this repository as source
+    - Add following extra components: `image-reflector-controller` and `image-automation-controller`
+    - Create a read / write key for Flux, so that Flux can make manifest changes
+2. Configure additional kustomizations for infrastructure and applications components
+3. (_optional_) Configure webhook notification and image update automation
+
+<details>
+  <summary markdown="span">Click to expand solution ...</summary>
 
 ```bash
-# install the Flux2 CLI on the master node
-# see https://fluxcd.io/docs/installation/
-curl -s https://fluxcd.io/install.sh | sudo bash
-
 # see https://fluxcd.io/docs/get-started/
 # generate a personal Github token
 export GITHUB_USER=qaware
@@ -72,8 +107,12 @@ flux bootstrap github \
     --path=./clusters/gcp/$CLUSTER_NAME \
     --components-extra=image-reflector-controller,image-automation-controller \
     --read-write-key
-    # --token-auth       # instead of SSH key access, use the Github token instead
     # --personal         # only for user accounts, not for org accounts
+
+# to manually trigger the GitOps process use the following commands
+flux reconcile source git flux-system
+flux reconcile kustomization infrastructure
+flux reconcile kustomization applications
 
 # you may need to update and modify Flux kustomization
 # - infrastructure-sync.yaml
@@ -83,11 +122,6 @@ flux bootstrap github \
 # - applications-sync.yaml
 # - image-update-automation.yaml
 
-# to manually trigger the GitOps process use the following commands
-flux reconcile source git flux-system
-flux reconcile kustomization infrastructure
-flux reconcile kustomization applications
-
 # to automatically trigger the GitOps process 
 # you also need to create or update the webhooks for the Git Repository
 # Payload URL: http://<LoadBalancerAddress>/<ReceiverURL>
@@ -96,10 +130,27 @@ $ kubectl -n flux-system get svc/receiver
 $ kubectl -n flux-system get receiver/webapp
 ```
 
-### Kubernetes Dashboard
+</details>
 
-The Kubernetes dashboard has not been installed as a GKE addon. Instead, we install the dashboard manually in the
-current version. Since RBAC is enabled we also need to make a few additional steps are required.
+## Config Connector
+
+The ConfigConnector add-on from GKE allows the declarative management of other GCP cloud resources such as SQL instances or storage bucket. However, after the installation it needs to be configured for it to work correctly.
+
+**Lab Instructions**
+
+1. Create a dedicated namespace `config-connector` and add `cnrm.cloud.google.com/project-id` label
+2. Create ConfigConnector resource and configure Google Service Account
+
+<details>
+  <summary markdown="span">Click to expand solution ...</summary>
+
+_TODO_
+
+</details>
+
+## Kubernetes Dashboard
+
+The Kubernetes dashboard has not been installed as a GKE addon. Instead, we install the dashboard manually in the current version. Since RBAC is enabled we also need to make a few additional steps are required.
 
 **Lab Instructions**
 
@@ -166,14 +217,15 @@ patchesStrategicMerge:
 
 </details>
 
-## Config Connector
+## External Secrets Management
 
-The ConfigConnector add-on from GKE allows the declarative management of other GCP cloud resources such as SQL instances or storage bucket. However, after the installation it needs to be configured for it to work correctly.
+The External Secrets Operator is a component to synchronize secrets from external APIs such
+as the Google Secrets Manager. In this step we will install the component using Helm and then configure it to synchronize some secrets.
 
 **Lab Instructions**
 
-1. Create a dedicated namespace `config-connector` and add `cnrm.cloud.google.com/project-id` label
-2. Create ConfigConnector resource and configure Google Service Account
+1. Install the External Secrets operator as Helm chart using Flux. Use the pod-based workload identity feature
+2. Create a `SecretStore` and a `ExternalSecret` to obtain a secret from the GCP secret manager
 
 <details>
   <summary markdown="span">Click to expand solution ...</summary>
@@ -182,13 +234,12 @@ _TODO_
 
 </details>
 
-## Network Policies with Calico
+## Addon and Alternative Labs
 
-_TODO_ 
+### Cluster Setup and Flux Bootstrapping with Infrastructure as Code
 
-## External Secrets Management
-
-_TODO_ 
+Instead of using the CLI tools to bootstrap the GKE cluster and Flux, use a proper
+Infrastructure as Code tool like Terraform or Pulumi to achieve the same.
 
 ## References
 
