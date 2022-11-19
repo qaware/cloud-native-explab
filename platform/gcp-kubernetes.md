@@ -27,14 +27,13 @@ install and enable additional built-in addons.
 1. Configure your local `gcloud` configuration to use the `cloud-native-experience-lab` project and `europe-west1-b` as compute zone.
 2. Create a GKE cluster with the following settings and properties:
    - Kubernetes version 1.22
-   - 3 to 10 nodes using auto scaling and machine type e2-standard-4
+   - 3 to 10 nodes using auto scaling and machine type `e2-standard-4`
    - Logging and monitoring enabled for SYSTEM scope
    - Network policies enabled
    - Workload pool identity enabled
    - Addons: HttpLoadBalancing, HorizontalPodAutoscaling, ConfigConnector
-3. Create a GCP service account for the cluster with the following permissions
-   - Add the service account to the `roles/editor` IAM role
-   - Add the workload identity service account as member using the `roles/iam.workloadIdentityUser` role
+3. Create a GCP service account for the cluster and add it to the `roles/editor` IAM role
+4. Add a policy binding to the service account for the workload identity member with the `roles/iam.workloadIdentityUser` IAM role
 
 <details>
   <summary markdown="span">Click to expand solution ...</summary>
@@ -72,8 +71,6 @@ gcloud projects add-iam-policy-binding $GCP_PROJECT  \
 gcloud iam service-accounts add-iam-policy-binding $CLUSTER_NAME@$GCP_PROJECT.iam.gserviceaccount.com \
         --member="serviceAccount:$GCP_PROJECT.svc.id.goog[cnrm-system/cnrm-controller-manager]" \
         --role="roles/iam.workloadIdentityUser"
-
-gcloud iam service-accounts keys create gke-sa-key.json --iam-account=$CLUSTER_NAME@$GCP_PROJECT.iam.gserviceaccount.com
 ```
 
 </details>
@@ -138,13 +135,33 @@ The ConfigConnector add-on from GKE allows the declarative management of other G
 
 **Lab Instructions**
 
-1. Create a dedicated namespace `config-connector` and add `cnrm.cloud.google.com/project-id` label
-2. Create ConfigConnector resource and configure Google Service Account
+1. Create a dedicated namespace `config-connector` and add `cnrm.cloud.google.com/project-id` annotation
+2. Create ConfigConnector resource manifest and configure Google Service Account and connector mode
+3. Add the manifests to the infrastructure Flux kustomization
 
 <details>
   <summary markdown="span">Click to expand solution ...</summary>
 
-_TODO_
+```yaml
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: config-connector
+  annotations:
+    # required to configure Config Connector with Google Cloud ProjectID
+    cnrm.cloud.google.com/project-id: cloud-native-experience-lab
+---
+apiVersion: core.cnrm.cloud.google.com/v1beta1
+kind: ConfigConnector
+metadata:
+  # the name is restricted to ensure that there is only one
+  # ConfigConnector resource installed in your cluster
+  name: configconnector.core.cnrm.cloud.google.com
+  namespace: cnrm-system
+spec:
+ mode: cluster
+ googleServiceAccount: "cloud-native-explab@cloud-native-experience-lab.iam.gserviceaccount.com"
+```
 
 </details>
 
@@ -252,7 +269,8 @@ Podinfo is a tiny web application made with Go that showcases best practices of 
   <summary markdown="span">Click to expand solution ...</summary>
 
 ```bash
-cd applications/gorilla/cne01
+cd applications/gcp/cloud-native-explab
+kustomize create
 
 flux create source git podinfo \
     --url=https://github.com/stefanprodan/podinfo \
