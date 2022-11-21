@@ -53,6 +53,8 @@ It also contains the individual installation and lab of several useful infrastru
 - [Flagger](https://flagger.app/)
 - [ArgoCD](https://argoproj.github.io/cd/)
 - [Tekton](https://tekton.dev/)
+- [Harbor](https://goharbor.io/)
+- [Dragonfly](https://d7y.io/)
 
 ## Observability
 
