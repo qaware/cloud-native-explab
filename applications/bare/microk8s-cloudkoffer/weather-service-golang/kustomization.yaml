@@ -4,5 +4,5 @@ resources:
   - weather-namespace.yaml
   - weather-kustomization.yaml
   - weather-source.yaml
-  - weather-registry.yaml
-  - weather-policy.yaml
+  # - weather-registry.yaml
+  # - weather-policy.yaml

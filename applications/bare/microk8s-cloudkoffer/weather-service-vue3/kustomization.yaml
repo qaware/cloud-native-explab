@@ -3,6 +3,6 @@ kind: Kustomization
 resources:
   - vue3ui-kustomization.yaml
   - vue3ui-source.yaml
-  - vue3ui-registry.yaml
-  - vue3ui-policy.yaml
+  # - vue3ui-registry.yaml
+  # - vue3ui-policy.yaml
   - vue3ui-ingress.yaml
