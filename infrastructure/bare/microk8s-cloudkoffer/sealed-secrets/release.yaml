@@ -7,13 +7,14 @@ spec:
   chart:
     spec:
       chart: sealed-secrets
+      reconcileStrategy: ChartVersion
       sourceRef:
         kind: HelmRepository
         name: sealed-secrets
-      version: ">=1.18.1"
-  interval: 1h0m0s
-  releaseName: sealed-secrets-controller
-  targetNamespace: kube-system
+      version: 2.7.3
+  interval: 1m0s
+  releaseName: sealed-secrets
+  targetNamespace: sealed-secrets
   install:
     crds: Create
   upgrade:

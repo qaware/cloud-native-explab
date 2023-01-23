@@ -8,10 +8,17 @@ spec:
   chart:
     spec:
       chart: loki
+      reconcileStrategy: ChartVersion
       sourceRef:
         kind: HelmRepository
-        name: grafana-charts
-      version: '>=2.13.0 <2.14.0'
+        name: grafana
+      version: 4.4.0
+      values:
+        loki:
+          commonConfig:
+            replication_factor: 1
+          storage:
+            type: 'filesystem'
   interval: 1m0s
+  releaseName: loki
   targetNamespace: observability
-

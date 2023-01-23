@@ -1,0 +1,12 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: ck-cluster-qaware-de
+  namespace: connectivity
+spec:
+  secretName: wildcard-certificate
+  issuerRef:
+    kind: ClusterIssuer
+    name: letsencrypt-prod
+  dnsNames:
+  - '*.ck.cluster.qaware.de'

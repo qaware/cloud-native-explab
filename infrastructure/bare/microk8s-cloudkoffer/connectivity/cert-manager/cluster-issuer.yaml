@@ -1,0 +1,18 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-prod
+spec:
+  acme:
+    email: team-qabuild@qaware.de
+    server: https://acme-v02.api.letsencrypt.org/directory
+    privateKeySecretRef:
+      name: letsencrypt-prod
+    solvers:
+    - selector: {}
+      dns01:
+        cloudDNS:
+          project: engineering-cloud
+          serviceAccountSecretRef:
+            name: gcp-service-account
+            key: gcp-service-account

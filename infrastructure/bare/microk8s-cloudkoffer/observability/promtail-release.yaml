@@ -8,10 +8,11 @@ spec:
   chart:
     spec:
       chart: promtail
+      reconcileStrategy: ChartVersion
       sourceRef:
         kind: HelmRepository
-        name: grafana-charts
-      version: '>=6.2.0 <6.3.0'
+        name: grafana
+      version: 6.8.1
   interval: 1m0s
+  releaseName: promtail
   targetNamespace: observability
-

@@ -3,4 +3,5 @@ kind: Kustomization
 resources:
   - dashboard/
   - sealed-secrets/
+  - connectivity/
   - observability/
