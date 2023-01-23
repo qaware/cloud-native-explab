@@ -8,12 +8,12 @@ bare metal or virtualized hardware.
 
 ## Ubuntu Server 22.04 Installation
 
-The case consists of 5 NUCs. All need to be pre-installed with the latest Ubuntu Server linux distribution. 
+The case consists of 5 NUCs. All need to be pre-installed with the latest Ubuntu Server linux distribution.
 - Download the latest ISO image from https://ubuntu.com/download/server
 - Use [Balena Etcher](https://www.balena.io/etcher/) or a similar tool to put the ISO on a USB stick
 - Boot each NUC from the USB stick and perform basic installation.
 
-Make sure to setup the same root password and user account with same password on all machines. This makes 
+Make sure to setup the same root password and user account with same password on all machines. This makes
 the microk8s setup on all machines a lot easier later on.
 
 | Node          | IP (static)    | DNS | Gateway | Packages  |
@@ -25,7 +25,7 @@ the microk8s setup on all machines a lot easier later on.
 | k8s-node-4.cloudkoffer   | 192.168.178.50 | 8.8.8.8 | 192.168.178.1 | OpenSSH, microk8s Snap |
 
 Once the initial setup of each nodes is done, it is recommended to perform a `sudo apt update && apt upgrade`.
-On the master node you may additionally install a GUI as described here 
+On the master node you may additionally install a GUI as described here
 
 On the master node edit the `/etc/hosts` file and add the IPs and hostnames of all cluster nodes.
 ```
@@ -44,7 +44,7 @@ After the initial server installation all nodes run as individual microk8s nodes
 with the master to automatically for a HA cluster. Also, we need to enable useful and required microk8s addons.
 
 **Lab Instructions**
-1. Enable at least the following standard microk8s addons: 
+1. Enable at least the following standard microk8s addons:
     - DNS
     - RBAC
     - hostpath-storage
@@ -107,7 +107,7 @@ Next, we will bootstrap Flux2 as GitOps tool to provision further infrastructure
 
 <details>
   <summary markdown="span">Click to expand solution ...</summary>
-  
+
   ```bash
 # install the Flux2 CLI on the master node
 # see https://fluxcd.io/docs/installation/
@@ -122,7 +122,7 @@ export GITHUB_TOKEN=<your-token>
 flux bootstrap github \
     --owner=$GITHUB_USER \
     --repository=cloud-native-explab \
-    --branch=main \
+    --branch=aldi-cloud-fair-day \
     --path=./clusters/bare/microk8s-cloudkoffer \
     --components-extra=image-reflector-controller,image-automation-controller \
     --read-write-key
@@ -284,7 +284,7 @@ Now, we will finally setup Flux2 as GitOps tool to provision cloud-native applic
 
 <details>
   <summary markdown="span">Click to expand solution ...</summary>
-  
+
   ```bash
 # you may need to update and modify Flux kustomization
 # - applications-sync.yaml
@@ -309,7 +309,7 @@ flux get all
 
 ### Pod Info Application Deployment
 
-Podinfo is a tiny web application made with Go that showcases best practices of running microservices in Kubernetes. Podinfo is used by CNCF projects like Flux and Flagger for end-to-end testing and workshops. 
+Podinfo is a tiny web application made with Go that showcases best practices of running microservices in Kubernetes. Podinfo is used by CNCF projects like Flux and Flagger for end-to-end testing and workshops.
 In this lab we will deploy [Podinfo](https://github.com/stefanprodan/podinfo) using the Cloudkoffer Gitops workflow.
 
 **Lab Instructions**
@@ -412,7 +412,7 @@ spec:
 
 ### Cloud-native Weather Showcase Deployment
 
-Currently, several implementations of the Cloud-native weather service implementation are available, including 
+Currently, several implementations of the Cloud-native weather service implementation are available, including
 a SPA that serves as a frontend. Installation instructions can be found in the individual repositories:
 
 - [Cloud-native Weather Service with Golang](https://github.com/qaware/cloud-native-weather-golang/blob/main/docs/README.md)
