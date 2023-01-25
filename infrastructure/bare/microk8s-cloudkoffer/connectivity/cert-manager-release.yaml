@@ -12,10 +12,10 @@ spec:
         kind: HelmRepository
         name: jetstack
       version: 1.11.0
-      values:
-        extraArgs:
-          - --dns01-recursive-nameservers="8.8.8.8:53"
-          - --dns01-recursive-nameservers-only=true
+  values:
+    extraArgs:
+      - --dns01-recursive-nameservers="8.8.8.8:53"
+      - --dns01-recursive-nameservers-only=true
   interval: 1m0s
   releaseName: cert-manager
   targetNamespace: connectivity
