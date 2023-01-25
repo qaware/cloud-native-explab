@@ -12,18 +12,18 @@ spec:
         kind: HelmRepository
         name: bitnami
       version: 6.13.1
-      values:
-        sources:
-          - service
-        provider: google
-        google:
-          project: engineering-cloud
-          serviceAccountSecret: gcp-service-account
-          serviceAccountKey: gcp-service-account
-        domainFilters:
-          - cluster.qaware.de
-        policy: sync
-        txtOwnerId: qaware-ck-cluster
+  values:
+    sources:
+      - service
+    provider: google
+    google:
+      project: engineering-cloud
+      serviceAccountSecret: gcp-service-account
+      serviceAccountKey: gcp-service-account
+    domainFilters:
+      - cluster.qaware.de
+    policy: sync
+    txtOwnerId: qaware-ck-cluster
   interval: 1m0s
   releaseName: external-dns
   targetNamespace: connectivity
