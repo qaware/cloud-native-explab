@@ -18,7 +18,7 @@ spec:
     provider: google
     google:
       project: engineering-cloud
-      serviceAccountSecret: gcp-service-account
+      serviceAccountSecret: external-dns-gcp-service-account
       serviceAccountKey: credentials.json
     domainFilters:
       - cluster.qaware.de
