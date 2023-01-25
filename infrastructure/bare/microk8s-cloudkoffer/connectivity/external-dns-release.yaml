@@ -19,7 +19,7 @@ spec:
     google:
       project: engineering-cloud
       serviceAccountSecret: gcp-service-account
-      serviceAccountKey: gcp-service-account
+      serviceAccountKey: credentials.json
     domainFilters:
       - cluster.qaware.de
     policy: sync
