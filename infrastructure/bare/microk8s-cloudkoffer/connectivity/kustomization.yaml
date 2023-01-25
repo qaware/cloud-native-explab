@@ -11,4 +11,4 @@ resources:
   - external-dns-release.yaml
   - cert-manager-release.yaml
 
-  # - cert-manager/
+  - cert-manager/
