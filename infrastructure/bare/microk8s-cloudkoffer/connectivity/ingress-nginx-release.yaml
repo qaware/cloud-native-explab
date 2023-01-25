@@ -12,19 +12,19 @@ spec:
         kind: HelmRepository
         name: ingress-nginx
       version: 4.4.2
-      values:
-        controller:
-          extraArgs:
-            default-ssl-certificate: "connectivity/wildcard-certificate"
-          service:
-            enableHttp: false
-            enableHttps: true
-            annotations:
-              external-dns.alpha.kubernetes.io/hostname: "*.ck.cluster.qaware.de"
-          config:
-            enable-access-log-for-default-backend: true
-          metrics:
-            enabled: true
+  values:
+    controller:
+      extraArgs:
+        default-ssl-certificate: "connectivity/wildcard-certificate"
+      service:
+        enableHttp: false
+        enableHttps: true
+        annotations:
+          external-dns.alpha.kubernetes.io/hostname: "*.ck.cluster.qaware.de"
+      config:
+        enable-access-log-for-default-backend: true
+      metrics:
+        enabled: true
   interval: 1m0s
   releaseName: ingress-nginx
   targetNamespace: connectivity
