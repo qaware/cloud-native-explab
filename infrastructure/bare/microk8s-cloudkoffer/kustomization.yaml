@@ -4,4 +4,4 @@ resources:
   - dashboard/
   - sealed-secrets/
   - connectivity/
-  - observability/
+  # - observability/
