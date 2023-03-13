@@ -1,0 +1,47 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: ingress-nginx
+  namespace: flux-system
+spec:
+  interval: 10m0s
+  url: https://kubernetes.github.io/ingress-nginx
+
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: ingress-nginx
+  namespace: flux-system
+spec:
+  chart:
+    spec:
+      chart: ingress-nginx
+      reconcileStrategy: ChartVersion
+      sourceRef:
+        kind: HelmRepository
+        name: ingress-nginx
+      version: 4.5.2
+  interval: 1m0s
+  releaseName: ingress-nginx
+  targetNamespace: ingress-nginx
+  values:
+    controller:
+      admissionWebhooks:
+        networkPolicyEnabled: false
+      extraArgs:
+        default-ssl-certificate: cert-manager/wildcard-certificate
+      metrics:
+        enabled: true
+        prometheusRule:
+          enabled: true
+        serviceMonitor:
+          enabled: true
+      service:
+        annotations:
+          external-dns.alpha.kubernetes.io/hostname: '*.ck3.cluster.qaware.de'
+        enableHttp: false
+        enableHttps: true
+        loadBalancerIP: 192.168.1.102
+
