@@ -28,8 +28,6 @@ spec:
   targetNamespace: kubernetes-dashboard
   values:
     ingress:
-      annotations:
-        nginx.ingress.kubernetes.io/backend-protocol: HTTPS
       className: nginx
       enabled: true
       hosts:
