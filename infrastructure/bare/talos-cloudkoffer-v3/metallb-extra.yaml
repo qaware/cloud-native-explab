@@ -1,0 +1,17 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: metallb-extra
+  namespace: flux-system
+spec:
+  dependsOn:
+  - name: metallb
+  interval: 5m0s
+  path: ./infrastructure/bare/talos-cloudkoffer-v3/metallb-extra
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  targetNamespace: metallb
+
