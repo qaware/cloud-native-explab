@@ -6,7 +6,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 5m0s
-  path: ./cloud-native-explab/infrastructure/bare/talos-cloudkoffer-v3/prometheus-operator-crds
+  path: ./infrastructure/bare/talos-cloudkoffer-v3/prometheus-operator-crds
   prune: true
   sourceRef:
     kind: GitRepository
