@@ -36,6 +36,8 @@ spec:
       - kubernetes-dashboard.ck3.cluster.qaware.de
     networkPolicy:
       enabled: false
+    rbac:
+      clusterReadOnlyRole: true
     serviceMonitor:
       enabled: true
     settings:
