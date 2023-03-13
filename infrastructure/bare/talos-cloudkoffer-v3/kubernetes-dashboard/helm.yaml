@@ -27,6 +27,8 @@ spec:
   releaseName: kubernetes-dashboard
   targetNamespace: kubernetes-dashboard
   values:
+    extraArgs:
+    - --enable-skip-login
     ingress:
       className: nginx
       enabled: true
