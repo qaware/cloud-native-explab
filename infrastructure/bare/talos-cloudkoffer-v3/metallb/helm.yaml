@@ -31,6 +31,7 @@ spec:
         enabled: false
       prometheusRule:
         enabled: true
+      rbacPrometheus: false
       serviceMonitor:
         enabled: true
     speaker:
