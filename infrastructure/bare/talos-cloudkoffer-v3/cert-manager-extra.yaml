@@ -1,0 +1,17 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: cert-manager-extra
+  namespace: flux-system
+spec:
+  dependsOn:
+  - name: cert-manager
+  interval: 5m0s
+  path: ./infrastructure/bare/talos-cloudkoffer-v3/cert-manager-extra
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  targetNamespace: cert-manager
+
