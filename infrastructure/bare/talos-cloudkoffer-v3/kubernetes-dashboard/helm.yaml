@@ -38,6 +38,21 @@ spec:
       enabled: false
     rbac:
       clusterReadOnlyRole: true
+      clusterReadOnlyRoleAdditionalRules:
+      - apiGroups:
+        - '*'
+        resources:
+        - '*'
+        verbs:
+        - get
+        - list
+        - watch
+      - nonResourceURLs:
+        - '*'
+        verbs:
+        - get
+        - list
+        - watch
     serviceMonitor:
       enabled: true
     settings:
