@@ -28,13 +28,13 @@ spec:
   targetNamespace: goldilocks
   values:
     dashboard:
+      ingress:
+        enabled: true
+        hosts:
+        - host: goldilocks.ck3.cluster.qaware.de
+          paths:
+          - path: /
+            type: ImplementationSpecific
+        ingressClassName: nginx
       replicaCount: 1
-    ingress:
-      enabled: true
-      hosts:
-      - host: goldilocks.ck3.cluster.qaware.de
-        paths:
-        - path: /
-          type: ImplementationSpecific
-      ingressClassName: nginx
 
