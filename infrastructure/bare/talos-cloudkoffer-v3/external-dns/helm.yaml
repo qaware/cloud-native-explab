@@ -34,12 +34,16 @@ spec:
       value: /etc/secrets/service-account/credentials.json
     extraArgs:
     - --google-project=engineering-cloud
+    extraVolumeMounts:
+    - mountPath: /etc/secrets/service-account/
+      name: secrets
+    extraVolumes:
+    - name: secrets
+      secret:
+        secretName: external-dns
     policy: sync
     priorityClassName: ""
     provider: google
-    secretConfiguration:
-      enabled: true
-      mountPath: /etc/secrets/service-account/
     serviceMonitor:
       enabled: true
     sources:
