@@ -6,7 +6,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 5m0s
-  path: ./vertical-pod-autoscaler
+  path: ./infrastructure/bare/talos-cloudkoffer-v3/vertical-pod-autoscaler
   prune: true
   sourceRef:
     kind: GitRepository
