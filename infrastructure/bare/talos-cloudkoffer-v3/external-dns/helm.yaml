@@ -15,6 +15,7 @@ metadata:
   name: external-dns
   namespace: flux-system
 spec:
+  timeout: 2m
   chart:
     spec:
       chart: external-dns
