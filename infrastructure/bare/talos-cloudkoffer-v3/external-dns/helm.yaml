@@ -15,7 +15,6 @@ metadata:
   name: external-dns
   namespace: flux-system
 spec:
-  timeout: 2m
   chart:
     spec:
       chart: external-dns
@@ -30,12 +29,17 @@ spec:
   values:
     domainFilters:
     - cluster.qaware.de
-    google:
-      project: engineering-cloud
-      serviceAccountKey: credentials.json
-      serviceAccountSecret: gcp-service-account
+    env:
+    - name: GOOGLE_APPLICATION_CREDENTIALS
+      value: /etc/secrets/service-account/credentials.json
+    extraArgs:
+    - --google-project=engineering-cloud
     policy: sync
+    priorityClassName: ""
     provider: google
+    secretConfiguration:
+      enabled: false
+      mountPath: /etc/secrets/service-account/
     serviceMonitor:
       enabled: true
     sources:
