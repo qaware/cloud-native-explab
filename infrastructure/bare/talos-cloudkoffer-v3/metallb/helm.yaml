@@ -34,8 +34,6 @@ spec:
       rbacPrometheus: false
       serviceMonitor:
         enabled: true
-    speaker:
-      enabled: false
   install:
     crds: CreateReplace
   upgrade:
