@@ -56,4 +56,6 @@ spec:
       persistence:
         enabled: false
       replicas: 1
+    test:
+      enabled: false
 
