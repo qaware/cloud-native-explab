@@ -32,6 +32,8 @@ spec:
         networkPolicyEnabled: false
       extraArgs:
         default-ssl-certificate: cert-manager/wildcard-certificate
+      ingressClassResource:
+        default: true
       metrics:
         enabled: true
         prometheusRule:
