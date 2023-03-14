@@ -1,0 +1,59 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: loki
+  namespace: flux-system
+spec:
+  interval: 10m0s
+  url: https://grafana.github.io/helm-charts
+
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: loki
+  namespace: flux-system
+spec:
+  chart:
+    spec:
+      chart: loki
+      reconcileStrategy: ChartVersion
+      sourceRef:
+        kind: HelmRepository
+        name: loki
+      version: 4.8.0
+  interval: 1m0s
+  releaseName: loki
+  targetNamespace: loki
+  values:
+    gateway:
+      enabled: false
+    loki:
+      commonConfig:
+        replication_factor: 1
+      storage:
+        type: filesystem
+    monitoring:
+      dashboards:
+        enabled: true
+        labels:
+          grafana_dashboard: "1"
+      lokiCanary:
+        enabled: false
+      rules:
+        alerting: true
+        enabled: true
+      selfMonitoring:
+        enabled: false
+        grafanaAgent:
+          installOperator: false
+      serviceMonitor:
+        enabled: true
+    networkPolicy:
+      enabled: false
+    singleBinary:
+      persistence:
+        enabled: false
+      replicas: 1
+
