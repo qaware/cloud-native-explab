@@ -53,6 +53,12 @@ spec:
     networkPolicy:
       enabled: false
     singleBinary:
+      extraVolumeMounts:
+      - mountPath: /var/loki
+        name: storage
+      extraVolumes:
+      - emptyDir: {}
+        name: storage
       persistence:
         enabled: false
       replicas: 1
