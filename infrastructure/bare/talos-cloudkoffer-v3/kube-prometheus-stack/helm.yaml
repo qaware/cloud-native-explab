@@ -1,0 +1,115 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: kube-prometheus-stack
+  namespace: flux-system
+spec:
+  interval: 10m0s
+  url: https://prometheus-community.github.io/helm-charts
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: kube-prometheus-stack
+  namespace: flux-system
+spec:
+  chart:
+    spec:
+      chart: kube-prometheus-stack
+      reconcileStrategy: ChartVersion
+      sourceRef:
+        kind: HelmRepository
+        name: kube-prometheus-stack
+      version: 45.7.1
+  interval: 1m0s
+  releaseName: kube-prometheus-stack
+  targetNamespace: kube-prometheus-stack
+  values:
+    alertmanager:
+      ingress:
+        enabled: true
+        hosts:
+          - alertmanager.ck3.cluster.qaware.de
+        ingressClassName: nginx
+        pathType: ImplementationSpecific
+        paths:
+          - /
+      serviceMonitor:
+        selfMonitor: true
+    grafana:
+      additionalDataSources:
+        - access: proxy
+          name: Loki
+          type: loki
+          uid: loki
+          url: http://loki.loki:3100
+        - access: proxy
+          name: Prometheus
+          type: prometheus
+          uid: prometheus
+          url: http://kube-prometheus-stack-prometheus:9090/
+        - access: proxy
+          name: Tempo
+          type: tempo
+          uid: tempo
+          url: http://tempo.tempo:3100
+      adminPassword: QAware
+      adminUser: admin
+      grafana.ini:
+        auth.anonymous:
+          enabled: true
+          org_role: Viewer
+        feature_toggles:
+          enable: traceqlEditor
+        users:
+          viewers_can_edit: true
+      ingress:
+        enabled: true
+        hosts:
+          - grafana.ck3.cluster.qaware.de
+        pathType: ImplementationSpecific
+      networkPolicy:
+        enabled: false
+      serviceMonitor:
+        enabled: true
+      sidecar:
+        dashboards:
+          enabled: true
+          searchNamespace: ALL
+        datasources:
+          enabled: true
+          searchNamespace: ALL
+    kube-state-metrics:
+      prometheus:
+        monitor:
+          enabled: true
+      selfMonitor:
+        enabled: false
+    prometheus:
+      ingress:
+        enabled: true
+        hosts:
+          - prometheus.ck3.cluster.qaware.de
+        ingressClassName: nginx
+        pathType: ImplementationSpecific
+      prometheusSpec:
+        podMonitorSelectorNilUsesHelmValues: false
+        probeSelectorNilUsesHelmValues: false
+        ruleSelectorNilUsesHelmValues: false
+        serviceMonitorSelectorNilUsesHelmValues: false
+      serviceMonitor:
+        selfMonitor: true
+    prometheus-node-exporter:
+      prometheus:
+        monitor:
+          enabled: true
+    prometheusOperator:
+      networkPolicy:
+        enabled: false
+      serviceMonitor:
+        selfMonitor: true
+  install:
+    crds: Skip
+  upgrade:
+    crds: Skip
