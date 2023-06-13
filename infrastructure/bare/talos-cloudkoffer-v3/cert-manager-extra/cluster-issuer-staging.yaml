@@ -14,5 +14,5 @@ spec:
         cloudDNS:
           project: engineering-cloud
           serviceAccountSecretRef:
-            name: cert-manager
+            name: google-application-credentials
             key: credentials.json
