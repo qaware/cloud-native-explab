@@ -36,5 +36,4 @@ spec:
     serviceMonitor:
       enabled: true
     trivy:
-      additionalVulnerabilityReportFields: Description,Links
       ignoreUnfixed: true
