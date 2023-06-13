@@ -8,7 +8,6 @@ spec:
   interval: 10m0s
   type: oci
   url: oci://ghcr.io/weaveworks/charts
-
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
@@ -23,7 +22,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: weave-gitops
-      version: 4.0.15
+      version: 4.0.23
   interval: 1m0s
   releaseName: weave-gitops
   targetNamespace: weave-gitops
@@ -44,4 +43,3 @@ spec:
       enabled: true
     networkPolicy:
       create: false
-
