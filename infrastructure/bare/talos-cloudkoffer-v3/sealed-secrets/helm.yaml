@@ -21,7 +21,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: sealed-secrets
-      version: 2.7.6
+      version: 2.9.0
   interval: 1m0s
   releaseName: sealed-secrets
   targetNamespace: sealed-secrets
