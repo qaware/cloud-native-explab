@@ -21,7 +21,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: metallb
-      version: 0.13.9
+      version: 0.13.10
   interval: 1m0s
   releaseName: metallb
   targetNamespace: metallb-system
