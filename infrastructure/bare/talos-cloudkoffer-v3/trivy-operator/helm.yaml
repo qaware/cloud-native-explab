@@ -1,0 +1,41 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: trivy-operator
+  namespace: flux-system
+spec:
+  interval: 10m0s
+  url: https://aquasecurity.github.io/helm-charts/
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: trivy-operator
+  namespace: flux-system
+spec:
+  chart:
+    spec:
+      chart: trivy-operator
+      reconcileStrategy: ChartVersion
+      sourceRef:
+        kind: HelmRepository
+        name: trivy-operator
+      version: 0.14.1
+  interval: 1m0s
+  releaseName: trivy-operator
+  targetNamespace: trivy-system
+  values:
+    operator:
+      clusterComplianceEnabled: true
+      configAuditScannerEnabled: true
+      infraAssessmentScannerEnabled: true
+      rbacAssessmentScannerEnabled: true
+      scanJobsConcurrentLimit: 1
+      scanNodeCollectorLimit: 1
+      vulnerabilityScannerEnabled: true
+    serviceMonitor:
+      enabled: true
+    trivy:
+      additionalVulnerabilityReportFields: Description,Links
+      ignoreUnfixed: true

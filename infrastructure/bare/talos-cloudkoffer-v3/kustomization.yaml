@@ -18,5 +18,6 @@ resources:
 - promtail.yaml
 - sealed-secrets.yaml
 - tempo.yaml
+- trivy-operator.yaml
 - vertical-pod-autoscaler.yaml
 - weave-gitops.yaml
