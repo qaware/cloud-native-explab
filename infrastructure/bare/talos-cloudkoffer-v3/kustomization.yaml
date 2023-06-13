@@ -10,6 +10,7 @@ resources:
 - kube-prometheus-stack.yaml
 - kubernetes-dashboard.yaml
 - kubernetes-event-exporter.yaml
+- kyverno.yaml
 - loki.yaml
 - metallb-extra.yaml
 - metallb.yaml
