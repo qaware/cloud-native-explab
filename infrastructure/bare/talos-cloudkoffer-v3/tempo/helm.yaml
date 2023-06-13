@@ -7,7 +7,6 @@ metadata:
 spec:
   interval: 10m0s
   url: https://grafana.github.io/helm-charts
-
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
@@ -22,7 +21,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: tempo
-      version: 1.0.2
+      version: 1.3.1
   interval: 1m0s
   releaseName: tempo
   targetNamespace: tempo
@@ -33,4 +32,3 @@ spec:
       reportingEnabled: false
       serviceMonitor:
         enabled: true
-
