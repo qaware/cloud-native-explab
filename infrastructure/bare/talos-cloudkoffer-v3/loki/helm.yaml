@@ -7,7 +7,6 @@ metadata:
 spec:
   interval: 10m0s
   url: https://grafana.github.io/helm-charts
-
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
@@ -22,7 +21,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: loki
-      version: 4.8.0
+      version: 5.6.4
   interval: 1m0s
   releaseName: loki
   targetNamespace: loki
@@ -64,4 +63,3 @@ spec:
       replicas: 1
     test:
       enabled: false
-
