@@ -29,10 +29,9 @@ spec:
     operator:
       clusterComplianceEnabled: true
       configAuditScannerEnabled: true
-      infraAssessmentScannerEnabled: true
+      infraAssessmentScannerEnabled: false
       rbacAssessmentScannerEnabled: true
       scanJobsConcurrentLimit: 1
-      scanNodeCollectorLimit: 1
       vulnerabilityScannerEnabled: true
     serviceMonitor:
       enabled: true
