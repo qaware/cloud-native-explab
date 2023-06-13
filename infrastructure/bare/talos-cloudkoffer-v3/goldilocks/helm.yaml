@@ -7,7 +7,6 @@ metadata:
 spec:
   interval: 10m0s
   url: https://charts.fairwinds.com/stable
-
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
@@ -22,7 +21,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: goldilocks
-      version: 6.5.1
+      version: 6.7.0
   interval: 1m0s
   releaseName: goldilocks
   targetNamespace: goldilocks
@@ -37,4 +36,3 @@ spec:
             type: ImplementationSpecific
         ingressClassName: nginx
       replicaCount: 1
-
