@@ -1,4 +1,5 @@
 .dccache
+.DS_Store
 .vscode/
 
 .terraform/
