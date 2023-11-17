@@ -232,6 +232,11 @@ patchesStrategicMerge:
   - loadbalancer.yaml
 ```
 
+Finally, create the access token for the admin user.
+```bash
+kubectl -n kubernetes-dashboard create token admin-user
+```
+
 </details>
 
 ## External Secrets Management
