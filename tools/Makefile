@@ -1,8 +1,9 @@
 GCP_PROJECT ?= cloud-native-experience-lab
-GCP_REGION ?= europe-west1
-GCP_ZONE ?= europe-west1-b
+GCP_REGION ?= europe-north1
+GCP_ZONE ?= europe-north1-b
+
 GITHUB_USER ?= qaware
-CLUSTER_NAME := cloud-native-explab
+CLUSTER_NAME ?= cloud-native-explab
 
 AWS_ACCOUNT_ID := $(shell aws sts get-caller-identity --query Account --output text)
 AWS_REGION ?= eu-central-1
@@ -14,16 +15,19 @@ prepare-gcp:
 
 create-gcp-cluster:
 	@gcloud container clusters create $(CLUSTER_NAME)  \
+	  	--release-channel=regular \
+		--cluster-version=1.26 \
+  		--region=$(GCP_REGION) \
 		--addons HttpLoadBalancing,HorizontalPodAutoscaling,ConfigConnector \
 		--workload-pool=$(GCP_PROJECT).svc.id.goog \
-		--enable-network-policy \
+  		--enable-vertical-pod-autoscaling \
 		--enable-autoscaling \
-		--num-nodes=5 \
-		--min-nodes=3 --max-nodes=10 \
-		--machine-type=e2-medium \
+		--autoscaling-profile=optimize-utilization \
+		--num-nodes=1 \
+		--min-nodes=1 --max-nodes=10 \
+		--machine-type=e2-standard-8 \
 		--logging=SYSTEM \
-    	--monitoring=SYSTEM \
-		--cluster-version=1.22
+    	--monitoring=SYSTEM
 	@kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-admin --user=$$(gcloud config get-value core/account)
 	@kubectl cluster-info
 
