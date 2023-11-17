@@ -1,0 +1,21 @@
+# enabling the metrics server proxy
+proxy:
+  metricsServer:
+    nodes:
+      enabled: true
+    pods:
+      enabled: true
+
+sync:
+  # enable Node synchronization for DaemonSet support
+  nodes:
+    enabled: true
+    syncAllNodes: true
+
+  # enable Ingress resources synchronization
+  ingresses:
+    enabled: true
+  
+  # enable synchronization of the Network Policies
+  # networkpolicies:
+  #   enabled: true

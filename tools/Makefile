@@ -4,6 +4,7 @@ GCP_ZONE ?= europe-north1-b
 
 GITHUB_USER ?= qaware
 CLUSTER_NAME ?= cloud-native-explab
+VCLUSTER_NAME ?= tenant-01
 
 AWS_ACCOUNT_ID := $(shell aws sts get-caller-identity --query Account --output text)
 AWS_REGION ?= eu-central-1
@@ -43,6 +44,15 @@ bootstrap-gcp-flux2:
         --repository=cloud-native-explab \
         --branch=main \
         --path=./clusters/gcp/$(CLUSTER_NAME) \
+		--components-extra=image-reflector-controller,image-automation-controller \
+		--read-write-key
+
+bootstrap-vcluster-flux2:
+	@flux bootstrap github \
+		--owner=$(GITHUB_USER) \
+        --repository=cloud-native-explab \
+        --branch=main \
+        --path=./clusters/gcp/$(CLUSTER_NAME)/$(VCLUSTER_NAME) \
 		--components-extra=image-reflector-controller,image-automation-controller \
 		--read-write-key
 
