@@ -36,7 +36,7 @@ create-gcp-sa:
 	@gcloud iam service-accounts create $(CLUSTER_NAME) --description="$(CLUSTER_NAME) Service Account" --display-name="$(CLUSTER_NAME) Service Account"
 	@gcloud projects add-iam-policy-binding $(GCP_PROJECT) --role=roles/editor --member=serviceAccount:$(CLUSTER_NAME)@$(GCP_PROJECT).iam.gserviceaccount.com
 	@gcloud iam service-accounts add-iam-policy-binding $(CLUSTER_NAME)@$(GCP_PROJECT).iam.gserviceaccount.com --member="serviceAccount:$(GCP_PROJECT).svc.id.goog[cnrm-system/cnrm-controller-manager]" --role="roles/iam.workloadIdentityUser"
-	@gcloud iam service-accounts keys create gke-sa-key.json --iam-account=$(CLUSTER_NAME)@$(GCP_PROJECT).iam.gserviceaccount.com
+	@gcloud iam service-accounts keys create $(CLUSTER_NAME)-sa-key.json --iam-account=$(CLUSTER_NAME)@$(GCP_PROJECT).iam.gserviceaccount.com
 
 bootstrap-gcp-flux2:
 	@flux bootstrap github \
