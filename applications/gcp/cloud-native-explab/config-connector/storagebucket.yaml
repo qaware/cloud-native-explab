@@ -4,6 +4,9 @@ metadata:
   # StorageBucket names must be globally unique
   name: cloud-native-experience-lab-demo
   annotations:
+    # required to configure Config Connector with Google Cloud ProjectID
+    # only if we deploy it to different namespaces
+    # cnrm.cloud.google.com/project-id: cloud-native-experience-lab
     cnrm.cloud.google.com/force-destroy: "false"
   labels:
     stage: demo
