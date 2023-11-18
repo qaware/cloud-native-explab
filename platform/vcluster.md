@@ -14,4 +14,5 @@ Before you dive right into this experience lab, make sure your local environment
 - [kubectl](https://kubernetes.io/docs/tasks/tools/)
 - [Flux2](https://fluxcd.io/flux/cmd/)
 - [Kustomize](https://kustomize.io)
+- [vcluster](https://www.vcluster.com/docs/getting-started/setup)
 
