@@ -1,5 +1,8 @@
 # Google Cloud Managed Services Platform
 
+> [!NOTE]  
+> TODO: This lab still needs to be detailled and described further.
+
 - Cloud CDN
 - Cloud Storage
 - Firestore

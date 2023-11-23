@@ -1,5 +1,8 @@
 # AWS Managed Services Platform
 
+> [!NOTE]  
+> TODO: This lab still needs to be detailled and described further.
+
 - Amazon API Gateway
 - Amazon Lambda
 - Amazon DynamoDB
