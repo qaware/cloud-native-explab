@@ -108,7 +108,7 @@ vcluster connect tenant-00
 kubectl get namespaces
 
 vcluster connect tenant-00 --update-current=false --kube-config=kubeconfig/tenant-00.yaml
-kubectl --kubeconfig kubeconfig/tenant-09.yaml get namespaces
+kubectl --kubeconfig kubeconfig/tenant-00.yaml get namespaces
 
 # or export the custom kubeconfig
 export KUBECONFIG=$PWD/kubeconfig/tenant-00.yaml
