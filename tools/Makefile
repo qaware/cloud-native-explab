@@ -54,7 +54,8 @@ bootstrap-vcluster-flux2:
         --branch=main \
         --path=./clusters/gcp/$(CLUSTER_NAME)/$(VCLUSTER_NAME) \
 		--components-extra=image-reflector-controller,image-automation-controller \
-		--read-write-key
+		--read-write-key \
+		--personal
 
 delete-gcp-cluster:
 	@gcloud container clusters delete $(CLUSTER_NAME) --async --quiet
