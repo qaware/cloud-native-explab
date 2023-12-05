@@ -25,9 +25,9 @@ spec:
   images:
     - name: ghcr.io/stefanprodan/podinfo
       newName: ghcr.io/stefanprodan/podinfo # {"$imagepolicy": "flux-system:podinfo:name"}
-      newTag: 6.2.2 # {"$imagepolicy": "flux-system:podinfo:tag"}
+      newTag: 6.5.3 # {"$imagepolicy": "flux-system:podinfo:tag"}
   patchesStrategicMerge:
-    - apiVersion: autoscaling/v2beta2
+    - apiVersion: autoscaling/v2
       kind: HorizontalPodAutoscaler
       metadata:
         name: podinfo
