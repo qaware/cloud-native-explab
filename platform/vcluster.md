@@ -167,7 +167,7 @@ $ kubectl -n flux-system get receiver/webapp
 
 </details>
 
-
+  
 ## Kubernetes Dashboard
 
 The Kubernetes dashboard has not been installed as a GKE addon. Instead, we install the dashboard manually in the current version. Since RBAC is enabled we also need to make a few additional steps are required.
