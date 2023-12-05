@@ -111,7 +111,7 @@ vcluster connect tenant-00 --update-current=false --kube-config=kubeconfig/tenan
 kubectl --kubeconfig kubeconfig/tenant-09.yaml get namespaces
 
 # or export the custom kubeconfig
-export KUBECONFIG=kubeconfig/tenant-00.yaml
+export KUBECONFIG=$PWD/kubeconfig/tenant-00.yaml
 ```
 
 </detals>
@@ -146,7 +146,7 @@ flux bootstrap github \
     --path=./clusters/gcp/$(CLUSTER_NAME)/$(VCLUSTER_NAME) \
     --components-extra=image-reflector-controller,image-automation-controller \
     --read-write-key \
-    --personal          # only for user accounts, not for org accounts
+    --personal         # only for user accounts, not for org accounts
 
 # to manually trigger the GitOps process use the following commands
 flux reconcile source git flux-system
