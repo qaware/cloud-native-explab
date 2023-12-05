@@ -11,7 +11,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: podinfo
-  validation: client
+  # validation: client
   # we supply an inline patch for the deployment
   # patchesJson6902:
   #  - target:
