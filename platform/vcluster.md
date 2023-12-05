@@ -108,7 +108,7 @@ vcluster connect tenant-00
 kubectl get namespaces
 
 vcluster connect tenant-00 --update-current=false --kube-config=kubeconfig/tenant-00.yaml
-kubectl --kubeconfig kubeconfig/tenant-09.yaml get namespaces
+kubectl --kubeconfig kubeconfig/tenant-00.yaml get namespaces
 
 # or export the custom kubeconfig
 export KUBECONFIG=$PWD/kubeconfig/tenant-00.yaml
@@ -163,6 +163,185 @@ flux reconcile kustomization applications
 # Secret: the webhook-token value
 $ kubectl -n flux-system get svc/receiver
 $ kubectl -n flux-system get receiver/webapp
+```
+
+</details>
+
+  
+## Kubernetes Dashboard
+
+The Kubernetes dashboard has not been installed as a GKE addon. Instead, we install the dashboard manually in the current version. Since RBAC is enabled we also need to make a few additional steps are required.
+
+**Lab Instructions**
+
+1. Deploy the Kubernetes Dashboard as YAML from the upstream repository
+2. Create service account and cluster role binding using Flux2
+3. Expose the dashboard UI as _LoadBalancer_ service or using an _Ingress_ resource
+4. Generate user token and access dashboard UI
+
+<details>
+  <summary markdown="span">Click to expand solution ...</summary>
+
+```yaml
+# see https://github.com/kubernetes/dashboard/blob/master/docs/user/access-control/creating-sample-user.md
+# create admin-service-account.yaml in the GitOps infrastructure directory
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+    name: admin-user
+    namespace: kube-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+    name: admin-user
+roleRef:
+    apiGroup: rbac.authorization.k8s.io
+    kind: ClusterRole
+    name: cluster-admin
+subjects:
+    - kind: ServiceAccount
+      name: admin-user
+      namespace: kube-system
+```
+
+Now you can open and access the dashboard in your preferred browser. You could either use port-forwarding or the proxy
+functionality of kubectl.
+
+```bash
+# using the proxy
+kubectl proxy
+open http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/
+
+# or use port forward
+kubectl port-forward -n kube-system service/kubernetes-dashboard 10443:443
+```
+
+Even better is to patch the `kubernetes-dashboard` service using type `LoadBalancer` and apply it as strategic
+merge patch using Kustomize.
+
+```yaml
+# create loadbalancer.yaml in the GitOps repository
+apiVersion: v1
+kind: Service
+metadata:
+  name: kubernetes-dashboard
+  namespace: kubernetes-dashboard
+spec:
+  type: LoadBalancer
+
+# add this to the kustomize.yaml
+patchesStrategicMerge:
+  - loadbalancer.yaml
+```
+
+Finally, create the access token for the admin user.
+```bash
+kubectl -n kubernetes-dashboard create token admin-user
+```
+
+</details>
+
+
+## Kube Prometheus based Monitoring Stack
+
+The External Secrets Operator is a component to synchronize secrets from external APIs such
+as the Google Secrets Manager. In this step we will install the component using Helm and then configure it to synchronize some secrets.
+
+**Lab Instructions**
+
+1. Install the Kube Prometheus based monitoring stack via a Helm chart
+
+<details>
+  <summary markdown="span">Click to expand solution ...</summary>
+
+_TODO_
+
+</details>
+
+
+## Pod Info Application Deployment
+
+In this step we will deploy [Podinfo](https://github.com/stefanprodan/podinfo).
+Podinfo is a tiny web application made with Go that showcases best practices of running microservices in Kubernetes. Podinfo is used by CNCF projects like Flux and Flagger for end-to-end testing and workshops.
+
+**Lab Instructions**
+
+1. Read the installation instructions at https://github.com/stefanprodan/podinfo
+2. Install the Podinfo application into the default namespace either as Helm chart or Kustomize
+    - Patch the Podinfo deployment and set `replicas: 3`
+    - Patch the PodInfo HPA and set `minReplicas: 3`
+    - Patch the PodInfo Service and set `type: LoadBalancer`
+3. (_optional_) Setup the image update automation workflow with suitable image repository and policy
+
+<details>
+  <summary markdown="span">Click to expand solution ...</summary>
+
+```bash
+cd applications/gcp/cloud-native-explab
+kustomize create
+
+flux create source git podinfo \
+    --url=https://github.com/stefanprodan/podinfo \
+    --tag="6.1.8" \
+    --interval=30s \
+    --export > podinfo/podinfo-source.yaml
+
+flux create kustomization podinfo \
+    --source=GitRepository/podinfo \
+    --path="./kustomize" \
+    --prune=true \
+    --interval=5m0s \
+    --target-namespace=default \
+    --export > podinfo/podinfo-kustomization.yaml
+```
+
+The Kustomize patches need to be added manually to the `podinfo-kustomization.yaml`.
+
+```yaml
+  images:
+    - name: ghcr.io/stefanprodan/podinfo
+      newName: ghcr.io/stefanprodan/podinfo # {"$imagepolicy": "flux-system:podinfo:name"}
+      newTag: 6.1.8 # {"$imagepolicy": "flux-system:podinfo:tag"}
+  patchesStrategicMerge:
+    - apiVersion: autoscaling/v2beta2
+      kind: HorizontalPodAutoscaler
+      metadata:
+        name: podinfo
+      spec:
+        minReplicas: 3
+    - apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: podinfo
+        labels:
+          lab: cloud-native-explab
+      spec:
+        replicas: 3
+        template:
+          metadata:
+            labels:
+              lab: cloud-native-explab
+    - apiVersion: v1
+      kind: Service
+      metadata:
+        name: podinfo
+      spec:
+        type: LoadBalancer
+```
+
+Then add and configure image repository and policy for the image update automation to work.
+
+```bash
+flux create image repository podinfo \
+    --image=ghcr.io/stefanprodan/podinfo \
+    --interval 1m0s \
+    --export > podinfo/podinfo-registry.yaml
+
+flux create image policy podinfo \
+    --image-ref=podinfo \
+    --select-semver="6.1.x" \
+    --export > podinfo/podinfo-policy.yaml
 ```
 
 </details>
