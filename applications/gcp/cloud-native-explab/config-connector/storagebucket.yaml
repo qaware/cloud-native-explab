@@ -2,7 +2,7 @@ apiVersion: storage.cnrm.cloud.google.com/v1beta1
 kind: StorageBucket
 metadata:
   # StorageBucket names must be globally unique
-  name: cloud-native-experience-lab-demo
+  name: mad-summit-demo
   annotations:
     # required to configure Config Connector with Google Cloud ProjectID
     # only if we deploy it to different namespaces
