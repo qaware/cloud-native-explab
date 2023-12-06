@@ -1,4 +1,4 @@
-apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
+apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: podinfo
@@ -11,7 +11,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: podinfo
-  validation: client
+  # validation: client
   # we supply an inline patch for the deployment
   # patchesJson6902:
   #  - target:
@@ -25,34 +25,46 @@ spec:
   images:
     - name: ghcr.io/stefanprodan/podinfo
       newName: ghcr.io/stefanprodan/podinfo # {"$imagepolicy": "flux-system:podinfo:name"}
-      newTag: 6.2.2 # {"$imagepolicy": "flux-system:podinfo:tag"}
-  patchesStrategicMerge:
-    - apiVersion: autoscaling/v2beta2
-      kind: HorizontalPodAutoscaler
-      metadata:
+      newTag: 6.5.3 # {"$imagepolicy": "flux-system:podinfo:tag"}
+  patches:
+    - patch: |-
+        apiVersion: autoscaling/v2
+        kind: HorizontalPodAutoscaler
+        metadata:
+          name: podinfo
+        spec:
+          minReplicas: 2
+          maxReplicas: 5
+      target:
+        kind: HorizontalPodAutoscaler
         name: podinfo
-      spec:
-        minReplicas: 2
-        maxReplicas: 5
-    - apiVersion: apps/v1
-      kind: Deployment
-      metadata:
+    - patch: |-
+        apiVersion: apps/v1
+        kind: Deployment
+        metadata:
+          name: podinfo
+          labels:
+            k8s-minipad/enabled: "true"
+            LAUNCHPAD_ENABLE: "true"
+            LAUNCHPAD_COLOR: RED
+            LAUNCHPAD_ROW: "0"
+            lab: cloudkoffer
+        spec:
+          replicas: 2
+          template:
+            metadata:
+              labels:
+                lab: cloudkoffer
+      target:
+        kind: Deployment
         name: podinfo
-        labels:
-          k8s-minipad/enabled: "true"
-          LAUNCHPAD_ENABLE: "true"
-          LAUNCHPAD_COLOR: RED
-          LAUNCHPAD_ROW: "0"
-          lab: cloudkoffer
-      spec:
-        replicas: 2
-        template:
-          metadata:
-            labels:
-              lab: cloudkoffer
-    - apiVersion: v1
-      kind: Service
-      metadata:
+    - patch: |-
+        apiVersion: v1
+        kind: Service
+        metadata:
+          name: podinfo
+        spec:
+          type: LoadBalancer
+      target:
+        kind: Service
         name: podinfo
-      spec:
-        type: LoadBalancer
