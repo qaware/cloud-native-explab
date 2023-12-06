@@ -43,7 +43,7 @@ install and enable additional built-in addons.
 export GCP_PROJECT=cloud-native-experience-lab
 export GCP_REGION=europe-north1
 export GCP_ZONE=europe-north1-b
-export CLUSTER_NAME=cloud-native-explab
+export CLUSTER_NAME=vcluster-explab
 
 gcloud config set project $GCP_PROJECT
 gcloud config set compute/region $GCP_REGION
@@ -136,7 +136,7 @@ In this step we bootstrap Flux2 as GitOps tool to provision the tenenant cluster
 # generate a personal Github token
 export GITHUB_USER=qaware
 export GITHUB_TOKEN=<your-token>
-export VCLUSTER_NAME=tenant-01
+export VCLUSTER_NAME=tenant-00
 
 # bootstrap the flux-system namespace and components
 flux bootstrap github \
@@ -181,6 +181,8 @@ The Kubernetes dashboard has not been installed as a GKE addon. Instead, we inst
 
 <details>
   <summary markdown="span">Click to expand solution ...</summary>
+
+Put all the files for the dashboard installation into a dedicated directory, e.g. `infrastructure/gcp/$(CLUSTER_NAME)/$(VCLUSTER_NAME)/kubernetes-dashboard/`.
 
 ```yaml
 # see https://github.com/kubernetes/dashboard/blob/master/docs/user/access-control/creating-sample-user.md
@@ -250,12 +252,60 @@ as the Google Secrets Manager. In this step we will install the component using 
 
 **Lab Instructions**
 
-1. Install the Kube Prometheus based monitoring stack via a Helm chart
+1. Install the Kube Prometheus based monitoring stack via its Helm chart
 
 <details>
   <summary markdown="span">Click to expand solution ...</summary>
 
-_TODO_
+Put all the files for the dashboard installation into a dedicated directory, e.g. `infrastructure/gcp/$(CLUSTER_NAME)/$(VCLUSTER_NAME)/monitoring/`.
+
+First, we need to create a dedicated monitoring namespace where the helm chart will be deployed. Create a
+`namespace.yaml` file with the following content:
+```yaml
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: monitoring
+```
+
+Next, we will need to create a `HelmRepository` resource to tell Flux where to find the charts. Create a
+`repository.yaml` file with the following content:
+```yaml
+apiVersion: source.toolkit.fluxcd.io/v1beta1
+kind: HelmRepository
+metadata:
+  name: prometheus-community
+  namespace: flux-system
+spec:
+  interval: 1h0m0s
+  url: https://prometheus-community.github.io/helm-charts
+```
+
+The final step is to create a `HelmRelease` resource to instruct Flux to install the `kube-prometheus` chart from previously created repository. Create a `release.yaml` file with the following content:
+```yaml
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: kube-prometheus-stack
+  namespace: flux-system
+spec:
+  chart:
+    spec:
+      chart: kube-prometheus-stack
+      sourceRef:
+        kind: HelmRepository
+        name: prometheus-community
+      version: "47.1.0"
+  interval: 1h0m0s
+  releaseName: kube-prometheus-stack
+  targetNamespace: monitoring
+```
+
+Register all files and folder in the `kustomization.yaml`, commit and push everything to your GitOps repository. Reconcile the Git source on the command line and check the status.
+```bash
+flux reconcile source git flux-system
+flux get all
+```
 
 </details>
 
