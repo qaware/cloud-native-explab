@@ -58,7 +58,7 @@ bootstrap-vcluster-flux2:
 		--personal
 
 delete-gcp-cluster:
-	@gcloud container clusters delete $(CLUSTER_NAME) --async --quiet
+	@gcloud container clusters delete $(CLUSTER_NAME) --region=$(GCP_REGION) --async --quiet
 
 create-aws-cluster:
 	@eksctl create cluster -f aws-cluster.yaml
