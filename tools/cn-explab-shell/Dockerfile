@@ -1,5 +1,5 @@
 # use ubuntu as base image
-FROM ubuntu:22.10
+FROM ubuntu:24.04
 
 WORKDIR /cloud-native-explab
 
